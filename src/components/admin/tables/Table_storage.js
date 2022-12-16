@@ -47,7 +47,7 @@ const Table_storage = (props) => {
           selector: (row) => row.past,
         },
       ]);
-      axios.get('https://oasistienda.com/pj2/api/get').then((res) =>{
+      axios.get('https://oasistienda.com/pj/api/products_pizza').then((res) =>{
     //    console.log(res);
         // setData([]);
         for (let i = 0; i < res.data.length; i++) {

@@ -26,33 +26,36 @@ export const MainContextProvider = ({ children }) => {
   
   const saveProduct = (type, data) => {
     //console.log(type, data);
-    if (type === 1) {
+
       axios
-        .post("https://oasistienda.com/pj2/api/save", { type: type, data: data})
+        .post("https://oasistienda.com/pj/api/save", { type: type, data: data})
         .then((res) => {
-          console.log(res.data);
+          console.log(parseFloat(res.data.price));
           let element = res.data;
+          if (type === 1) {
             setData((prev) => [
               ...prev,
               {
                 id: element.id,
                 size: element.size,
-                price: parseFloat(element.price),
-                extra: parseFloat(element.exin),
-                cbm: parseFloat(element.chstedm),
-                cbp: parseFloat(element.chstedp),
-                ec: parseFloat(element.exch),
-                fing: element.fin == 0 ? "N/A" : parseFloat(element.fin),
-                past: element.pas == 0 ? "N/A" : parseFloat(element.pas),
+                price: parseFloat(element.price).toFixed(2),
+                extra: parseFloat(element.exin).toFixed(2),
+                cbm: parseFloat(element.chstedm).toFixed(2),
+                cbp: parseFloat(element.chstedp).toFixed(2),
+                ec: parseFloat(element.exch).toFixed(2),
+                fing: element.fin == 0 ? "N/A" : parseFloat(element.fin).toFixed(2),
+                past: element.pas == 0 ? "N/A" : parseFloat(element.pas).toFixed(2),
               },
             ]);
+          
+          }
             setShowAddInv(false);
           
         })
         .catch((err) => {
           console.error(err);
         });
-    }
+    
   };
  useEffect(() => {
   console.log(data);
