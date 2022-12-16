@@ -37,13 +37,13 @@ export const MainContextProvider = ({ children }) => {
               {
                 id: element.id,
                 size: element.size,
-                price: element.price,
-                extra: element.exin,
-                cbm: element.chstedm,
-                cbp: element.chstedp,
-                ec: element.exch,
-                fing: element.fin == 0 ? "N/A" : element.fin,
-                past: element.pas == 0 ? "N/A" : element.pas,
+                price: parseFloat(element.price),
+                extra: parseFloat(element.exin),
+                cbm: parseFloat(element.chstedm),
+                cbp: parseFloat(element.chstedp),
+                ec: parseFloat(element.exch),
+                fing: element.fin == 0 ? "N/A" : parseFloat(element.fin),
+                past: element.pas == 0 ? "N/A" : parseFloat(element.pas),
               },
             ]);
             setShowAddInv(false);
