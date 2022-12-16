@@ -12,6 +12,7 @@ const Table_storage = (props) => {
   useEffect(() => {
     if (type === 0) {
       console.log('entro');
+      setData([]);
       setColumns([
         {
           name: "Tamaño",
@@ -48,7 +49,7 @@ const Table_storage = (props) => {
       ]);
       axios.get('https://oasistienda.com/pj2/api/get').then((res) =>{
     //    console.log(res);
-         setData([]);
+        // setData([]);
         for (let i = 0; i < res.data.length; i++) {
           const element = res.data[i];
           setData(prev =>[...prev,
