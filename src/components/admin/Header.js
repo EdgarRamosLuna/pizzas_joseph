@@ -2,14 +2,16 @@ import React, { useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
 import MainContext from "../../context/MainContext";
 import { BodyS, HeaderS } from "../../styles/Styles";
+import AddExtIng from "../client/AddExtIng";
 import Modal from "../client/Modal";
 
 const Header = () => {
-  const {location, pathname, showAddInv, setShowAddInv} = useContext(MainContext);
+  const {location, pathname, showAddInv, setShowAddInv, showAddEI, setShowAddEI} = useContext(MainContext);
   
   return (
     <HeaderS>
       { showAddInv ? <Modal  type="addInv" /> : ""}
+      { showAddEI ? <AddExtIng  type="addInv" /> : ""}
       <div className="menu">
         <div className="menu-items">
           <ul className="logo-container">

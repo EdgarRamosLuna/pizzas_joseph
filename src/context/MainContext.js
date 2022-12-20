@@ -13,6 +13,7 @@ export const MainContextProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
+  const [searchResult, setSearchResult] = useState([]);
   const stopProp = (e) => {
     e.stopPropagation();
   };
@@ -49,6 +50,33 @@ export const MainContextProvider = ({ children }) => {
             ]);
           
           }
+          if (type === 2) {
+            setData2((prev) => [
+              ...prev,
+              {
+                id: element.id,
+                product: element.product,
+                price: parseFloat(element.price).toFixed(2),
+                ha: parseFloat(element.ha).toFixed(2),
+                sal: parseFloat(element.sal).toFixed(2),
+                doca: parseFloat(element.doca).toFixed(2),
+              },
+            ]);
+          
+          }
+          if (type === 3) {
+            setData3((prev) => [
+              ...prev,
+              {
+                id: element.id,
+                is_ing: element.is_ing,
+                name: element.name,
+                price_bu: parseFloat(element.price_bu).toFixed(2),
+                cant: element.cant,
+              },
+            ]);
+          
+          }
             setShowAddInv(false);
           
         })
@@ -58,13 +86,15 @@ export const MainContextProvider = ({ children }) => {
     
   };
  useEffect(() => {
-  console.log(data);
+ // console.log(data);
  
    return () => {
      
    }
  }, [data])
- 
+ const [showAddEI, setShowAddEI] = useState(false);
+ const [carItem, setCarItem] = useState([]);
+ const [extraIngItem, setExtraIngItem] = useState('');
   return (
     <MainContext.Provider
       value={{
@@ -83,6 +113,10 @@ export const MainContextProvider = ({ children }) => {
         data3,
         setData3,
         v4,
+        showAddEI, setShowAddEI,
+        searchResult, setSearchResult,
+        carItem, setCarItem,
+        extraIngItem, setExtraIngItem
       }}
     >
       {children}

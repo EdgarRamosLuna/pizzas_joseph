@@ -343,7 +343,7 @@ const Modal = (props) => {
                 )*/}
 
                 <div className="form-item">
-                  <StyledButton onClick={(e) => saveProduct(2, data2)}>
+                  <StyledButton onClick={(e) => saveProduct(3, data3)}>
                       Guardar
                     </StyledButton>
                 </div>

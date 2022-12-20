@@ -73,69 +73,93 @@ const Table_storage = (props) => {
       });
     }
     if (type === 1) {
+      setData2([]);
       setColumns([
         {
-          name: "Title",
-          selector: (row) => row.title,
+          name: "Producto",
+          selector: (row) => row.product,
         },
         {
-          name: "Year",
-          selector: (row) => row.year,
+          name: "Precio",
+          selector: (row) => row.price,
         },
         {
-          name: "Year",
-          selector: (row) => row.year,
+          name: "Hawaiana",
+          selector: (row) => row.ha,
         },
+        {
+          name: "Salchicha",
+          selector: (row) => row.sal,
+        },
+        {
+          name: "Doble Carne",
+          selector: (row) => row.doca,
+        },
+        
       ]);
-      setData2([
-        {
-          id: 1,
-          title: "Beetlejuice",
-          year: "1988",
-        },
-        {
-          id: 2,
-          title: "Ghostbusters",
-          year: "1984",
-        },
-        {
-            id: 2,
-            title: "Ghostbusters",
-            year: "1984",
-          },
-      ]);
+      axios.get('https://oasistienda.com/pj/api/products_other').then((res) =>{
+    //    console.log(res);
+        // setData([]);
+        for (let i = 0; i < res.data.length; i++) {
+          const element = res.data[i];
+          setData2(prev =>[...prev,
+            {
+              id: element.id,
+              product: element.product,
+              price: element.price,
+              ha: element.ha,
+              sal: element.sal,
+              doca: element.doca,
+            },
+           
+          ]);
+          
+        }
+      }).catch((err) =>{
+        console.error(err);
+      });
     }
     if (type === 2) {
+      setData3([]);
       setColumns([
         {
-          name: "Title",
-          selector: (row) => row.title,
+          name: "Producto",
+          selector: (row) => row.name,
         },
         {
-          name: "Year",
-          selector: (row) => row.year,
+          name: "Precio Compra",
+          selector: (row) => row.price_bu,
         },
         {
-          name: "Year",
-          selector: (row) => row.year,
+          name: "Es Ingrediente?",
+          selector: (row) => parseInt(row.is_ing) === 1 ? "Si":"No",
         },
         {
-          name: "Year",
-          selector: (row) => row.year,
+          name: "Cantidad en inventario",
+          selector: (row) => row.cant,
         },
+        
       ]);
-      setData3([
-        {
-          id: 1,
-          title: "Beetlejuice",
-          year: "1988",
-        },
-        {
-          id: 2,
-          title: "Ghostbusters",
-          year: "1984",
-        },
-      ]);
+      axios.get('https://oasistienda.com/pj/api/products_materias_primas').then((res) =>{
+    //    console.log(res);
+        // setData([]);
+        for (let i = 0; i < res.data.length; i++) {
+          const element = res.data[i];
+          setData3(prev =>[...prev,
+            {
+              id: element.id,
+              is_ing: element.is_ing,
+              name: element.name,
+              price_bu: element.price_bu,
+              cant: element.cant,
+            },
+           
+          ]);
+          
+        }
+      }).catch((err) =>{
+        console.error(err);
+      });
     }
   }, [type]);
 
