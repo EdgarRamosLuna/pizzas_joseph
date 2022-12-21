@@ -50,6 +50,10 @@ export const HeaderS = styled.div`
         transition: all 0.3s ease-in-out;
         background: #571211;
       }
+      &:before {
+        //  position: absolute;
+        // left: 0;
+      }
       &:nth-child(1) {
         &:before {
           font-family: "Font Awesome 6 Free" !important;
@@ -502,9 +506,17 @@ export const PosS = styled.div`
   td {
     text-align: center !important;
   }
-  .fa-circle-plus{
+  .fa-circle-plus {
     font-size: 1.5em;
     cursor: pointer;
+  }
+  .list-extras {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 5px;
   }
   /*td .fa-pizza-slice{
   position: relative;

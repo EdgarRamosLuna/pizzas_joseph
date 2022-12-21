@@ -16,7 +16,7 @@ const Header = () => {
         <div className="menu-items">
           <ul className="logo-container">
             <Link to="/">
-              <i class="fa-solid fa-pizza-slice"></i>
+              <i className="fa-solid fa-pizza-slice"></i>
             </Link>
           </ul>
           <ul className="menu-data">

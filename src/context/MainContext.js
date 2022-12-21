@@ -29,7 +29,7 @@ export const MainContextProvider = ({ children }) => {
     //console.log(type, data);
 
       axios
-        .post("https://oasistienda.com/pj/api/save", { type: type, data: data})
+        .post("https://oasistienda.com/pj/api/save", { type: type, data: data, id:v4()})
         .then((res) => {
           console.log(parseFloat(res.data.price));
           let element = res.data;
