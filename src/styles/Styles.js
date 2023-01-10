@@ -571,6 +571,16 @@ export const PosS = styled.div`
     margin-top: 10px;
     gap: 5px;
   }
+  .ingItemContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+  }
+  .btnDelIng {
+    cursor: pointer;
+  }
   /*td .fa-pizza-slice{
   position: relative;
   &:after{

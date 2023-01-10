@@ -10,7 +10,6 @@ const Pos = () => {
   const {
     showAddEI,
     setShowAddEI,
-    setShowAddI,
     searchResult,
     setSearchResult,
     v4,
@@ -248,7 +247,7 @@ const Pos = () => {
     // setCant(newState);
     // setCartItemD(newState);
   };
-  console.log(carItem);
+
   //const [extras, setExtras] = useState([]);
   const handleOnSearch = (string, results) => {
     // console.log(string);
@@ -368,9 +367,9 @@ const Pos = () => {
       //console.log(totalSale);
       setTotalFinal(totalSale);
       //setDomItem(DOM);
-      console.log(" El elemento existe en el DOM");
+      //  console.log(" El elemento existe en el DOM");
     } else {
-      console.log("El elemento no existe en el DOM");
+      //console.log("El elemento no existe en el DOM");
       // El elemento no existe en el DOM
     }
   }, [handleOnSelect]);
@@ -392,10 +391,6 @@ const Pos = () => {
   };
   const addExtraI = (item) => {
     setShowAddEI(true);
-    setExtraIngItem(item);
-  };
-  const addI = (item) => {
-    setShowAddI(true);
     setExtraIngItem(item);
   };
   const addExtra = (id, status, field) => {
@@ -503,58 +498,35 @@ const Pos = () => {
     return () => {};
   }, [searchResult]);
 
-  
   /*const addIngre = (id, item) =>{
     console.log(item, id);
     
     let checkItem = updateArray5(item.id_item, item.name);
   }*/
   const [dataI, setDataI] = useState([]);
-  const [actualIngre, setActualIngre] = useState([]);
-  /*const addIngre =  (e, id) =>{
-    setDataI({ ...dataI, [e.target.dataset.name || e.target.name]: e.target.value, })
+  //const [actualIngre, setActualIngre] = useState([]);
+  const addIngre = (id, val) => {
+    let arrayData = carItem[id].ingre;
 
-    let actualIngs = [];
-    for (let i = 0; i < carItem.length; i++) {
-      const element = carItem[i];
-      if(i === id){
-        if(element.ingre.length > 0){
-          actualIngs.push(element.ingre);
-        }else{
-          console.log('entro la concha de su madre');
-        }
-      }
-        
-    }
-   
-    //let arrayTest = [];
-    actualIngs = actualIngs.slice();
-    for (let j = 0; j < opIng.length; j++) {
-      const element = opIng[j];
-      if(parseInt(element.id) === parseInt(e.target.value)){
-        
-        actualIngs.push({id_ing:e.target.value, ing:element.name,});
-      }
-      //  console.log(element);
-    }
-   
-    updateArray5(id, actualIngs);
-      
-  }
-  const updateArray5 = (id, datas) => {
+    arrayData = arrayData.slice();
 
-    
+    const element = opIng.find((e) => parseInt(e.id) === parseInt(val));
+    if (element) {
+      arrayData.push({ id_ing: val, ing: element.name });
+    }
+    updateArray5(id, arrayData);
+  };
+  const updateArray5 = (id, extras) => {
     const newState = carItem.map((obj, idx) => {
-        if (parseInt(idx) === parseInt(id)) {
-          
-            return { ...obj, ingre: datas };
-        }
-        return obj;
+      if (parseInt(idx) === parseInt(id)) {
+        return { ...obj, ingre: extras };
+      }
+      return obj;
     });
     setCarItem(newState);
     //setShowAddEI(false);
-
-};*/
+  };
+  console.log(carItem);
   return (
     <PosS>
       <div className="container">
@@ -634,24 +606,49 @@ const Pos = () => {
                               {data.name}
                             </td>
                             <td>
-                              
-                            {data.cat === "pizza" ? (
+                              {data.cat === "pizza" ? (
                                 <>
-                                {data.ingre.length >= 2 ? "" : <i
-                                      className="fa-solid fa-circle-plus"
-                                      onClick={() => addI(index)}
-                                    ></i>}
-                                  
+                                  {data.ingre.length >= 2 ? (
+                                    ""
+                                  ) : (
+                                    <select
+                                      name="ing"
+                                      value={dataI.ing}
+                                      onChange={(e) =>
+                                        addIngre(index, e.target.value)
+                                      }
+                                    >
+                                      <option value="0">
+                                        Selecciona un ingrediente
+                                      </option>
+                                      {opIng.map((item, index) => {
+                                        return (
+                                          <>
+                                            <option value={item.id} key={index}>
+                                              {item.name}
+                                            </option>
+                                          </>
+                                        );
+                                      })}
+                                    </select>
+                                  )}
 
                                   <div className="list-extras">
                                     {data.ingre.map((item, index2) => {
-                                      return <div key={index2}>{item.ing}</div>;
+                                      return <div key={index2} className="ingItemContainer"> 
+                                        
+                                        <div className="ingName">{item.ing}</div>
+                                        <div className="btnDelIng">
+                                          <i className="fa-solid fa-circle-xmark"></i>
+                                        </div>
+                                        </div>;
                                     })}
                                   </div>
                                 </>
                               ) : (
                                 ""
                               )}
+                              {}
                             </td>
                             <td style={{ textAlign: "center" }}>
                               {data.cat === "pizza" ? (
@@ -869,8 +866,11 @@ const Pos = () => {
             </div>
             <div className="total">
               <h3>Total</h3>
-              { activeOption === 1 ? <span>${(parseFloat(totalFinal)).toFixed(2)}</span> : <span>${(parseFloat(totalFinal) + envioPrice).toFixed(2)}</span>}
-              
+              {activeOption === 1 ? (
+                <span>${parseFloat(totalFinal).toFixed(2)}</span>
+              ) : (
+                <span>${(parseFloat(totalFinal) + envioPrice).toFixed(2)}</span>
+              )}
             </div>
             <div className="complete">
               <div className="cp-btn">
