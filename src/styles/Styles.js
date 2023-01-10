@@ -142,6 +142,7 @@ export const HeaderS = styled.div`
     a {
       font-size: 1.3em;
       text-transform: uppercase;
+      width: 100%;
     }
   }
   .logo-container {
@@ -150,6 +151,7 @@ export const HeaderS = styled.div`
     justify-content: center;
     align-items: center;
     font-size: 2em;
+    text-align: center;
   }
   .header-body {
     position: fixed;
@@ -212,6 +214,12 @@ export const ModalS = styled.div`
     flex-direction: row;
     flex-wrap: wrap;
   }
+  .form-footer {
+    display: flex;
+    box-sizing: border-box;
+    width: 35%;
+    margin-left: auto;
+  }
   .form-item {
     width: 100%;
     display: flex;
@@ -229,6 +237,14 @@ export const ModalS = styled.div`
       outline: none;
       box-sizing: border-box;
       padding: 0 10px;
+    }
+  }
+  .btn-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    button {
+      margin-left: 0;
     }
   }
   .modal-close {
@@ -249,9 +265,10 @@ export const StyledButton = styled.button`
   max-width: 150px;
   margin-left: auto;
   margin-top: 10px;
-  background: #a42220;
+  
+  background: ${props => props.bg ? props.bg:"#a42220"};
   color: #fff;
-  border: 1px solid #a42220;
+  border: ${props => props.bg ? `1px solid ${props.bg}`:"1px solid #a42220"}; 
   height: 30px;
   border-radius: 15px;
   cursor: pointer;
@@ -427,10 +444,21 @@ export const PosS = styled.div`
     border-radius: 6px;
     background-color: #ffffff;
     box-sizing: border-box;
-    height: 300px;
-    justify-content: center;
+    height: auto;
+    justify-content: start;
     align-items: center;
     display: flex;
+    flex-direction: column;
+    min-height: 400px;
+    padding-top: 15px;
+  }
+  .rp-container1 {
+    width: 100%;
+    display: flex;
+  }
+  .rp-container-1-1 {
+    width: 80%;
+    margin: 0 auto;
   }
   .rp-container2 {
     width: 80%;
@@ -438,6 +466,29 @@ export const PosS = styled.div`
     flex-direction: column;
     margin: 15px auto;
     gap: 11px;
+  }
+  
+  .search-client {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+
+    input {
+      width: 100%;
+      padding: 0 0 0 13px;
+      border: none;
+      outline: none;
+      background-color: rgba(0, 0, 0, 0);
+      font-size: inherit;
+      font-family: inherit;
+      color: #212121;
+      box-shadow: unset;
+    }
+    .wrapper:hover {
+      box-shadow: unset !important;
+    }
   }
   .complete-payment {
     display: flex;
@@ -468,6 +519,8 @@ export const PosS = styled.div`
       border-left: 1px solid #a42220;
       background: #a42220;
       color: #fff;
+      height: 50px;
+      width: 100%;
     }
   }
   .subtotal {
@@ -525,4 +578,93 @@ export const PosS = styled.div`
 
   }
 }*/
+  .address {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    textarea {
+      border: 1px solid #dfe1e5;
+      background-color: white;
+      color: #212121;
+      height: 100px;
+      width: 100%;
+      padding: 13px;
+      outline: none;
+      box-sizing: border-box;
+      resize: none;
+    }
+  }
+  .rp-container0 {
+    width: 100%;
+  }
+  .store-options {
+      width: 80%;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      margin: 0 auto;
+      gap: 0px;
+      margin-bottom: 10px;
+  }
+  .type-active{
+    transition: all 0.3s;
+    background-color:#a42220;
+    i{
+        transition: all 0.3s;
+        color: #fff;
+    }
+  }
+`;
+export const StoreOptions = styled.div`
+  
+    cursor: pointer;
+    width: 70px;
+    border: 3px solid #a42220;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: 100px;
+    height: 70px;
+    transition: all 0.3s;
+    i{
+      font-size: 1.5em;
+    }
+    &:hover{
+      background-color:#a42220;
+      transition: all 0.3s;
+      i{
+        transition: all 0.3s;
+        color: #fff;
+      }
+    }
+  
+  
+`;
+export const ActionBtns = styled.div`
+  display: flex;
+  gap: 5px;
+  .btn {
+    background: none;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    width: 25px;
+    height: 25px;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3em;
+    cursor: pointer;
+  }
+  .btn-edit {
+    color: #20a428;
+  }
+  .btn-del {
+    color: #a42220;
+  }
 `;

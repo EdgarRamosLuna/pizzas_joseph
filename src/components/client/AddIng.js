@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import MainContext from "../../context/MainContext";
 import { ModalS, StyledButton } from "../../styles/Styles";
 
-const AddExtIng = () => {
-  const { setShowAddInv, stopProp, saveProduct, setShowAddEI, searchResult, carItem,setCarItem, extraIngItem } =
+const AddIng = () => {
+  const { setShowAddInv, stopProp, saveProduct, setShowAddI, searchResult, carItem,setCarItem, extraIngItem } =
     useContext(MainContext);
   const [data, setData] = useState([]);
   const [opIng, setOpIng] = useState([]);
@@ -18,7 +18,7 @@ const AddExtIng = () => {
     for (let j = 0; j < carItem.length; j++) {
         const element = carItem[j];
         if(j === extraIngItem){
-            setActualExtras(element.extras);
+            setActualExtras(element.ingre);
         }
         
     }
@@ -47,22 +47,22 @@ const AddExtIng = () => {
 
     const newState = carItem.map((obj, idx) => {
         if (parseInt(idx) === parseInt(id)) {
-            return { ...obj, extras: extras };
+            return { ...obj, ingre: extras };
         }
         return obj;
     });
     setCarItem(newState);
-    setShowAddEI(false);
+    setShowAddI(false);
 
 };
   return (
-    <ModalS onClick={() => setShowAddEI(false)}>
+    <ModalS onClick={() => setShowAddI(false)}>
       <div className="modal-container" onClick={(e) => stopProp(e)}>
-        <div className="modal-close" onClick={() => setShowAddEI(false)}>
+        <div className="modal-close" onClick={() => setShowAddI(false)}>
           <i className="fa-solid fa-circle-xmark"></i>
         </div>
         <div className="modal-title">
-          <h2>Agregar un ingrediente extra</h2>
+          <h2>Agregar un ingrediente</h2>
         </div>
         <div className="modal-form">
           <div className="form-item">
@@ -88,7 +88,7 @@ const AddExtIng = () => {
             </select>
           </div>
           <div className="form-item">
-            <StyledButton onClick={()=> saveExtraIng(extraIngItem)}>Guardar</StyledButton>
+            <StyledButton onClick={()=> saveExtraIng(extraIngItem)} bg="#4fa420">Guardar</StyledButton>
           </div>
         </div>
       </div>
@@ -96,4 +96,4 @@ const AddExtIng = () => {
   );
 };
 
-export default AddExtIng;
+export default AddIng;

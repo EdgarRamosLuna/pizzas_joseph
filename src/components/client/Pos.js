@@ -1,14 +1,16 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { PosS } from "../../styles/Styles";
+import { PosS, StoreOptions } from "../../styles/Styles";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import MainContext from "../../context/MainContext";
+import { useCallback } from "react";
 const Pos = () => {
   const [val, setVal] = useState("");
 
   const {
     showAddEI,
     setShowAddEI,
+    setShowAddI,
     searchResult,
     setSearchResult,
     v4,
@@ -18,9 +20,34 @@ const Pos = () => {
     setExtraIngItem,
   } = useContext(MainContext);
   const [searchResult2, setSearchResult2] = useState([]);
+  const [searchResult3, setSearchResult3] = useState([]);
+  const [addressCli, setAddressCli] = useState("");
+  const [idCliente, setIdCliente] = useState(0);
+  const [activeOption, setActiveOption] = useState(1);
+  const [envioPrice, setEnvioPrice] = useState(10);
   useEffect(() => {
     axios
-      .get("https://oasistienda.com/pj/api/get")
+      .get("http://phpstack-491629-3140445.cloudwaysapps.com/api/get_clients")
+      .then((res) => {
+        //console.log(res.data);
+
+        for (let i = 0; i < res.data.length; i++) {
+          const element = res.data[i];
+          setSearchResult3((prev) => [
+            ...prev,
+            {
+              id: element.id,
+              name: element.nombre,
+              address: element.direccion,
+            },
+          ]);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    axios
+      .get("http://phpstack-491629-3140445.cloudwaysapps.com/api/get")
       .then((res) => {
         if (res.data.pizza.length > 0) {
           for (let i = 0; i < res.data.pizza.length; i++) {
@@ -39,6 +66,7 @@ const Pos = () => {
                     id_item: element.id_item,
                     name: element.size,
                     price: element.price,
+                    exin: element.exin,
                     chstedm: element.chstedm,
                     chstedp: element.chstedp,
                     exch: element.exch,
@@ -56,6 +84,7 @@ const Pos = () => {
                   id_item: element.id_item,
                   name: element.size,
                   price: element.price,
+                  exin: element.exin,
                   chstedm: element.chstedm,
                   chstedp: element.chstedp,
                   exch: element.exch,
@@ -82,7 +111,6 @@ const Pos = () => {
                   {
                     id: element.id,
                     name: element.name,
-                    price: 10,
                     cat: "mp",
                   },
                 ]);
@@ -223,6 +251,7 @@ const Pos = () => {
   console.log(carItem);
   //const [extras, setExtras] = useState([]);
   const handleOnSearch = (string, results) => {
+    // console.log(string);
     // onSearch will have as the first callback parameter
     // the string searched and for the second the results.
     //console.log(string, results);
@@ -233,13 +262,41 @@ const Pos = () => {
     //  console.log(result);
   };
 
-  const handleOnSelect = (item) => {
+  const handleOnSelect2 = useCallback((item) => {
+    // console.log(item);
+    setAddressCli(item);
+    setIdCliente(item.id);
+  });
+  const handleOnSelect = useCallback((item) => {
     // the item selected
     console.log(item);
     let checkItem = updateArray2(item.id_item, item.name);
     if (checkItem.length > 0) {
       if (checkItem[0].exist) {
-        setCarItem(checkItem[0].newState);
+        //setCarItem(checkItem[0].newState);
+        setCarItem((prev) => [
+          ...prev,
+          {
+            id: item.id,
+            id_item: item.id_item,
+            name: item.name,
+            ingre: [],
+            cant: 1,
+            price: parseFloat(item.price),
+            exin: parseFloat(item.exin),
+            chstedm: parseFloat(item.chstedm).toFixed(2),
+            chstedp: parseFloat(item.chstedp).toFixed(2),
+            exch: parseFloat(item.exch).toFixed(2),
+            fin: parseFloat(item.fin).toFixed(2),
+            pas: parseFloat(item.pas).toFixed(2),
+            cat: item.cat,
+            extras: [],
+            or: 0,
+            qe: false,
+            de: false,
+            pa: false,
+          },
+        ]);
       } else {
         setCarItem((prev) => [
           ...prev,
@@ -247,15 +304,16 @@ const Pos = () => {
             id: item.id,
             id_item: item.id_item,
             name: item.name,
+            ingre: [],
             cant: 1,
             price: parseFloat(item.price),
+            exin: parseFloat(item.exin),
             chstedm: parseFloat(item.chstedm).toFixed(2),
             chstedp: parseFloat(item.chstedp).toFixed(2),
             exch: parseFloat(item.exch).toFixed(2),
             fin: parseFloat(item.fin).toFixed(2),
             pas: parseFloat(item.pas).toFixed(2),
             cat: item.cat,
-            extra: 0,
             extras: [],
             or: 0,
             qe: false,
@@ -271,15 +329,16 @@ const Pos = () => {
           id: item.id,
           id_item: item.id_item,
           name: item.name,
+          ingre: [],
           cant: 1,
           price: parseFloat(item.price),
+          exin: parseFloat(item.exin),
           chstedm: parseFloat(item.chstedm).toFixed(2),
           chstedp: parseFloat(item.chstedp).toFixed(2),
           exch: parseFloat(item.exch).toFixed(2),
           fin: parseFloat(item.fin).toFixed(2),
           pas: parseFloat(item.pas).toFixed(2),
           cat: item.cat,
-          extra: 0,
           extras: [],
           or: 0,
           qe: false,
@@ -288,7 +347,34 @@ const Pos = () => {
         },
       ]);
     }
-  };
+  });
+
+  //const [domItem, setDomItem] = useState({});
+  const [totalFinal, setTotalFinal] = useState(0);
+  useEffect(() => {
+    if (document.querySelector(".total-sale") !== null) {
+      // El elemento existe en el DOM
+      let DOM = document.getElementsByClassName("total-sale");
+      //DOM.slot = DOM.textContent;
+      let totalSale = 0;
+      for (let i = 0; i < DOM.length; i++) {
+        const element = DOM[i];
+        element.nonce = element.innerHTML;
+        totalSale += parseFloat(element.innerHTML);
+
+        //
+      }
+      // DOM[0].slot = 'test';
+      //console.log(totalSale);
+      setTotalFinal(totalSale);
+      //setDomItem(DOM);
+      console.log(" El elemento existe en el DOM");
+    } else {
+      console.log("El elemento no existe en el DOM");
+      // El elemento no existe en el DOM
+    }
+  }, [handleOnSelect]);
+  //console.log();
 
   const handleOnFocus = () => {
     //console.log("Focused");
@@ -308,6 +394,10 @@ const Pos = () => {
     setShowAddEI(true);
     setExtraIngItem(item);
   };
+  const addI = (item) => {
+    setShowAddI(true);
+    setExtraIngItem(item);
+  };
   const addExtra = (id, status, field) => {
     console.log(status);
     if (status === false) {
@@ -324,16 +414,16 @@ const Pos = () => {
   const updateArray4 = (id, value) => {
     // console.log(id);
     let existe = false;
-    const newState = carItem.map((obj) => {
+    const newState = carItem.map((obj, indx) => {
       //   let ca = obj.cant;
       // ca = parseInt(ca);
       //console.log(ca);
 
-        if (obj.id_item === id) {
-          existe = true;
-          return { ...obj, or: value };
-        }
-      
+      if (indx === id) {
+        existe = true;
+        return { ...obj, or: value };
+      }
+
       return obj;
     });
     const response = [
@@ -351,26 +441,26 @@ const Pos = () => {
   const updateArray3 = (id, status, field) => {
     // console.log(id);
     let existe = false;
-    const newState = carItem.map((obj) => {
+    const newState = carItem.map((obj, indx) => {
       //   let ca = obj.cant;
       // ca = parseInt(ca);
       //console.log(ca);
 
       if (field === "qe") {
-        if (obj.id_item === id) {
+        if (indx === id) {
           existe = true;
           return { ...obj, qe: status };
         }
       }
       if (field === "de") {
-        if (obj.id_item === id) {
+        if (indx === id) {
           existe = true;
 
           return { ...obj, de: status };
         }
       }
       if (field === "pa") {
-        if (obj.id_item === id) {
+        if (indx === id) {
           existe = true;
           return { ...obj, pa: status };
         }
@@ -390,6 +480,81 @@ const Pos = () => {
     // setCartItemD(newState);
   };
   // console.log(searchResult2);
+  /*const datas = document.querySelector('.test');
+  useEffect(() => {
+    console.log(datas);
+    if(datas !== null){
+      console.log('asdasd');
+      datas.accessKey = 'test';
+     // console.log(datas);
+    }
+    
+    return () => {
+    };
+  }, [datas]);*/
+  const [opIng, setOpIng] = useState([]);
+  useEffect(() => {
+    for (let i = 0; i < searchResult.length; i++) {
+      const element = searchResult[i];
+      if (element.cat === "mp") {
+        setOpIng((prev) => [...prev, searchResult[i]]);
+      }
+    }
+    return () => {};
+  }, [searchResult]);
+
+  
+  /*const addIngre = (id, item) =>{
+    console.log(item, id);
+    
+    let checkItem = updateArray5(item.id_item, item.name);
+  }*/
+  const [dataI, setDataI] = useState([]);
+  const [actualIngre, setActualIngre] = useState([]);
+  /*const addIngre =  (e, id) =>{
+    setDataI({ ...dataI, [e.target.dataset.name || e.target.name]: e.target.value, })
+
+    let actualIngs = [];
+    for (let i = 0; i < carItem.length; i++) {
+      const element = carItem[i];
+      if(i === id){
+        if(element.ingre.length > 0){
+          actualIngs.push(element.ingre);
+        }else{
+          console.log('entro la concha de su madre');
+        }
+      }
+        
+    }
+   
+    //let arrayTest = [];
+    actualIngs = actualIngs.slice();
+    for (let j = 0; j < opIng.length; j++) {
+      const element = opIng[j];
+      if(parseInt(element.id) === parseInt(e.target.value)){
+        
+        actualIngs.push({id_ing:e.target.value, ing:element.name,});
+      }
+      //  console.log(element);
+    }
+   
+    updateArray5(id, actualIngs);
+      
+  }
+  const updateArray5 = (id, datas) => {
+
+    
+    const newState = carItem.map((obj, idx) => {
+        if (parseInt(idx) === parseInt(id)) {
+          
+            return { ...obj, ingre: datas };
+        }
+        return obj;
+    });
+    setCarItem(newState);
+    //setShowAddEI(false);
+
+};*/
   return (
     <PosS>
       <div className="container">
@@ -442,9 +607,10 @@ const Pos = () => {
                   <tr className="table-header">
                     <th></th>
                     <th>Producto</th>
-                    <th>Ingrediente Extra</th>
-                    <th>Orilla Rellena</th>
-                    <th>Queso Extra</th>
+                    <th>Ing.</th>
+                    <th>Ing. Extra</th>
+                    <th>O. Rellena</th>
+                    <th>Q. Extra</th>
                     <th>Deditos</th>
                     <th>Pastor</th>
                     <th>Precio</th>
@@ -460,29 +626,59 @@ const Pos = () => {
                             <td style={{ textAlign: "center" }}>
                               <i
                                 className="fa-solid fa-trash"
-                                onClick={() => removeItem(data.id_item)}
+                                onClick={() => removeItem(index)}
                               ></i>
                             </td>
                             <td>
                               {data.cat === "pizza" ? "Pizza " : ""}
                               {data.name}
                             </td>
-                            <td style={{ textAlign: "center" }}>
-                              <i
-                                className="fa-solid fa-circle-plus"
-                                onClick={() => addExtraI(data.id_item)}
-                              ></i>
+                            <td>
+                              
+                            {data.cat === "pizza" ? (
+                                <>
+                                {data.ingre.length >= 2 ? "" : <i
+                                      className="fa-solid fa-circle-plus"
+                                      onClick={() => addI(index)}
+                                    ></i>}
+                                  
 
-                              <div className="list-extras">
-                                {data.extras.map((item, index) => {
-                                  return <div>{item.ing}</div>;
-                                })}
-                              </div>
+                                  <div className="list-extras">
+                                    {data.ingre.map((item, index2) => {
+                                      return <div key={index2}>{item.ing}</div>;
+                                    })}
+                                  </div>
+                                </>
+                              ) : (
+                                ""
+                              )}
+                            </td>
+                            <td style={{ textAlign: "center" }}>
+                              {data.cat === "pizza" ? (
+                                <>
+                                  <i
+                                    className="fa-solid fa-circle-plus"
+                                    onClick={() => addExtraI(index)}
+                                  ></i>
+
+                                  <div className="list-extras">
+                                    {data.extras.map((item, index2) => {
+                                      return <div key={index2}>{item.ing}</div>;
+                                    })}
+                                  </div>
+                                </>
+                              ) : (
+                                ""
+                              )}
                             </td>
                             <td>
                               <div className="td-container">
                                 {data.cat === "pizza" ? (
-                                  <select onChange={(e) => addOr(data.id_item, e.target.value)}>
+                                  <select
+                                    onChange={(e) =>
+                                      addOr(index, e.target.value)
+                                    }
+                                  >
                                     <option value="0">
                                       Selecciona una opcion
                                     </option>
@@ -505,8 +701,8 @@ const Pos = () => {
                                     <input
                                       type="checkbox"
                                       checked={data.qe}
-                                      onClick={() =>
-                                        addExtra(data.id_item, data.qe, "qe")
+                                      onChange={() =>
+                                        addExtra(index, data.qe, "qe")
                                       }
                                     />
                                   ) : (
@@ -524,8 +720,8 @@ const Pos = () => {
                                     <input
                                       type="checkbox"
                                       checked={data.de}
-                                      onClick={() =>
-                                        addExtra(data.id_item, data.de, "de")
+                                      onChange={() =>
+                                        addExtra(index, data.de, "de")
                                       }
                                     />
                                   ) : (
@@ -543,8 +739,8 @@ const Pos = () => {
                                     <input
                                       type="checkbox"
                                       checked={data.pa}
-                                      onClick={() =>
-                                        addExtra(data.id_item, data.pa, "pa")
+                                      onChange={() =>
+                                        addExtra(index, data.pa, "pa")
                                       }
                                     />
                                   ) : (
@@ -555,28 +751,41 @@ const Pos = () => {
                             </td>
                             <td>${parseFloat(data.price).toFixed(2)}</td>
                             <td>{data.cant}</td>
-                            <td>{data.extra}</td>
+                            <td>
+                              {data.cat === "pizza"
+                                ? (
+                                    parseFloat(data.exin) *
+                                    parseInt(data.extras.length)
+                                  ).toFixed(2)
+                                : ""}
+                            </td>
                             <td>
                               $
-                              {parseFloat(
-                                (parseFloat(data.price) +
-                                  (data.qe === true
-                                    ? parseFloat(data.exch)
-                                    : 0) +
-                                  (data.de === true
-                                    ? parseFloat(data.fin)
-                                    : 0) +
-                                  (data.pa === true
-                                    ? parseFloat(data.pas)
-                                    : 0) +
-                                  (parseInt(data.or) === 1
-                                    ? parseFloat(data.chstedp)
-                                    : 0) +
-                                  (parseInt(data.or) === 2
-                                    ? parseFloat(data.chstedm)
-                                    : 0)) *
-                                  parseInt(data.cant)
-                              ).toFixed(2)}
+                              <span className="total-sale">
+                                {parseFloat(
+                                  (parseFloat(data.price) +
+                                    (data.extras.length > 0
+                                      ? Number(data.extras.length) *
+                                        parseFloat(data.exin)
+                                      : 0) +
+                                    (data.qe === true
+                                      ? parseFloat(data.exch)
+                                      : 0) +
+                                    (data.de === true
+                                      ? parseFloat(data.fin)
+                                      : 0) +
+                                    (data.pa === true
+                                      ? parseFloat(data.pas)
+                                      : 0) +
+                                    (parseInt(data.or) === 1
+                                      ? parseFloat(data.chstedp)
+                                      : 0) +
+                                    (parseInt(data.or) === 2
+                                      ? parseFloat(data.chstedm)
+                                      : 0)) *
+                                    parseInt(data.cant)
+                                ).toFixed(2)}
+                              </span>
                             </td>
                           </tr>
                         );
@@ -591,28 +800,91 @@ const Pos = () => {
           </div>
         </div>
         <div className="right-panel">
-          <div className="rp-container1"></div>
-          <div className="rp-container2">
-            <div className="total">
-              <h3>Envio</h3>
-              <span>$10.00</span>
+          <div className="rp-container0">
+            <div className="store-options">
+              <h2 style={{ width: "100%" }}>Tipo de pedido:</h2>
+              <StoreOptions
+                className={`store-option ${
+                  activeOption === 1 && "type-active"
+                }`}
+                onClick={() => setActiveOption(1)}
+              >
+                {/*<h4>Para comer aqui</h4>*/}
+                <i class="fa-solid fa-shop"></i>
+              </StoreOptions>
+              <StoreOptions
+                className={`store-option ${
+                  activeOption === 2 && "type-active"
+                }`}
+                onClick={() => setActiveOption(2)}
+              >
+                {/*<h4>A Domicilio</h4>*/}
+                <i class="fa-solid fa-motorcycle"></i>
+              </StoreOptions>
             </div>
+          </div>
+          {activeOption === 1 ? (
+            ""
+          ) : (
+            <div className="rp-container1">
+              <div className="rp-container-1-1">
+                <div className="search-client">
+                  <label htmlFor="">Selecciona un cliente:</label>
+                  <ReactSearchAutocomplete
+                    items={searchResult3}
+                    onSearch={handleOnSearch}
+                    onHover={handleOnHover}
+                    onSelect={handleOnSelect2}
+                    onFocus={handleOnFocus}
+                    autoFocus
+                    formatResult={formatResult}
+                  />
+                </div>
+                <div className="address">
+                  <center>
+                    <label htmlFor="">Direccion de envio:</label>
+                  </center>
+                  <textarea
+                    type="text"
+                    placeholder="Direccion"
+                    onChange={(e) => setAddressCli({ address: e.target.value })}
+                    value={addressCli.address}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="rp-container2">
+            {activeOption === 1 ? (
+              ""
+            ) : (
+              <div className="total">
+                <h3>Envio</h3>
+                <span>$10.00</span>
+              </div>
+            )}
             <div className="subtotal">
               <h3>Subtotal</h3>
-              <span>$0.00</span>
+              <span>${parseFloat(totalFinal).toFixed(2)}</span>
             </div>
             <div className="total">
               <h3>Total</h3>
-              <span>$0.00</span>
+              { activeOption === 1 ? <span>${(parseFloat(totalFinal)).toFixed(2)}</span> : <span>${(parseFloat(totalFinal) + envioPrice).toFixed(2)}</span>}
+              
             </div>
-            <div className="complete-payment">
-              <div className="cp-input-container">
-                <input type="text" />
-              </div>
+            <div className="complete">
               <div className="cp-btn">
                 <button type="">Completar venta</button>
               </div>
             </div>
+            {/* <div className="complete-payment">
+              <div className="cp-input-container">
+                <input type="text" />
+                  </div>
+              <div className="cp-btn">
+                <button type="">Completar venta</button>
+              </div>
+            </div>*/}
           </div>
         </div>
       </div>

@@ -4,8 +4,8 @@ import MainContext from "../../context/MainContext";
 import { ModalS, StyledButton } from "../../styles/Styles";
 
 const Modal = (props) => {
-  const { type } = props;
-  const { setShowAddInv, stopProp, saveProduct } = useContext(MainContext);
+  const { type, id_item, table} = props;
+  const { setShowAddInv, stopProp, saveProduct, setShowConfBox, delConf, setDelConf, deleteItemDb } = useContext(MainContext);
   const [tipo, setTipo] = useState(0);
   const [ingrediente, setIngrediente] = useState(2);
   const [data, setData] = useState([]);
@@ -17,8 +17,21 @@ const Modal = (props) => {
   const SelectIngr = (e) => {
     setIngrediente(e.target.value);
   };
+  const delItemC = (id_item, table) =>{
+  //  console.log('aaaaaaaaaa');
+   // setDelConf(true);
+
+    deleteItemDb(id_item, table);
+    
+    
+  }
+  const hideModal = () =>{
+    setShowAddInv(false);
+    setShowConfBox(false);
+
+  }
   return (
-    <ModalS onClick={() => setShowAddInv(false)}>
+    <ModalS onClick={() => hideModal()}>
       {type === "addInv" ? (
         <div className="modal-container" onClick={(e) => stopProp(e)}>
           <div className="modal-close" onClick={() => setShowAddInv(false)}>
@@ -295,21 +308,7 @@ const Modal = (props) => {
                     }
                   />
                 </div>
-                <div className="form-item">
-                  <label for="">Precio Compra</label>
-                  <input
-                    type="text"
-                    name="price_bu"
-                    value={data3.price_bu}
-                    onChange={(e) =>
-                      setData3({
-                        ...data3,
-                        [e.target.dataset.name || e.target.name]:
-                          e.target.value,
-                      })
-                    }
-                  />
-                </div>
+                {data3.is_ing !== '1' &&
                 <div className="form-item">
                   <label for="">Cantidad</label>
                   <input
@@ -325,6 +324,8 @@ const Modal = (props) => {
                     }
                   />
                 </div>
+                
+                } 
                 {/*ingrediente === "1" ? (
                   <div className="form-item">
                     <label for="">Precio Venta</label>
@@ -351,6 +352,31 @@ const Modal = (props) => {
             ) : (
               ""
             )}
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
+{type === "delItem" ? (
+        <div className="modal-container" onClick={(e) => stopProp(e)}>
+          <div className="modal-close" onClick={() => setShowConfBox(false)}>
+            <i class="fa-solid fa-circle-xmark"></i>
+          </div>
+          <div className="modal-title">
+            <h2>Elminar producto</h2>
+          </div>
+          <div className="modal-form">
+            <h3>¿Estás seguro(a) que deseas borrar este producto? Esta acción no podrá deshacerse.</h3>
+          </div>
+          
+          <div className="form-footer">
+                  <StyledButton onClick={() => setShowConfBox(false)}>
+                      Cerrar
+                    </StyledButton>
+                  <StyledButton onClick={(e) => delItemC(id_item, table)}>
+                      Estoy Seguro(a)
+                    </StyledButton>
           </div>
         </div>
       ) : (

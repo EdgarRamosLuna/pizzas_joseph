@@ -21,9 +21,9 @@ function App() {
               <Route exact path="/inventario" element={<Storage />} />
               <Route exact path="/ventas" element={<Sales />} />
               <Route exact path="/pos" element={<Pos />} />
-              <Route exact path="/usuarios" element={<Users />} />
-              <Route exact path="login" element={<Login />} />
+              <Route exact path="/usuarios" element={<Users />} />              
             </Route>
+            <Route exact path="/login" element={<Login />} />
           </Routes>
       </MainContextProvider>
     </Content>
