@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { PosS, StoreOptions } from "../../styles/Styles";
+import { PosS, StoreOptions, StyledNumber } from "../../styles/Styles";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import MainContext from "../../context/MainContext";
 import { useCallback } from "react";
+import EditableText from "../../helpers/EditableText";
 const Pos = () => {
   const [val, setVal] = useState("");
 
@@ -24,6 +25,9 @@ const Pos = () => {
   const [idCliente, setIdCliente] = useState(0);
   const [activeOption, setActiveOption] = useState(1);
   const [envioPrice, setEnvioPrice] = useState(10);
+  const [cantN, setCantN] = useState(1);
+  const [elementType, setElementType] = useState("span");
+
   useEffect(() => {
     axios
       .get("http://phpstack-491629-3140445.cloudwaysapps.com/api/get_clients")
@@ -61,7 +65,7 @@ const Pos = () => {
                 setSearchResult2((prev) => [
                   ...prev,
                   {
-                    id: element.id,
+                    id: element.id_item,
                     id_item: element.id_item,
                     name: element.size,
                     price: element.price,
@@ -386,8 +390,13 @@ const Pos = () => {
       </>
     );
   };
-  const removeItem = (data) => {
-    console.log(data);
+  const removeItem = (indx) => {
+    setCarItem(
+      carItem.filter((valor, i) => {
+        return Number(i) !== Number(indx);
+      })
+    );
+    //console.log(indx);
   };
   const addExtraI = (item) => {
     setShowAddEI(true);
@@ -497,14 +506,7 @@ const Pos = () => {
     }
     return () => {};
   }, [searchResult]);
-
-  /*const addIngre = (id, item) =>{
-    console.log(item, id);
-    
-    let checkItem = updateArray5(item.id_item, item.name);
-  }*/
   const [dataI, setDataI] = useState([]);
-  //const [actualIngre, setActualIngre] = useState([]);
   const addIngre = (id, val) => {
     let arrayData = carItem[id].ingre;
 
@@ -514,19 +516,46 @@ const Pos = () => {
     if (element) {
       arrayData.push({ id_ing: val, ing: element.name });
     }
-    updateArray5(id, arrayData);
+    updateArray5(id, arrayData, val);
   };
-  const updateArray5 = (id, extras) => {
+  const updateArray5 = (id, extras, id_ing = 0) => {
     const newState = carItem.map((obj, idx) => {
       if (parseInt(idx) === parseInt(id)) {
-        return { ...obj, ingre: extras };
+        console.log(obj.ingre);
+        const element = obj.ingre.find(
+          (e) => parseInt(e.id_ing) === parseInt(id_ing)
+        );
+        if (element) {
+        } else {
+          return { ...obj, ingre: extras };
+        }
       }
       return obj;
     });
     setCarItem(newState);
-    //setShowAddEI(false);
   };
-  console.log(carItem);
+
+  const removeIng = (indx, arrayD, index_main) => {
+    let arrayItems = carItem[index_main].ingre;
+    arrayD = arrayD.filter((valor, i) => {
+      return Number(i) !== Number(indx);
+    });
+    arrayItems = arrayItems.slice();
+    updateArray5(index_main, arrayD);
+
+    //    console.log(arrayD);
+  };
+  const isWednesday = () => {
+    var d = new Date();
+    var day = d.getDay();
+    return day === 3 || day === 5;
+  };
+  /*if (isWednesday()) {
+    console.log("3 ingredientes");
+  } else {
+    console.log("2 Ingredientes.");
+  }*/
+
   return (
     <PosS>
       <div className="container">
@@ -535,7 +564,7 @@ const Pos = () => {
             <ReactSearchAutocomplete
               items={searchResult2}
               onSearch={handleOnSearch}
-              onHover={handleOnHover}
+              //   onHover={handleOnHover}
               onSelect={handleOnSelect}
               onFocus={handleOnFocus}
               autoFocus
@@ -545,7 +574,7 @@ const Pos = () => {
           {/*<div className="header">
             <div className="search">
               <div className="search-btn" onClick={searchItem}>
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <i className="fa-solid fa-magnifying-glass"></i>
               </div>
               <div className="search-field">
                 <input
@@ -579,8 +608,8 @@ const Pos = () => {
                   <tr className="table-header">
                     <th></th>
                     <th>Producto</th>
-                    <th>Ing.</th>
-                    <th>Ing. Extra</th>
+                    <th>Ingredientes</th>
+
                     <th>O. Rellena</th>
                     <th>Q. Extra</th>
                     <th>Deditos</th>
@@ -592,13 +621,13 @@ const Pos = () => {
                   </tr>
                   {carItem.length > 0 ? (
                     <>
-                      {carItem.map((data, index) => {
+                      {carItem.map((data, index_main) => {
                         return (
-                          <tr key={index}>
+                          <tr key={data.id_item + index_main}>
                             <td style={{ textAlign: "center" }}>
                               <i
                                 className="fa-solid fa-trash"
-                                onClick={() => removeItem(index)}
+                                onClick={() => removeItem(index_main)}
                               ></i>
                             </td>
                             <td>
@@ -608,40 +637,69 @@ const Pos = () => {
                             <td>
                               {data.cat === "pizza" ? (
                                 <>
-                                  {data.ingre.length >= 2 ? (
-                                    ""
-                                  ) : (
-                                    <select
-                                      name="ing"
-                                      value={dataI.ing}
-                                      onChange={(e) =>
-                                        addIngre(index, e.target.value)
-                                      }
-                                    >
-                                      <option value="0">
-                                        Selecciona un ingrediente
-                                      </option>
-                                      {opIng.map((item, index) => {
-                                        return (
-                                          <>
-                                            <option value={item.id} key={index}>
-                                              {item.name}
-                                            </option>
-                                          </>
-                                        );
-                                      })}
-                                    </select>
-                                  )}
+                                  <select
+                                    name="ing"
+                                    value={dataI.ing}
+                                    onChange={(e) =>
+                                      addIngre(index_main, e.target.value)
+                                    }
+                                  >
+                                    <option value="0">
+                                      Selecciona un ingrediente
+                                    </option>
+                                    {opIng.map((item, indx) => {
+                                      return (
+                                        <option
+                                          value={item.id}
+                                          key={`${opIng.length + carItem.length}-${item.name}`}
+                                        >
+                                          {item.name}
+                                        </option>
+                                      );
+                                    })}
+                                  </select>
 
-                                  <div className="list-extras">
+                                  <div
+                                    className="list-extras"
+                                    style={{
+                                      display: `${
+                                        data.ingre.length >= 1 ? "flex" : "none"
+                                      } `,
+                                    }}
+                                  >
                                     {data.ingre.map((item, index2) => {
-                                      return <div key={index2} className="ingItemContainer"> 
-                                        
-                                        <div className="ingName">{item.ing}</div>
-                                        <div className="btnDelIng">
-                                          <i className="fa-solid fa-circle-xmark"></i>
+                                      return (
+                                        <div
+                                          className="ingContainer"
+                                          key={item.ing}
+                                        >
+                                          <div className="ingItemContainer">
+                                            <div className="ingName">
+                                              {item.ing}
+                                            </div>
+                                            <div className="btnDelIng">
+                                              <i
+                                                className="fa-solid fa-circle-xmark"
+                                                onClick={(e) =>
+                                                  removeIng(
+                                                    index2,
+                                                    data.ingre,
+                                                    index_main
+                                                  )
+                                                }
+                                              />
+                                            </div>
+                                          </div>
+                                          {index2 === 1 &&
+                                          data.ingre.length > 2 ? (
+                                            <div className="extra-ing">
+                                              <h5>Ingredientes extra</h5>
+                                            </div>
+                                          ) : (
+                                            ""
+                                          )}
                                         </div>
-                                        </div>;
+                                      );
                                     })}
                                   </div>
                                 </>
@@ -650,12 +708,12 @@ const Pos = () => {
                               )}
                               {}
                             </td>
-                            <td style={{ textAlign: "center" }}>
+                            {/*<td style={{ textAlign: "center" }}>
                               {data.cat === "pizza" ? (
                                 <>
                                   <i
                                     className="fa-solid fa-circle-plus"
-                                    onClick={() => addExtraI(index)}
+                                    onClick={() => addExtraI(index_main)}
                                   ></i>
 
                                   <div className="list-extras">
@@ -667,13 +725,13 @@ const Pos = () => {
                               ) : (
                                 ""
                               )}
-                            </td>
+                              </td>*/}
                             <td>
                               <div className="td-container">
                                 {data.cat === "pizza" ? (
                                   <select
                                     onChange={(e) =>
-                                      addOr(index, e.target.value)
+                                      addOr(index_main, e.target.value)
                                     }
                                   >
                                     <option value="0">
@@ -699,7 +757,7 @@ const Pos = () => {
                                       type="checkbox"
                                       checked={data.qe}
                                       onChange={() =>
-                                        addExtra(index, data.qe, "qe")
+                                        addExtra(index_main, data.qe, "qe")
                                       }
                                     />
                                   ) : (
@@ -718,7 +776,7 @@ const Pos = () => {
                                       type="checkbox"
                                       checked={data.de}
                                       onChange={() =>
-                                        addExtra(index, data.de, "de")
+                                        addExtra(index_main, data.de, "de")
                                       }
                                     />
                                   ) : (
@@ -737,7 +795,7 @@ const Pos = () => {
                                       type="checkbox"
                                       checked={data.pa}
                                       onChange={() =>
-                                        addExtra(index, data.pa, "pa")
+                                        addExtra(index_main, data.pa, "pa")
                                       }
                                     />
                                   ) : (
@@ -747,12 +805,18 @@ const Pos = () => {
                               )}
                             </td>
                             <td>${parseFloat(data.price).toFixed(2)}</td>
-                            <td>{data.cant}</td>
+                            <td>
+                              <EditableText data={data} />
+                            </td>
                             <td>
                               {data.cat === "pizza"
                                 ? (
                                     parseFloat(data.exin) *
-                                    parseInt(data.extras.length)
+                                    parseInt(
+                                      data.ingre.length > 2
+                                        ? data.ingre.length - 2
+                                        : 0
+                                    )
                                   ).toFixed(2)
                                 : ""}
                             </td>
@@ -761,8 +825,8 @@ const Pos = () => {
                               <span className="total-sale">
                                 {parseFloat(
                                   (parseFloat(data.price) +
-                                    (data.extras.length > 0
-                                      ? Number(data.extras.length) *
+                                    (data.ingre.length > 2
+                                      ? Number(data.ingre.length - 2) *
                                         parseFloat(data.exin)
                                       : 0) +
                                     (data.qe === true
@@ -799,7 +863,12 @@ const Pos = () => {
         <div className="right-panel">
           <div className="rp-container0">
             <div className="store-options">
-              <h2 style={{ width: "100%" }}>Tipo de pedido:</h2>
+              <h2 style={{ width: "100%" }}>
+                Tipo de pedido: <br />
+              </h2>
+              <div style={{ width: "100%", marginBottom: 15 }}>
+                {activeOption === 1 ? "Para comer aqui" : "Para llevar"}
+              </div>
               <StoreOptions
                 className={`store-option ${
                   activeOption === 1 && "type-active"
@@ -807,7 +876,7 @@ const Pos = () => {
                 onClick={() => setActiveOption(1)}
               >
                 {/*<h4>Para comer aqui</h4>*/}
-                <i class="fa-solid fa-shop"></i>
+                <i className="fa-solid fa-shop"></i>
               </StoreOptions>
               <StoreOptions
                 className={`store-option ${
@@ -816,7 +885,7 @@ const Pos = () => {
                 onClick={() => setActiveOption(2)}
               >
                 {/*<h4>A Domicilio</h4>*/}
-                <i class="fa-solid fa-motorcycle"></i>
+                <i className="fa-solid fa-motorcycle"></i>
               </StoreOptions>
             </div>
           </div>

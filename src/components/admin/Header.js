@@ -23,9 +23,9 @@ const Header = () => {
             </Link>
           </ul>
           <ul className="menu-data">
-            <li>
+            {/*<li>
               <Link to="/">Inicio</Link>
-            </li>
+  </li>*/}
             <li>
               <Link to="/inventario">Inventario</Link>
             </li>
@@ -38,9 +38,7 @@ const Header = () => {
             <li>
               <Link to="/usuarios">Usuarios</Link>
             </li>
-            <li>
-              <Link to="/login">Salir</Link>
-            </li>
+         
           </ul>
         </div>
       </div>

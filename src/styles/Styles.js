@@ -4,6 +4,17 @@ export const Content = styled.div`
   display: flex;
   flex-wrap: wrap;
   height: 100%;
+  select,
+    input {
+      height: 30px;
+      background: transparent;
+      border: 1px solid;
+      color: #a42220;
+      border-radius: 5px;
+      outline: none;
+      box-sizing: border-box;
+      padding: 0 10px;
+    }
 `;
 export const HeaderS = styled.div`
   display: flex;
@@ -227,17 +238,7 @@ export const ModalS = styled.div`
     height: auto;
     gap: 10px;
     margin-bottom: 5px;
-    select,
-    input {
-      height: 30px;
-      background: transparent;
-      border: 1px solid;
-      color: #a42220;
-      border-radius: 5px;
-      outline: none;
-      box-sizing: border-box;
-      padding: 0 10px;
-    }
+    
   }
   .btn-container {
     display: flex;
@@ -555,6 +556,11 @@ export const PosS = styled.div`
   .table-container {
     width: 100%;
   }
+  .body-table {
+    scrollbar-width: thin;
+    scrollbar-color: #a42220 #fff !important;
+    max-height: 90vh;
+  }
   th,
   td {
     text-align: center !important;
@@ -577,6 +583,24 @@ export const PosS = styled.div`
     justify-content: space-between;
     gap: 10px;
     width: 100%;
+  }
+  .ingContainer {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+  }
+  .extra-ing {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border: 1px solid #a42220;
+    border-left: 0;
+    border-right: 0;
+    .extra-ing h5 {
+      margin: 7px 0;
+    }
   }
   .btnDelIng {
     cursor: pointer;
@@ -618,6 +642,7 @@ export const PosS = styled.div`
       margin: 0 auto;
       gap: 0px;
       margin-bottom: 10px;
+      color: #a42220;
   }
   .type-active{
     transition: all 0.3s;
@@ -676,5 +701,38 @@ export const ActionBtns = styled.div`
   }
   .btn-del {
     color: #a42220;
+  }
+`;
+
+export const StyledNumber = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  min-width: 115px;
+  input{
+    max-width: 60px;
+    text-align: center;
+  }
+  .edit-btns {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    max-width: 115px;
+    min-width: 115px;
+    margin: 0 auto;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    i{
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      color: #a42220;
+      width: 20px;
+    }
   }
 `;
