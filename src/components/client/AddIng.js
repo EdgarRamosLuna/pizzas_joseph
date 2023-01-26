@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import MainContext from "../../context/MainContext";
 import { ModalS, StyledButton } from "../../styles/Styles";
+import BtnClose from "../helpers/BtnClose";
 
 const AddIng = () => {
   const { setShowAddInv, stopProp, saveProduct, setShowAddI, searchResult, carItem,setCarItem, extraIngItem } =
@@ -55,12 +56,14 @@ const AddIng = () => {
     setShowAddI(false);
 
 };
+const setFunction = () =>{
+  setShowAddI(false);
+}
   return (
     <ModalS onClick={() => setShowAddI(false)}>
       <div className="modal-container" onClick={(e) => stopProp(e)}>
-        <div className="modal-close" onClick={() => setShowAddI(false)}>
-          <i className="fa-solid fa-circle-xmark"></i>
-        </div>
+
+        <BtnClose setFunction={setFunction} />
         <div className="modal-title">
           <h2>Agregar un ingrediente</h2>
         </div>

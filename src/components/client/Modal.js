@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useState } from "react";
 import MainContext from "../../context/MainContext";
 import { ModalS, StyledButton } from "../../styles/Styles";
+import BtnClose from "../helpers/BtnClose";
 
 const Modal = (props) => {
   const { type, id_item, table} = props;
@@ -30,13 +31,14 @@ const Modal = (props) => {
     setShowConfBox(false);
 
   }
+  const setFunction = () =>{
+    setShowAddInv(false);
+  }
   return (
     <ModalS onClick={() => hideModal()}>
       {type === "addInv" ? (
         <div className="modal-container" onClick={(e) => stopProp(e)}>
-          <div className="modal-close" onClick={() => setShowAddInv(false)}>
-            <i class="fa-solid fa-circle-xmark"></i>
-          </div>
+          <BtnClose setFunction={setFunction} />
           <div className="modal-title">
             <h2>Agregar un nuevo producto</h2>
           </div>
@@ -371,10 +373,10 @@ const Modal = (props) => {
           </div>
           
           <div className="form-footer">
-                  <StyledButton onClick={() => setShowConfBox(false)}>
+                  <StyledButton onClick={() => setShowConfBox(false)} >
                       Cerrar
                     </StyledButton>
-                  <StyledButton onClick={(e) => delItemC(id_item, table)}>
+                  <StyledButton onClick={(e) => delItemC(id_item, table)} bg="#20a428">
                       Estoy Seguro(a)
                     </StyledButton>
           </div>

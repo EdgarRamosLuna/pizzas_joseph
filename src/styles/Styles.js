@@ -41,6 +41,10 @@ export const HeaderS = styled.div`
       padding: 0;
     }
   }
+  .item-active{
+    transition: all 0.3s ease-in-out;
+    background: #571211;
+  }
   .menu-items {
     display: flex;
     width: 100%;
@@ -151,9 +155,19 @@ export const HeaderS = styled.div`
       }
     }
     a {
+     
       font-size: 1.3em;
       text-transform: uppercase;
       width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+    }
+    .logo-container{
+      a{
+        display: unset;
+      }
     }
   }
   .logo-container {
@@ -196,8 +210,13 @@ export const BodyS = styled.div`
   box-sizing: border-box;
   padding: 0 50px;
   margin-top: 65px;
-  height: 100vh;
+  height: 90vh;
   margin-left: auto;
+  overflow-y: auto;
+  .jaZsat{
+    padding: 0 25px !important;
+    padding-left: 10px !important;
+  }
 `;
 
 export const ModalS = styled.div`
@@ -363,6 +382,17 @@ export const PosS = styled.div`
   input {
     outline: none;
   }
+  span.number-container {
+      border-bottom: 1px solid;
+      color: #a42220;
+      font-weight: bold;
+      cursor: pointer;
+  }
+  .wrapper{
+    input{
+      border: 0 !important;
+    }
+  }
   .body {
     width: 75%;
     display: flex;
@@ -433,7 +463,7 @@ export const PosS = styled.div`
     width: 100%;
     box-sizing: border-box;
     background: #fff;
-    min-height: 756px;
+    min-height: 333px;
     overflow-y: auto;
   }
   .right-panel {
@@ -502,11 +532,14 @@ export const PosS = styled.div`
   .cp-input-container {
     display: flex;
     height: 100%;
+    width: 100%;
     input {
       border: 0;
       box-sizing: border-box;
       padding: 5px 11px;
       outline: none;
+      width: 100%;
+      height: 100%;
     }
   }
   .cp-btn {
@@ -713,7 +746,7 @@ export const StyledNumber = styled.div`
   min-width: 115px;
   input{
     max-width: 60px;
-    text-align: center;
+    text-align: center ;
   }
   .edit-btns {
     width: 100%;
@@ -735,4 +768,68 @@ export const StyledNumber = styled.div`
       width: 20px;
     }
   }
+`;
+export const LoginS = styled.div`
+width: 100%;
+display: flex;
+justify-content: center;
+align-items: center;
+background: #a42220;
+form {
+  display: flex;
+  width: 60%;
+  margin: 0 auto;
+  flex-direction: column;
+  gap: 8px;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.form-container {
+  width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+button{
+  height: 30px;
+  background: transparent;
+  border: 1px solid #a42220;
+  background-color: #a42220;
+  color: #fff;
+  border-radius: 5px;
+  outline: none;
+  box-sizing: border-box;
+  padding: 0 10px;
+  transition: all 0.3s;
+  &:hover{
+    transition: all 0.3s;
+    border: 1px solid #a42220;
+    color: #a42220;
+    background-color: #fff;
+  }
+}
+.logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3em;
+  color: #a42220;
+}
+`;
+export const Loader = styled.div`
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 999;
 `;

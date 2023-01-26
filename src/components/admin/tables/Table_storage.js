@@ -2,10 +2,11 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import MainContext from "../../../context/MainContext";
 import { ActionBtns, TableContainer } from "../../../styles/Styles";
+import FilterItems from "./FilterItems";
 
 const Table_storage = (props) => {
   const { type } = props;
-  const { DataTable, data, setData,data2, setData2, data3, setData3, v4, showConfBox, setShowConfBox, updateItem, removeItem } = useContext(MainContext);
+  const { DataTable, data, setData,data2, setData2, data3, setData3, v4, showConfBox, setShowConfBox, updateItem, removeItem, baseUrl } = useContext(MainContext);
   
   const [columns, setColumns] = useState([]);
   
@@ -52,7 +53,7 @@ const Table_storage = (props) => {
           selector: (row) => row.actions,
         },
       ]);
-      axios.get('http://phpstack-491629-3140445.cloudwaysapps.com/api/products_pizza').then((res) =>{
+      axios.get(`${baseUrl}/server/api/products_pizza`).then((res) =>{
     //    console.log(res);
         // setData([]);
         for (let i = 0; i < res.data.length; i++) {
@@ -112,7 +113,7 @@ const Table_storage = (props) => {
         },
         
       ]);
-      axios.get('http://phpstack-491629-3140445.cloudwaysapps.com/api/products_other').then((res) =>{
+      axios.get(`${baseUrl}/server/api/products_other`).then((res) =>{
     //    console.log(res);
         // setData([]);
         for (let i = 0; i < res.data.length; i++) {
@@ -153,7 +154,7 @@ const Table_storage = (props) => {
         },
         {
           name: "Cantidad en inventario",
-          selector: (row) => row.cant,
+          selector: (row) => Number(row.is_ing) === 1 ? "":row.cant,
         },
         {
           name: "",
@@ -161,7 +162,7 @@ const Table_storage = (props) => {
         },
         
       ]);
-      axios.get('http://phpstack-491629-3140445.cloudwaysapps.com/api/products_materias_primas').then((res) =>{
+      axios.get(`${baseUrl}/server/api/products_materias_primas`).then((res) =>{
     //    console.log(res);
         // setData([]);
         for (let i = 0; i < res.data.length; i++) {
@@ -192,9 +193,9 @@ const Table_storage = (props) => {
 
   return (
     <TableContainer>
-      {type === 0 && <DataTable columns={columns} data={ data} />}
-      {type === 1 && <DataTable columns={columns} data={ data2} />}
-      {type === 2 && <DataTable columns={columns} data={ data3} />}
+      {type === 0 && <FilterItems columns={columns} data={data} field='size' placeholder='Buscar por tamaño' />}
+      {type === 1 && <FilterItems columns={columns} data={data2} field='product' placeholder='Buscar por producto' />}
+      {type === 2 && <FilterItems columns={columns} data={data3} field='name' placeholder='Buscar por nombre' />}
     </TableContainer>
   );
 };

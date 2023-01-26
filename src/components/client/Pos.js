@@ -18,6 +18,13 @@ const Pos = () => {
     setCarItem,
     extraIngItem,
     setExtraIngItem,
+    baseUrl,
+    showAlert,
+    setShowAlert,
+    setTypeAlert,
+    sesionData,
+    setSesionData,
+    bseUrl
   } = useContext(MainContext);
   const [searchResult2, setSearchResult2] = useState([]);
   const [searchResult3, setSearchResult3] = useState([]);
@@ -30,7 +37,7 @@ const Pos = () => {
 
   useEffect(() => {
     axios
-      .get("http://phpstack-491629-3140445.cloudwaysapps.com/api/get_clients")
+      .get(`${baseUrl}/server/api/get_clients`)
       .then((res) => {
         //console.log(res.data);
 
@@ -50,7 +57,7 @@ const Pos = () => {
         console.error(err);
       });
     axios
-      .get("http://phpstack-491629-3140445.cloudwaysapps.com/api/get")
+      .get(`${baseUrl}/server/api/get`)
       .then((res) => {
         if (res.data.pizza.length > 0) {
           for (let i = 0; i < res.data.pizza.length; i++) {
@@ -178,7 +185,7 @@ const Pos = () => {
   const searchItem = (value) => {
     if (value.length >= 3) {
       axios
-        .post("https://oasistienda.com/pj/api/search", { val: value })
+        .post(`${baseUrl}/server/api/search`, { val: value })
         .then((res) => {})
         .catch((err) => {
           console.error(err);
@@ -221,9 +228,6 @@ const Pos = () => {
 
     // setCarItem(prev => [...prev, {id:id}]);
   };
-  useEffect(() => {
-    return () => {};
-  }, [searchResult]);
 
   const updateArray2 = (id, name) => {
     // console.log(id);
@@ -379,7 +383,8 @@ const Pos = () => {
   }, [handleOnSelect]);
   //console.log();
 
-  const handleOnFocus = () => {
+  const handleOnFocus = (e) => {
+    //console.log(e.target);
     //console.log("Focused");
   };
   const formatResult = (item) => {
@@ -426,6 +431,34 @@ const Pos = () => {
       if (indx === id) {
         existe = true;
         return { ...obj, or: value };
+      }
+
+      return obj;
+    });
+    const response = [
+      {
+        exist: existe,
+        newState,
+      },
+    ];
+
+    // return response;
+    setCarItem(newState);
+    // setCant(newState);
+    // setCartItemD(newState);
+  };
+
+  const updateCantArray = (id, value) => {
+    // console.log(id);
+    let existe = false;
+    const newState = carItem.map((obj, indx) => {
+      //   let ca = obj.cant;
+      // ca = parseInt(ca);
+      //console.log(ca);
+
+      if (indx === id) {
+        existe = true;
+        return { ...obj, cant: value };
       }
 
       return obj;
@@ -504,7 +537,7 @@ const Pos = () => {
         setOpIng((prev) => [...prev, searchResult[i]]);
       }
     }
-    return () => {};
+    
   }, [searchResult]);
   const [dataI, setDataI] = useState([]);
   const addIngre = (id, val) => {
@@ -555,6 +588,74 @@ const Pos = () => {
   } else {
     console.log("2 Ingredientes.");
   }*/
+  const [amountCard, setAmountCard] = useState('');
+  const [amountCash, setAmountCash] = useState('');
+  const [clientName, setClientname] = useState('');
+  useEffect(() => {
+    setClientname(addressCli.name);
+  }, [addressCli]);
+  const completeSale = () =>{
+    let totalDue = parseFloat(totalFinal) + parseFloat(activeOption === 1 ? 0 : envioPrice );
+    if(amountCard === '' && amountCash === ''){
+      
+      showALertF('fail-sale1', 6000);
+      console.log('debes agregar un monto valido ya sea tarjeta o efectivo para completar la venta');
+      return false;
+    }
+    if(Number(amountCash) === Number(totalDue)){
+      if(Number(amountCash) === 0){
+        showALertF('fail-sale2', 6000);
+        console.log('Debes ingresar un monto valido');
+        return false;
+      }
+      
+    }
+    if(Number(amountCard) === Number(totalDue)){
+      if(Number(amountCard) === 0){
+        showALertF('fail-sale2', 6000);
+        console.log('Debes ingresar un monto valido');
+        return false;
+      }
+    }
+   
+    let totalPayment = parseFloat(amountCash === '' ? 0 : amountCash) + parseFloat(amountCard === '' ? 0 : amountCard);
+    if(Number(totalPayment) < Number(totalDue) ){
+      showALertF('fail-sale3', 6000);
+      console.log('Debes debes completar el total del costo de la venta para continuar');
+
+      return false;
+    }
+    //console.log(totalPayment);
+    //console.log(totalDue);
+    //console.log(carItem);
+ //   console.log('venta completada');
+    
+    axios.post(`${baseUrl}/server/api/complete-sale`, {data:carItem, del:activeOption === 1 ? 0 : envioPrice, total:totalFinal, order:activeOption === 1 ? "Local":"Domicilio", total_cash:Number(amountCash), total_card:Number(amountCard), sale_data:addressCli, client:clientName}, {headers: {
+      Authorization: `Bearer ${sesionData}`,
+    },}).then((res) =>{
+      const error = res.data.error;
+      const id_sale = res.data.id_sale;
+      if(!error){
+        showALertF('success-sale', 3000 ,id_sale);
+      }
+      //console.log(error);
+    }).catch((err) => {
+      console.log(err);
+    });
+    
+
+  }
+  const showALertF = (type = '', time = 3000, id_sale) =>{
+     setShowAlert(true);
+     setTypeAlert(type);
+     
+     setTimeout(() => {
+       setShowAlert(false);
+       if(type === 'success-sale'){
+         window.open(`${bseUrl}/ticket/${id_sale}`, "_blank");
+       }
+      }, time);
+  }
 
   return (
     <PosS>
@@ -615,8 +716,8 @@ const Pos = () => {
                     <th>Deditos</th>
                     <th>Pastor</th>
                     <th>Precio</th>
-                    <th>Cantidad</th>
-                    <th>Extras</th>
+                    <th>Cant.</th>
+                    <th>Ext.</th>
                     <th>Total</th>
                   </tr>
                   {carItem.length > 0 ? (
@@ -651,7 +752,9 @@ const Pos = () => {
                                       return (
                                         <option
                                           value={item.id}
-                                          key={`${opIng.length + carItem.length}-${item.name}`}
+                                          key={`${
+                                            opIng.length + carItem.length
+                                          }-${item.name}-${indx}`}
                                         >
                                           {item.name}
                                         </option>
@@ -806,7 +909,7 @@ const Pos = () => {
                             </td>
                             <td>${parseFloat(data.price).toFixed(2)}</td>
                             <td>
-                              <EditableText data={data} />
+                              <EditableText data={data} id={index_main} fun={updateCantArray} />
                             </td>
                             <td>
                               {data.cat === "pizza"
@@ -908,6 +1011,14 @@ const Pos = () => {
                 </div>
                 <div className="address">
                   <center>
+                    <label htmlFor="">Cliente:</label>
+                    
+                    
+                  </center>
+                  <input type="" name="" value={clientName} onChange={(e) => setClientname(e.target.value)} />
+                </div>
+                <div className="address">
+                  <center>
                     <label htmlFor="">Direccion de envio:</label>
                   </center>
                   <textarea
@@ -941,19 +1052,25 @@ const Pos = () => {
                 <span>${(parseFloat(totalFinal) + envioPrice).toFixed(2)}</span>
               )}
             </div>
-            <div className="complete">
-              <div className="cp-btn">
-                <button type="">Completar venta</button>
+            <label htmlFor="efe">Pagar con efectivo</label>
+            <div className="complete-payment">
+              
+              <div className="cp-input-container">
+                <input type="text" placeholder="Monto Efectivo" name="efe" value={amountCash} onChange={(e) => setAmountCash(e.target.value)} />
               </div>
             </div>
-            {/* <div className="complete-payment">
+            <label htmlFor="car">Pagar con tarjeta</label>
+            <div className="complete-payment">
               <div className="cp-input-container">
-                <input type="text" />
-                  </div>
-              <div className="cp-btn">
-                <button type="">Completar venta</button>
+                <input type="text" placeholder="Monto Tarjeta" name="car" value={amountCard} onChange={(e) => setAmountCard(e.target.value)} />
               </div>
-            </div>*/}
+            </div>
+            <div className="complete">
+              <div className="cp-btn">
+                <button type="button" onClick={completeSale}>Completar venta</button>
+              </div>
+            </div>
+            
           </div>
         </div>
       </div>
