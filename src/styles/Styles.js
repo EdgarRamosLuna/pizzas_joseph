@@ -4,6 +4,7 @@ export const Content = styled.div`
   display: flex;
   flex-wrap: wrap;
   height: 100%;
+  
   select,
     input {
       height: 30px;
@@ -21,6 +22,7 @@ export const HeaderS = styled.div`
   flex-wrap: wrap;
   width: 100%;
   height: 100%;
+
   .menu {
     width: 250px;
     background: #a42220;
@@ -338,6 +340,10 @@ export const StorageS = styled.div`
 export const TableContainer = styled.div`
   border-right: 1px solid #a42220;
   border-left: 1px solid #a42220;
+  .details-container {
+      font-size: 1.3em;
+      color: #101629;
+  }
 `;
 
 export const PosS = styled.div`

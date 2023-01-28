@@ -19,14 +19,15 @@ import Ticket from "./components/helpers/Ticket";
 function App() {
   const [haveSess, setHaveSess] = useState(false);
   const [loading, setLoading] = useState(true);
-  
+  const [server, setServer] = useState(process.env.REACT_APP_API_URL_LOCAL_SERVER);
+ // console.log(server);
   useEffect(() => {
    // setLoading(true);
     const token = localStorage?.getItem("token");
     if (token !== null && token !== "") {
       //console.log(token);
       axios
-        .get("http://phpstack-921351-3198370.cloudwaysapps.com/server/api/user", {
+        .get(`${server}/server/api/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

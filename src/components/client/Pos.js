@@ -592,7 +592,7 @@ const Pos = () => {
   const [amountCash, setAmountCash] = useState('');
   const [clientName, setClientname] = useState('');
   useEffect(() => {
-    setClientname(addressCli.name);
+    setClientname(addressCli.name ? addressCli.name: clientName);
   }, [addressCli]);
   const completeSale = () =>{
     let totalDue = parseFloat(totalFinal) + parseFloat(activeOption === 1 ? 0 : envioPrice );
@@ -629,7 +629,7 @@ const Pos = () => {
     //console.log(totalDue);
     //console.log(carItem);
  //   console.log('venta completada');
-    
+    console.log(clientName);
     axios.post(`${baseUrl}/server/api/complete-sale`, {data:carItem, del:activeOption === 1 ? 0 : envioPrice, total:totalFinal, order:activeOption === 1 ? "Local":"Domicilio", total_cash:Number(amountCash), total_card:Number(amountCard), sale_data:addressCli, client:clientName}, {headers: {
       Authorization: `Bearer ${sesionData}`,
     },}).then((res) =>{
@@ -653,6 +653,7 @@ const Pos = () => {
        setShowAlert(false);
        if(type === 'success-sale'){
          window.open(`${bseUrl}/ticket/${id_sale}`, "_blank");
+         window.location.reload();
        }
       }, time);
   }

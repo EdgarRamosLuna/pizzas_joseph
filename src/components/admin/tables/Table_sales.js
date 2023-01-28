@@ -33,10 +33,6 @@ const Table_sales = (props) => {
         selector: (row) => row.total,
       },
       {
-        name: "Cliente",
-        selector: (row) => row.client,
-      },
-      {
         name: "Total Efectivo",
         selector: (row) => row.total_cash,
       },
@@ -47,23 +43,32 @@ const Table_sales = (props) => {
       {
         name: "Tipo de orden",
         selector: (row) => row.order,
+        sortable:true,
       },
       {
         name: "Envio",
         selector: (row) => row.envio,
       },
       {
-        name: "Direccion",
-        selector: (row) => row.address,
+        name: "Cliente",
+        selector: (row) => row.client,
       },
       {
         name: "Fecha",
         selector: (row) => row.date,
+        sortable:true,
+      },
+      {
+        name: "Detalles",
+        selector: (row) => row.details,
+        center: true,
       },
 
       {
         name: "",
         selector: (row) => row.actions,
+        center: true,
+        button:true,
       },
     ]);
     axios
@@ -112,6 +117,9 @@ const Table_sales = (props) => {
                   </button>
                 </ActionBtns>
               ),
+              details: (<div className="details-container">
+                <i className="fa-solid fa-circle-info"></i>
+              </div>)
             },
           ]);
         }
