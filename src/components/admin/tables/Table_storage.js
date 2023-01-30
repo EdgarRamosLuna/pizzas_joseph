@@ -4,7 +4,7 @@ import MainContext from "../../../context/MainContext";
 import { ActionBtns, TableContainer } from "../../../styles/Styles";
 import FilterItems from "./FilterItems";
 
-const Table_storage = (props) => {
+const TableStorage = (props) => {
   const { type } = props;
   const { DataTable, data, setData,data2, setData2, data3, setData3, v4, showConfBox, setShowConfBox, updateItem, removeItem, baseUrl } = useContext(MainContext);
   
@@ -13,7 +13,7 @@ const Table_storage = (props) => {
 //console.log(data);
   useEffect(() => {
     if (type === 0) {
-      console.log('entro');
+      //console.log('entro');
       setData([]);
       setColumns([
         {
@@ -71,8 +71,8 @@ const Table_storage = (props) => {
               fing: element.fin == 0 ? "N/A" : element.fin,
               past: element.pas == 0 ? "N/A" : element.pas,
               actions: <ActionBtns >
-                <button className="btn btn-edit" onClick={() => updateItem(element.id_item, 1)}><i className="fa-solid fa-pen-to-square"></i></button>
-                <button className="btn btn-del"  onClick={() => removeItem(element.id_item, 1)}><i className="fa-solid fa-trash"></i></button>
+                <button className="btn btn-edit" onClick={(e) => updateItem(e, element.id_item, 1)} />
+                <button className="btn btn-del"  onClick={() => removeItem(element.id_item, 1)} />
                 
               </ActionBtns>,
             },
@@ -128,8 +128,8 @@ const Table_storage = (props) => {
               sal: element.sal,
               doca: element.doca,
               actions: <ActionBtns >
-              <button className="btn btn-edit" onClick={() => updateItem(element.id_item, 2)}><i className="fa-solid fa-pen-to-square"></i></button>
-              <button className="btn btn-del"  onClick={() => removeItem(element.id_item, 2)}><i className="fa-solid fa-trash"></i></button>
+              <button className="btn btn-edit" onClick={(e) => updateItem(e, element.id_item, 2)} />
+              <button className="btn btn-del"  onClick={() => removeItem(element.id_item, 2)} />
               
             </ActionBtns>,
             },
@@ -176,8 +176,55 @@ const Table_storage = (props) => {
               price_bu: element.price_bu,
               cant: element.cant,
               actions: <ActionBtns >
-              <button className="btn btn-edit" onClick={() => updateItem(element.id_item, 3)}><i className="fa-solid fa-pen-to-square"></i></button>
-              <button className="btn btn-del"  onClick={() => removeItem(element.id_item, 3)}><i className="fa-solid fa-trash"></i></button>
+              <button className="btn btn-edit" onClick={(e) => updateItem(e, element.id_item, 3)} />
+              <button className="btn btn-del"  onClick={() => removeItem(element.id_item, 3)} />
+              
+            </ActionBtns>,
+            },
+           
+          ]);
+          
+        }
+      }).catch((err) =>{
+        console.error(err);
+      });
+    }  
+    if (type === 3) {
+      setData([]);
+      setColumns([
+        {
+          name: "Producto",
+          selector: (row) => row.name,
+        },
+        {
+          name: "Precio Venta",
+          selector: (row) => Number(row.is_ing) === 1 ? "":row.price,
+        },
+        {
+          name: "Cantidad en inventario",
+          selector: (row) => Number(row.is_ing) === 1 ? "":row.cant,
+        },
+        {
+          name: "",
+          selector: (row) => row.actions,
+        },
+        
+      ]);
+      axios.get(`${baseUrl}/server/api/drinks`).then((res) =>{
+    //    console.log(res);
+        // setData([]);
+        for (let i = 0; i < res.data.length; i++) {
+          const element = res.data[i];
+          setData(prev =>[...prev,
+            {
+              id: element.id,
+              id_item: element.id_item,
+              name: element.name,
+              cant: element.cant,
+              price: element.sale_price,
+              actions: <ActionBtns >
+              <button className="btn btn-edit" onClick={(e) => updateItem(e, element.id_item, 4)} />
+              <button className="btn btn-del"  onClick={() => removeItem(element.id_item, 4)} />
               
             </ActionBtns>,
             },
@@ -191,13 +238,15 @@ const Table_storage = (props) => {
     }
   }, [type]);
 
+  
   return (
     <TableContainer>
       {type === 0 && <FilterItems columns={columns} data={data} field='size' placeholder='Buscar por tamaño' />}
       {type === 1 && <FilterItems columns={columns} data={data2} field='product' placeholder='Buscar por producto' />}
       {type === 2 && <FilterItems columns={columns} data={data3} field='name' placeholder='Buscar por nombre' />}
+      {type === 3 && <FilterItems columns={columns} data={data} field='name' placeholder='Buscar por bebida' />}
     </TableContainer>
   );
 };
 
-export default Table_storage;
+export default TableStorage;

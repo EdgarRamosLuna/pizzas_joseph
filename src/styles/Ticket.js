@@ -3,9 +3,8 @@ import styled from "styled-components";
 export const TicketS = styled.div`
   @media print {
     @page {
-      *{
-        font-family: 'Consolas';
-      }
+      size: 80mm 100%;
+    }
       .p-cant-cont {
           width: 100%;
           height: 100%;
@@ -13,7 +12,7 @@ export const TicketS = styled.div`
           justify-content: center;
           align-items: start;
       }
-      size: 80mm 100%;
+    
       table {
         border-collapse: collapse;
         width: 100%;
@@ -110,7 +109,6 @@ export const TicketS = styled.div`
         padding: 0;
         gap: 5px;
       }
-    }
   }
   width: 25%;
   margin: auto 38%;
@@ -216,13 +214,7 @@ export const TicketS = styled.div`
     text-align: center;
   }
 
-  @media print {
-    .ticket {
-      width: 80mm;
-      margin: 0;
-    }
-    /* other styles for print go here */
-  }
+
   table {
     border-collapse: collapse;
     width: 100%;
@@ -255,4 +247,108 @@ export const TicketS = styled.div`
    
     flex-direction: column;
   }
+      .p-cant-cont {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: start;
+      }
+    
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      .footer {
+        margin-top: 10px;
+        text-align: center;
+      }
+      th,
+      td {
+        border: 0px solid black;
+        border-left: 0;
+        border-right: 0;
+        padding: 8px;
+        text-align: left;
+        height: 34px;
+      }
+      .p-cant-cont {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: start;
+      }
+        th {
+        font-size: 0.8em;
+        word-break: keep-all;
+        white-space: pre;
+        text-align: center;
+        background-color: transparent;
+      }
+      tr{
+        th:nth-child(2), th:nth-child(3){
+          text-align: left;
+        }
+      }
+      .total {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+      }
+      .p-name {
+        display: flex;
+       
+        flex-direction: column;
+      }
+      body {
+        padding: 0 10px;
+        box-sizing: border-box;
+      }
+      .item {
+        display: flex;
+        justify-content: space-between;
+
+        margin-bottom: 5px;
+      }
+      .ticket {
+        break-after: always;
+        page-break-after: always;
+      }
+      .item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        align-items: center;
+      }
+      .item-ing {
+        width: 70%;
+      }
+
+      .item .item-name {
+        width: 70%;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+      .item-name {
+        //display: inline-block;
+        //text-align: justify;
+        margin-bottom: 5px;
+      }
+      .table-container {
+        width: 100%;
+        font-size: 0.5em;
+      }
+      .item-cant {
+        width: 40px;
+        display: flex;
+        text-align: center;
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
+        gap: 5px;
+      }
 `;

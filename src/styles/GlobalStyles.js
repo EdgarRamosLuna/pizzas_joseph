@@ -18,7 +18,11 @@ const GlobalStyle = createGlobalStyle`
       overflow-y: auto;
     }
   }
-  
+  #search {
+    border-right: 0;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+  }
 
 `;
  

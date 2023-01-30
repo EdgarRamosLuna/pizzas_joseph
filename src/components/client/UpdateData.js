@@ -5,73 +5,126 @@ import MainContext from "../../context/MainContext";
 import { ModalS, StyledButton } from "../../styles/Styles";
 import BtnClose from "../helpers/BtnClose";
 
-const Modal = (props) => {
-  const { type, id_item, table} = props;
-  const { setShowAddInv, stopProp, saveProduct, setShowConfBox, delConf, setDelConf, deleteItemDb, option } = useContext(MainContext);
-  const [tipo, setTipo] = useState(option);
+const UpdateData = (props) => {
+  const { type, table } = props;
+  const {
+    setShowAddInv,
+    stopProp,
+    updateData,
+    setShowConfBox,
+    delConf,
+    setDelConf,
+    deleteItemDb,
+    option,
+    updateItem,
+    isEdit,
+    setIsEdit,
+    actualData,
+    id_item
+  } = useContext(MainContext);
+  const [tipo, setTipo] = useState(0);
   const [ingrediente, setIngrediente] = useState(2);
-  const [data, setData] = useState([]);
-  const [data2, setData2] = useState([]);
-  const [data3, setData3] = useState([]);
-  const [data4, setData4] = useState([]);
+  const [data, setData] = useState({
+    size: '',
+    price: '',
+    exin: '',
+    chstedm: '',
+    chstedp: '',
+    exch: '',
+    fin: '',
+    pas: '',
+  });
+  const [data2, setData2] = useState({
+    product:'',
+    price:'',
+    ha:'',
+    sal:'',
+    doca:'',
+  });
+  const [data3, setData3] = useState({
+    name:'',
+    is_ing:'',
+    cant:'',
+  });
+  const [data4, setData4] = useState({
+    name:'',
+    price:'',
+    cant:'',
+  });
   const SelectType = (data) => {
-   // data = data.toString();
+    // data = data.toString();
     setTipo(data);
   };
+  
   useEffect(() => {
-    
-    SelectType(option)
-
+    if (option === 0) {
+      setData({
+        size: actualData[0].data,
+        price: actualData[1].data,
+        exin: actualData[2].data,
+        chstedm: actualData[3].data,
+        chstedp: actualData[4].data,
+        exch: actualData[5].data,
+        fin: actualData[6].data === 'N/A' ? 0 : actualData[6].data,
+        pas: actualData[7].data === 'N/A' ? 0 : actualData[7].data
+      });
+    }
+    if (option === 1) {
+      setData2({
+        product: actualData[0].data,
+        price: actualData[1].data,
+        ha: actualData[2].data,
+        sal: actualData[3].data,
+        doca: actualData[4].data,
+      });
+    }
+    if (option === 2) {
+      setData3({
+        name: actualData[0].data,
+        is_ing: actualData[1].data === 'Si' ? '1' : '2',
+        cant: actualData[2].data,
+      });
+    }
+    if (option === 3) {
+      setData4({
+        name: actualData[0].data,
+        price: actualData[1].data,
+        cant: actualData[2].data,
+      });
+    }
+    SelectType(option);
   }, []);
   //console.log(tipo);
   const SelectIngr = (e) => {
     setIngrediente(e.target.value);
   };
-  const delItemC = (id_item, table) =>{
-  //  console.log('aaaaaaaaaa');
-   // setDelConf(true);
+  const delItemC = (id_item, table) => {
+    //  console.log('aaaaaaaaaa');
+    // setDelConf(true);
 
     deleteItemDb(id_item, table);
-    
-    
-  }
-  const hideModal = () =>{
-    setShowAddInv(false);
-    setShowConfBox(false);
+  };
+  const hideModal = () => {
+    setIsEdit(false);
+  };
+  const setFunction = () => {
+    setIsEdit(false);
+  };
 
-  }
-  const setFunction = () =>{
-    setShowAddInv(false);
-  }
-
-  console.log(tipo);
+  // console.log(arrayData);
   return (
-    <ModalS onClick={() => hideModal()}>
-      {type === "addInv" ? (
+    <ModalS>
+      {type === "updateItem" ? (
         <div className="modal-container" onClick={(e) => stopProp(e)}>
           <BtnClose setFunction={setFunction} />
           <div className="modal-title">
-            <h2>Agregar un nuevo producto</h2>
+            <h2>Editar producto</h2>
           </div>
           <div className="modal-form">
-            <div className="form-item">
-              <label for="">Tipo de producto</label>
-              <select
-                defaultValue={tipo}
-                value={tipo}
-                onChange={(e) => setTipo(Number(e.target.value))}
-              >
-                <option value={-1}>Selecciona un elemento</option>
-                <option value={0}>Pizza</option>
-                <option value={1}>Otros Productos</option>
-                <option value={2}>Materias Primas</option>
-                <option value={3}>Bebidas</option>
-              </select>
-            </div>
             {tipo === 0 ? (
               <>
                 <div className="form-item">
-                  <label for="">Tamaño</label>
+                  <label htmlFor="">Tamaño</label>
                   <input
                     type="text"
                     name="size"
@@ -86,7 +139,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">Precio</label>
+                  <label htmlFor="">Precio</label>
                   <input
                     type="text"
                     name="price"
@@ -101,7 +154,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">Ingrediente Extra</label>
+                  <label htmlFor="">Ingrediente Extra</label>
                   <input
                     type="text"
                     name="exin"
@@ -116,11 +169,11 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">O.R Mozarella</label>
+                  <label htmlFor="">O.R Mozarella</label>
                   <input
                     type="text"
                     name="chstedm"
-                    value={data.sizchstedme}
+                    value={data.chstedm}
                     onChange={(e) =>
                       setData({
                         ...data,
@@ -131,7 +184,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">O.R Piladelphia</label>
+                  <label htmlFor="">O.R Piladelphia</label>
                   <input
                     type="text"
                     name="chstedp"
@@ -146,7 +199,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">Queso Extra</label>
+                  <label htmlFor="">Queso Extra</label>
                   <input
                     type="text"
                     name="exch"
@@ -161,7 +214,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">Deditos</label>
+                  <label htmlFor="">Deditos</label>
                   <input
                     type="text"
                     name="fin"
@@ -176,7 +229,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">Pastor</label>
+                  <label htmlFor="">Pastor</label>
                   <input
                     type="text"
                     name="pas"
@@ -191,7 +244,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <StyledButton onClick={(e) => saveProduct(1, data)}>
+                  <StyledButton onClick={(e) => updateData(1, id_item,data)}>
                     Guardar
                   </StyledButton>
                 </div>
@@ -202,7 +255,7 @@ const Modal = (props) => {
             {tipo === 1 ? (
               <>
                 <div className="form-item">
-                  <label for="">Producto</label>
+                  <label htmlFor="">Producto</label>
                   <input
                     type="text"
                     name="product"
@@ -217,7 +270,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">Precio</label>
+                  <label htmlFor="">Precio</label>
                   <input
                     type="text"
                     name="price"
@@ -233,7 +286,7 @@ const Modal = (props) => {
                 </div>
 
                 <div className="form-item">
-                  <label for="">Hawai</label>
+                  <label htmlFor="">Hawai</label>
                   <input
                     type="text"
                     name="ha"
@@ -248,7 +301,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">Salchicha</label>
+                  <label htmlFor="">Salchicha</label>
                   <input
                     type="text"
                     name="sal"
@@ -263,7 +316,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">Doble Carne</label>
+                  <label htmlFor="">Doble Carne</label>
                   <input
                     type="text"
                     name="doca"
@@ -278,7 +331,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <StyledButton onClick={(e) => saveProduct(2, data2)}>
+                  <StyledButton onClick={(e) => updateData(2, id_item, data2)}>
                     Guardar
                   </StyledButton>
                 </div>
@@ -289,9 +342,8 @@ const Modal = (props) => {
             {tipo === 2 ? (
               <>
                 <div className="form-item">
-                  <label for="">Es ingrediente</label>
+                  <label htmlFor="">Es ingrediente</label>
                   <select
-                    
                     name="is_ing"
                     value={data3.is_ing}
                     onChange={(e) =>
@@ -308,7 +360,7 @@ const Modal = (props) => {
                   </select>
                 </div>
                 <div className="form-item">
-                  <label for="">Nombre</label>
+                  <label htmlFor="">Nombre</label>
                   <input
                     type="text"
                     name="name"
@@ -322,27 +374,26 @@ const Modal = (props) => {
                     }
                   />
                 </div>
-                {data3.is_ing !== '1' &&
-                <div className="form-item">
-                  <label for="">Cantidad</label>
-                  <input
-                    type="text"
-                    name="cant"
-                    value={data3.cant}
-                    onChange={(e) =>
-                      setData3({
-                        ...data3,
-                        [e.target.dataset.name || e.target.name]:
-                          e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                
-                } 
+                {data3.is_ing !== "1" && (
+                  <div className="form-item">
+                    <label htmlFor="">Cantidad</label>
+                    <input
+                      type="text"
+                      name="cant"
+                      value={data3.cant}
+                      onChange={(e) =>
+                        setData3({
+                          ...data3,
+                          [e.target.dataset.name || e.target.name]:
+                            e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                )}
                 {/*ingrediente === "1" ? (
                   <div className="form-item">
-                    <label for="">Precio Venta</label>
+                    <label htmlFor="">Precio Venta</label>
                     <input type="text" name="" value="" />
                   </div>
                 ) : (
@@ -350,7 +401,7 @@ const Modal = (props) => {
                 )}
                 {ingrediente === "2" || ingrediente === 2 ? (
                   <div className="form-item">
-                    <label for="">Cantidad</label>
+                    <label htmlFor="">Cantidad</label>
                     <input type="text" name="" value="" />
                   </div>
                 ) : (
@@ -358,19 +409,18 @@ const Modal = (props) => {
                 )*/}
 
                 <div className="form-item">
-                  <StyledButton onClick={(e) => saveProduct(3, data3)}>
-                      Guardar
-                    </StyledButton>
+                  <StyledButton onClick={(e) => updateData(3, id_item, data3)}>
+                    Guardar
+                  </StyledButton>
                 </div>
               </>
             ) : (
               ""
             )}
-             {tipo === 3 ? (
+            {tipo === 3 ? (
               <>
-                
                 <div className="form-item">
-                  <label for="">Nombre del producto</label>
+                  <label htmlFor="">Nombre del cocon</label>
                   <input
                     type="text"
                     name="name"
@@ -384,24 +434,8 @@ const Modal = (props) => {
                     }
                   />
                 </div>
-            
                 <div className="form-item">
-                  <label for="">Cantidad</label>
-                  <input
-                    type="text"
-                    name="cant"
-                    value={data4.cant}
-                    onChange={(e) =>
-                      setData4({
-                        ...data4,
-                        [e.target.dataset.name || e.target.name]:
-                          e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="form-item">
-                  <label for="">Precio</label>
+                  <label htmlFor="">Precio</label>
                   <input
                     type="text"
                     name="price"
@@ -415,13 +449,26 @@ const Modal = (props) => {
                     }
                   />
                 </div>
-                
-            
+                <div className="form-item">
+                  <label htmlFor="">Cantidad</label>
+                  <input
+                    type="text"
+                    name="cant"
+                    value={data4.cant}
+                    onChange={(e) =>
+                      setData4({
+                        ...data4,
+                        [e.target.dataset.name || e.target.name]:
+                          e.target.value,
+                      })
+                    }
+                  />
+                </div>
 
                 <div className="form-item">
-                  <StyledButton onClick={(e) => saveProduct(4, data4)}>
-                      Guardar
-                    </StyledButton>
+                  <StyledButton onClick={(e) => updateData(4, id_item, data4)}>
+                    Guardar
+                  </StyledButton>
                 </div>
               </>
             ) : (
@@ -432,33 +479,8 @@ const Modal = (props) => {
       ) : (
         ""
       )}
-
-{type === "delItem" ? (
-        <div className="modal-container" onClick={(e) => stopProp(e)}>
-          <div className="modal-close" onClick={() => setShowConfBox(false)}>
-            <i class="fa-solid fa-circle-xmark"></i>
-          </div>
-          <div className="modal-title">
-            <h2>Elminar producto</h2>
-          </div>
-          <div className="modal-form">
-            <h3>¿Estás seguro(a) que deseas borrar este producto? Esta acción no podrá deshacerse.</h3>
-          </div>
-          
-          <div className="form-footer">
-                  <StyledButton onClick={() => setShowConfBox(false)} >
-                      Cerrar
-                    </StyledButton>
-                  <StyledButton onClick={(e) => delItemC(id_item, table)} bg="#20a428">
-                      Estoy Seguro(a)
-                    </StyledButton>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
     </ModalS>
   );
 };
 
-export default Modal;
+export default UpdateData;

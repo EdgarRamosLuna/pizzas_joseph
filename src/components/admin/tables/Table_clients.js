@@ -4,7 +4,7 @@ import MainContext from "../../../context/MainContext";
 import { ActionBtns, TableContainer } from "../../../styles/Styles";
 import FilterItems from "./FilterItems";
 
-const TableUsers = (props) => {
+const TableClients = (props) => {
   const { type } = props;
   const { DataTable, data, setData,data2, setData2, data3, setData3, v4, showConfBox, setShowConfBox, updateItem, removeItem, baseUrl } = useContext(MainContext);
   
@@ -84,4 +84,4 @@ const TableUsers = (props) => {
   );
 };
 
-export default TableUsers;
+export default TableClients;

@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
 import Ticket from "./components/helpers/Ticket";
+import Clients from "./components/admin/Clients";
 
 function App() {
   const [haveSess, setHaveSess] = useState(false);
@@ -44,7 +45,7 @@ function App() {
           }else{
             if (Number(response.data.id) > 0) {
               setHaveSess(true);
-              localStorage.setItem('turno', Number(response.data.turno_status));
+           //   localStorage.setItem('turno', Number(response.data.turno_status));
               setTimeout(() => {
                 setLoading(false);
                 
@@ -79,6 +80,7 @@ function App() {
                 <Route exact path="/ventas" element={<Sales />} />
                 <Route exact path="/pos" element={<Pos />} />
                 <Route exact path="/usuarios" element={<Users />} />
+                <Route exact path="/clientes" element={<Clients />} />
                 
               </Route>
               <Route exact path="/ticket/:id" element={<Ticket />} />

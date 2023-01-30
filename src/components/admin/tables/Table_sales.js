@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import MainContext from "../../../context/MainContext";
 import { ActionBtns, TableContainer } from "../../../styles/Styles";
 import FilterItems from "./FilterItems";
+import SelectComponent from "./SelectComponent";
 
 const Table_sales = (props) => {
   const { type } = props;
@@ -43,7 +44,7 @@ const Table_sales = (props) => {
       {
         name: "Tipo de orden",
         selector: (row) => row.order,
-        sortable:true,
+        sortable: true,
       },
       {
         name: "Envio",
@@ -56,11 +57,16 @@ const Table_sales = (props) => {
       {
         name: "Fecha",
         selector: (row) => row.date,
-        sortable:true,
+        sortable: true,
       },
       {
         name: "Detalles",
         selector: (row) => row.details,
+        center: true,
+      },
+      {
+        name: "Status",
+        selector: (row) => row.status,
         center: true,
       },
 
@@ -68,7 +74,7 @@ const Table_sales = (props) => {
         name: "",
         selector: (row) => row.actions,
         center: true,
-        button:true,
+        button: true,
       },
     ]);
     axios
@@ -98,28 +104,26 @@ const Table_sales = (props) => {
               envio: `$${element.envio}`,
               address: element.address,
               date: formattedDate,
-
+              status: (
+                <>
+                 <SelectComponent />
+                </>
+              ),
               order:
                 Number(element.type_order) === 1 ? "Restaurante" : "Domicilio",
               actions: (
                 <ActionBtns>
                   <button
-                    className="btn btn-edit"
-                    onClick={() => updateItem(element.id, 4)}
-                  >
-                    <i className="fa-solid fa-pen-to-square"></i>
-                  </button>
-                  <button
                     className="btn btn-del"
-                    onClick={() => removeItem(element.id, 4)}
-                  >
-                    <i className="fa-solid fa-trash"></i>
-                  </button>
+                    onClick={() => removeItem(element.id, 5)}
+                  />
                 </ActionBtns>
               ),
-              details: (<div className="details-container">
-                <i className="fa-solid fa-circle-info"></i>
-              </div>)
+              details: (
+                <div className="details-container">
+                  <i className="fa-solid fa-circle-info"></i>
+                </div>
+              ),
             },
           ]);
         }
@@ -131,8 +135,12 @@ const Table_sales = (props) => {
 
   return (
     <TableContainer>
-      
-      <FilterItems columns={columns} data={data} field='client' placeholder='Buscar por cliente' />
+      <FilterItems
+        columns={columns}
+        data={data}
+        field="client"
+        placeholder="Buscar por cliente"
+      />
     </TableContainer>
   );
 };

@@ -13,7 +13,7 @@ const Alert = ({children, type}) => {
   return (
     <>
     <AlertStyle >
-            <div className={`container ${type === 'success-sale' && 'success' } ${type === 'fail-sale1' && 'error' } ${type === 'fail-sale2' && 'error' } ${type === 'fail-sale3' && 'error' }`}>
+            <div className={`container ${type === 'success-sale' && 'success' } ${type === 'success-save' && 'success' } ${type === 'success-update' && 'success' } ${type === 'fail-sale1' && 'error' } ${type === 'fail-sale2' && 'error' } ${type === 'fail-sale3' && 'error' }`}>
             <div className='actions-buttons'>
                 <div className='close-btn'>
                     <BtnClose  setFunction={setFunction}/>
@@ -22,6 +22,8 @@ const Alert = ({children, type}) => {
             <div className='alert-content'>
                 <div className={`alert-txt`}>
                 {type === 'success-sale' && 'Venta realizada con exito' }
+                {type === 'success-update' && 'Datos actualizados con exito' }
+                {type === 'success-save' && 'Datos guardados con exito' }
                 {type === 'fail-sale1' && 'Debes agregar un monto valido ya sea tarjeta o efectivo para completar la venta' }
                 {type === 'fail-sale2' && 'Debes ingresar un monto valido' }
                 {type === 'fail-sale3' && 'Debes debes completar el total del costo de la venta para continuar' }

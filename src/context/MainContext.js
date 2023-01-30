@@ -1,5 +1,5 @@
-import axios from "axios";
 import React, { useState, useEffect, createContext } from "react";
+import axios from "axios";
 import DataTable from "react-data-table-component";
 import { useLocation } from "react-router-dom";
 import { v4 } from "uuid";
@@ -7,14 +7,18 @@ import { ActionBtns } from "../styles/Styles";
 export const MainContext = createContext();
 export const MainContextProvider = ({ children }) => {
   const isOnline = navigator.onLine;
- // console.log(isOnline);
+  // console.log(isOnline);
   //console.log(process.env.REACT_APP_API_URL);
   //console.log(process.env.REACT_APP_URL);
 
-  const [baseUrl, setBaseUrl] = useState( isOnline === true ? 
-    process.env.REACT_APP_API_URL_DEVELOPMENT : process.env.REACT_APP_API_URL_LOCAL_SERVER
+  const [baseUrl, setBaseUrl] = useState(
+    isOnline === true
+      ? process.env.REACT_APP_API_URL_DEVELOPMENT
+      : process.env.REACT_APP_API_URL_LOCAL_SERVER
   );
-  const [bseUrl, setBseUrl] = useState(process.env.REACT_APP_API_URL_LOCAL_CLIENT); 
+  const [bseUrl, setBseUrl] = useState(
+    process.env.REACT_APP_API_URL_LOCAL_CLIENT
+  );
   const test = true;
   const location = useLocation();
   const pathname = location.pathname.replaceAll("/", "");
@@ -22,6 +26,7 @@ export const MainContextProvider = ({ children }) => {
   const [data, setData] = useState([]);
   const [data2, setData2] = useState([]);
   const [data3, setData3] = useState([]);
+  const [data4, setData4] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
   const [showConfBox, setShowConfBox] = useState(false);
   const [delConf, setDelConf] = useState(false);
@@ -33,27 +38,30 @@ export const MainContextProvider = ({ children }) => {
   const [extraIngItem, setExtraIngItem] = useState("");
 
   const [sesion, setSesion] = useState(false);
-  const [sesionData, setSesionData] = useState('');
+  const [sesionData, setSesionData] = useState("");
   const [turn, setTurn] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
-  const [typeAlert, setTypeAlert] = useState('');
-  
+  const [loadingS, setLoadingS] = useState(false);
+  const [typeAlert, setTypeAlert] = useState("");
+  const [option, setOption] = useState(0);
+  const [isEdit, setIsEdit] = useState(false);
+  const [isEdit2, setIsEdit2] = useState(false);
   const stopProp = (e) => {
     e.stopPropagation();
   };
   useEffect(() => {
     const token = localStorage?.getItem("token");
     const turno = localStorage?.getItem("turno");
-    if(token !== null){
+    if (token !== null) {
       setSesionData(token);
-     // console.log(token);
+      // console.log(token);
       setSesion(true);
     }
-    if(turno !== null){
-   //  setSesionData(token);
-    //  console.log(turno);
-      setTurn(Number(turno))
-     // setSesion(true);
+    if (turno !== null) {
+      //  setSesionData(token);
+      //  console.log(turno);
+      setTurn(Number(turno));
+      // setSesion(true);
     }
     //setSesionToken()
     return () => {};
@@ -63,12 +71,9 @@ export const MainContextProvider = ({ children }) => {
     //console.log(type, data);
 
     axios
-      .post(
-        `${baseUrl}/server/api/save`,
-        { type: type, data: data, id: v4() }
-      )
+      .post(`${baseUrl}/server/api/save`, { type: type, data: data, id: v4() })
       .then((res) => {
-       // console.log(parseFloat(res.data.price));
+        // console.log(parseFloat(res.data.price));
         let element = res.data;
         if (type === 1) {
           setData((prev) => [
@@ -90,16 +95,12 @@ export const MainContextProvider = ({ children }) => {
                 <ActionBtns>
                   <button
                     className="btn btn-edit"
-                    onClick={() => updateItem(element.id_item, 1)}
-                  >
-                    <i className="fa-solid fa-pen-to-square"></i>
-                  </button>
+                    onClick={(e) => updateItem(e, element.id_item, 1)}
+                  />
                   <button
                     className="btn btn-del"
                     onClick={() => removeItem(element.id_item, 1)}
-                  >
-                    <i className="fa-solid fa-trash"></i>
-                  </button>
+                  />
                 </ActionBtns>
               ),
             },
@@ -120,16 +121,12 @@ export const MainContextProvider = ({ children }) => {
                 <ActionBtns>
                   <button
                     className="btn btn-edit"
-                    onClick={() => updateItem(element.id_item, 2)}
-                  >
-                    <i className="fa-solid fa-pen-to-square"></i>
-                  </button>
+                    onClick={(e) => updateItem(e, element.id_item, 2)}
+                  />
                   <button
                     className="btn btn-del"
                     onClick={() => removeItem(element.id_item, 2)}
-                  >
-                    <i className="fa-solid fa-trash"></i>
-                  </button>
+                  />
                 </ActionBtns>
               ),
             },
@@ -148,16 +145,12 @@ export const MainContextProvider = ({ children }) => {
                 <ActionBtns>
                   <button
                     className="btn btn-edit"
-                    onClick={() => updateItem(element.id_item, 3)}
-                  >
-                    <i className="fa-solid fa-pen-to-square"></i>
-                  </button>
+                    onClick={(e) => updateItem(e, element.id_item, 3)}
+                  />
                   <button
                     className="btn btn-del"
                     onClick={() => removeItem(element.id_item, 3)}
-                  >
-                    <i className="fa-solid fa-trash"></i>
-                  </button>
+                  />
                 </ActionBtns>
               ),
             },
@@ -166,7 +159,184 @@ export const MainContextProvider = ({ children }) => {
           //console.log();
           // clearModal.childNodes[1].children[1].options.selectedIndex = 0;
         }
+        if (type === 4) {
+          setData((prev) => [
+            ...prev,
+            {
+              id: element.id,
+              id_item: element.id_item,
+              price: Number(element.sale_price).toFixed(2),
+              name: element.name,
+              cant: element.cant,
+              actions: (
+                <ActionBtns>
+                  <button
+                    className="btn btn-edit"
+                    onClick={(e) => updateItem(e, element.id_item, 4)}
+                  />
+                  <button
+                    className="btn btn-del"
+                    onClick={() => removeItem(element.id_item, 4)}
+                  />
+                </ActionBtns>
+              ),
+            },
+          ]);
+        
+        }
+        setShowAlert(true);
+          setTypeAlert('success-save');
+          setIsEdit(false);
+          setTimeout(() => {
+            setShowAlert(false);
+          }, 3000);
+        setShowAddInv(false);
+        //     setShowAddInv(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  const updateData = (type, id, dataDb) => {
+    //  console.log(id, data);
 
+    //  return false;
+    axios
+      .post(`${baseUrl}/server/api/update`, {type, data:dataDb, id})
+      .then((res) => {
+        // console.log(parseFloat(res.data.price));
+        let element = res.data;
+      
+        if (type === 1) {
+          const newState = data.map((obj) => {
+            if (obj.id_item === id) {
+              return {
+                ...obj,
+                size: element.size,
+                price: parseFloat(element.price).toFixed(2),
+                extra: parseFloat(element.exin).toFixed(2),
+                cbm: parseFloat(element.chstedm).toFixed(2),
+                cbp: parseFloat(element.chstedp).toFixed(2),
+                ec: parseFloat(element.exch).toFixed(2),
+                fing:
+                  element.fin === 0 ? "N/A" : parseFloat(element.fin).toFixed(2),
+                past:
+                  element.pas === 0 ? "N/A" : parseFloat(element.pas).toFixed(2),
+                actions: (
+                  <ActionBtns>
+                    <button
+                      className="btn btn-edit"
+                      onClick={(e) => updateItem(e, id, 1)}
+                    />                      
+                    <button
+                      className="btn btn-del"
+                      onClick={() => removeItem(id, 1)}
+                    />
+                  </ActionBtns>
+                ),
+              };
+            }
+            return obj;
+          });
+          setData(newState);
+          
+         
+        }
+        if (type === 2) {
+          const newState = data2.map((obj) => {
+            if (obj.id_item === id) {
+              return {
+                ...obj,
+                product: element.product,
+                price: parseFloat(element.price).toFixed(2),
+                ha: parseFloat(element.ha).toFixed(2),
+                sal: parseFloat(element.sal).toFixed(2),
+                doca: parseFloat(element.doca).toFixed(2),
+                actions: (
+                  <ActionBtns>
+                    <button
+                      className="btn btn-edit"
+                      onClick={(e) => updateItem(e, id, 2)}
+                    />
+                    <button
+                      className="btn btn-del"
+                      onClick={() => removeItem(id, 2)}
+                    />
+                  </ActionBtns>
+                ),
+              };
+            }
+            return obj;
+          });
+          setData2(newState);
+        }
+        if (type === 3) {
+          const newState = data3.map((obj) => {
+            if (obj.id_item === id) {
+              return {
+                ...obj,
+                is_ing: element.is_ing,
+                name: element.name,
+                cant: element.cant,
+                actions: (
+                  <ActionBtns>
+                    <button
+                      className="btn btn-edit"
+                      onClick={(e) => updateItem(e, id, 3)}
+                    />
+                    <button
+                      className="btn btn-del"
+                      onClick={() => removeItem(id, 3)}
+                    />
+                  </ActionBtns>
+                ),
+              };
+            }
+            return obj;
+          });
+          setData3(newState);
+         
+          let clearModal = document.querySelector(".modal-form");
+          //console.log();
+          // clearModal.childNodes[1].children[1].options.selectedIndex = 0;
+        }
+        if (type === 4) {
+          const newState = data.map((obj) => {
+            if (obj.id_item === id) {
+              return {
+                ...obj,                
+                name: element.name,
+                price: Number(element.sale_price).toFixed(2),
+                cant: element.cant,
+                actions: (
+                  <ActionBtns>
+                    <button
+                      className="btn btn-edit"
+                      onClick={(e) => updateItem(e, id, 4)}
+                    />
+                    <button
+                      className="btn btn-del"
+                      onClick={() => removeItem(id, 4)}
+                    />
+                  </ActionBtns>
+                ),
+              };
+            }
+            return obj;
+          });
+          setData(newState);
+         
+          let clearModal = document.querySelector(".modal-form");
+          //console.log();
+          // clearModal.childNodes[1].children[1].options.selectedIndex = 0;
+        }
+        setShowAlert(true);
+          setTypeAlert('success-update');
+          setIsEdit(false);
+          setTimeout(() => {
+            setShowAlert(false);
+          }, 3000);
+        setShowAddInv(false);
         //     setShowAddInv(false);
       })
       .catch((err) => {
@@ -178,10 +348,38 @@ export const MainContextProvider = ({ children }) => {
 
     return () => {};
   }, [data]);
+  
+  const [actualData, setActualData] = useState([]);
+  const updateItem = (e, item, type) => {
+    setActualData([]);
+    const parent = e.target.parentNode;
+    const arrayChildren = parent.children;
+    setId_item(item);
+    //console.log(parent.parentNode.parentNode.parentNode.childNodes);
+    // console.log(item);
+    const dataI = parent.parentNode.parentNode.parentNode.childNodes;
 
-  const updateItem = (item) => {
-    console.log(item);
+    Array.from(dataI).map((element) =>
+      setActualData((prev) => [
+        ...prev,
+        { data: element.children[0].innerText },
+      ])
+    );
+    //console.log(JSON.stringify(dataI);
+    /*dataI.forEach(function(element) {
+      console.log(element);
+    });*/
+    //console.log(Array.from(dataI).forEach(child => child));
+    //console.log(type);
+
+    if (type === 6) {
+      //console.log('entro')
+      setIsEdit2(true);
+    } else {
+      setIsEdit(true);
+    }
   };
+  //console.log(actualData);
   const askAction = (id_item) => {
     setShowConfBox(true);
     setId_item(id_item);
@@ -193,19 +391,40 @@ export const MainContextProvider = ({ children }) => {
     setTable(table);
   };
   const deleteItemDb = (id_item, table, seter) => {
+
+    
     if (parseInt(table) === 1) {
       setData((prev) => prev.filter((item) => item.id_item !== id_item));
       /*setData((prev) => {
       return prev.filter((item) => item.id_item !== id_item);
     });*/
     }
-    if (parseInt(table) === 2) setData2((prev) => prev.filter((item) => item.id_item !== id_item));
-    if (parseInt(table) === 3) setData3((prev) => prev.filter((item) => item.id_item !== id_item));
-    if (parseInt(table) === 4) setData((prev) => prev.filter((item) => item.id !== id_item));
-    if (parseInt(table) === 5) setData((prev) => prev.filter((item) => item.id !== id_item));
+    if (parseInt(table) === 2)
+      setData2((prev) => prev.filter((item) => item.id_item !== id_item));
+    if (parseInt(table) === 3)
+      setData3((prev) => prev.filter((item) => item.id_item !== id_item));
+    if (parseInt(table) === 4) setData((prev) => prev.filter((item) => item.id_item !== id_item));
+    if (parseInt(table) === 5)
+      setData((prev) => prev.filter((item) => item.id !== id_item));
+    if (parseInt(table) === 6)
+      setData((prev) => prev.filter((item) => item.id !== id_item));
     setShowConfBox(false);
+    saveChangesDB(table, id_item);
+  };
+  const saveChangesDB = async (table, id) => {
+    //const bseUrl = 'https://mi-url.com';
+    try {
+      const response = await axios.post(`${baseUrl}/server/api/delete`, {
+        id,
+        table,
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
   const onlyNumbers = /^\d+$/;
+  
   return (
     <MainContext.Provider
       value={{
@@ -249,13 +468,28 @@ export const MainContextProvider = ({ children }) => {
         baseUrl,
         sesion,
         setSesion,
-        sesionData, setSesionData,
+        sesionData,
+        setSesionData,
         isOnline,
-        turn, setTurn,
-        showAlert, setShowAlert,
-        typeAlert, setTypeAlert,
-        bseUrl, setBseUrl
-        
+        turn,
+        setTurn,
+        showAlert,
+        setShowAlert,
+        typeAlert,
+        setTypeAlert,
+        bseUrl,
+        setBseUrl,
+        option,
+        setOption,
+        loadingS,
+        setLoadingS,
+        isEdit,
+        setIsEdit,
+        isEdit2,
+        setIsEdit2,
+        actualData,
+        setActualData,
+        updateData,
       }}
     >
       {children}

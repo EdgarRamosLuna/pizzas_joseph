@@ -653,7 +653,6 @@ const Pos = () => {
        setShowAlert(false);
        if(type === 'success-sale'){
          window.open(`${bseUrl}/ticket/${id_sale}`, "_blank");
-         window.location.reload();
        }
       }, time);
   }
