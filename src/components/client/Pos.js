@@ -5,7 +5,9 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import MainContext from "../../context/MainContext";
 import { useCallback } from "react";
 import EditableText from "../../helpers/EditableText";
-const Pos = () => {
+import EditableTextC from "../../helpers/EditableTextC";
+const Pos = ({ permisos }) => {
+  const { p_storage, p_sales, p_clients, p_users } = permisos;
   const [val, setVal] = useState("");
 
   const {
@@ -24,17 +26,17 @@ const Pos = () => {
     setTypeAlert,
     sesionData,
     setSesionData,
-    bseUrl
+    bseUrl,
   } = useContext(MainContext);
   const [searchResult2, setSearchResult2] = useState([]);
   const [searchResult3, setSearchResult3] = useState([]);
   const [addressCli, setAddressCli] = useState("");
   const [idCliente, setIdCliente] = useState(0);
   const [activeOption, setActiveOption] = useState(1);
-  const [envioPrice, setEnvioPrice] = useState(10);
+  const [envioPrice, setEnvioPrice] = useState(0);
   const [cantN, setCantN] = useState(1);
   const [elementType, setElementType] = useState("span");
-
+  //const [deliver_price, setDeliver_price] = useState(0);
   useEffect(() => {
     axios
       .get(`${baseUrl}/server/api/get_clients`)
@@ -59,6 +61,8 @@ const Pos = () => {
     axios
       .get(`${baseUrl}/server/api/get`)
       .then((res) => {
+        setEnvioPrice(Number(res.data.deliver_price));
+        console.log();
         if (res.data.pizza.length > 0) {
           for (let i = 0; i < res.data.pizza.length; i++) {
             const element = res.data.pizza[i];
@@ -170,6 +174,41 @@ const Pos = () => {
                   name: element.product,
                   price: element.price,
                   cat: "op",
+                },
+              ]);
+            }
+          }
+        }
+        if (res.data.drinks.length > 0) {
+          for (let i = 0; i < res.data.drinks.length; i++) {
+            const element = res.data.drinks[i];
+
+            let checkItem = updateArray(element.id_item, element.name);
+            // console.log(checkItem);
+            if (checkItem.length > 0) {
+              if (checkItem[0].exist) {
+                setSearchResult2(checkItem[0].newState);
+              } else {
+                setSearchResult2((prev) => [
+                  ...prev,
+                  {
+                    id: element.id,
+                    id_item: element.id_item,
+                    name: element.name,
+                    price: element.sale_price,
+                    cat: "drinks",
+                  },
+                ]);
+              }
+            } else {
+              setSearchResult2((prev) => [
+                ...prev,
+                {
+                  id: element.id,
+                  id_item: element.id_item,
+                  name: element.name,
+                  price: element.sale_price,
+                  cat: "drinks",
                 },
               ]);
             }
@@ -289,6 +328,7 @@ const Pos = () => {
             name: item.name,
             ingre: [],
             cant: 1,
+            type_ing: 1,
             price: parseFloat(item.price),
             exin: parseFloat(item.exin),
             chstedm: parseFloat(item.chstedm).toFixed(2),
@@ -313,6 +353,7 @@ const Pos = () => {
             name: item.name,
             ingre: [],
             cant: 1,
+            type_ing: 1,
             price: parseFloat(item.price),
             exin: parseFloat(item.exin),
             chstedm: parseFloat(item.chstedm).toFixed(2),
@@ -338,6 +379,7 @@ const Pos = () => {
           name: item.name,
           ingre: [],
           cant: 1,
+          type_ing: 1,
           price: parseFloat(item.price),
           exin: parseFloat(item.exin),
           chstedm: parseFloat(item.chstedm).toFixed(2),
@@ -381,7 +423,7 @@ const Pos = () => {
       // El elemento no existe en el DOM
     }
   }, [handleOnSelect]);
-  //console.log();
+  //console.log(carItem);
 
   const handleOnFocus = (e) => {
     //console.log(e.target);
@@ -447,7 +489,9 @@ const Pos = () => {
     // setCant(newState);
     // setCartItemD(newState);
   };
-
+  const updapteDelPrice = (value) => {
+    setEnvioPrice(value);
+  };
   const updateCantArray = (id, value) => {
     // console.log(id);
     let existe = false;
@@ -537,7 +581,6 @@ const Pos = () => {
         setOpIng((prev) => [...prev, searchResult[i]]);
       }
     }
-    
   }, [searchResult]);
   const [dataI, setDataI] = useState([]);
   const addIngre = (id, val) => {
@@ -551,6 +594,18 @@ const Pos = () => {
     }
     updateArray5(id, arrayData, val);
   };
+  const addIngreType = (id, val) => {
+    //  let arrayData = carItem[id].ingre;
+
+    /* arrayData = arrayData.slice();
+
+    const element = opIng.find((e) => parseInt(e.id) === parseInt(val));
+    if (element) {
+      arrayData.push({ id_ing: val, ing: element.name });
+    }*/
+    updateArray6(id, val);
+  };
+
   const updateArray5 = (id, extras, id_ing = 0) => {
     const newState = carItem.map((obj, idx) => {
       if (parseInt(idx) === parseInt(id)) {
@@ -567,7 +622,23 @@ const Pos = () => {
     });
     setCarItem(newState);
   };
+  const updateArray6 = (id, val) => {
+    const newState = carItem.map((obj, idx) => {
+      if (parseInt(idx) === parseInt(id)) {
+        /* const element = obj.ingre.find(
+          (e) => parseInt(e.id_ing) === parseInt(id_ing)
+        );
+        if (element) {
 
+        } else {
+        }*/
+        return { ...obj, type_ing: val };
+      }
+      return obj;
+    });
+    setCarItem(newState);
+  };
+  //console.log(carItem);
   const removeIng = (indx, arrayD, index_main) => {
     let arrayItems = carItem[index_main].ingre;
     arrayD = arrayD.filter((valor, i) => {
@@ -578,84 +649,109 @@ const Pos = () => {
 
     //    console.log(arrayD);
   };
-  const isWednesday = () => {
+
+  const extraIngFree = () => {
     var d = new Date();
     var day = d.getDay();
-    return day === 3 || day === 5;
+    return day === 3 || day === 4;
   };
   /*if (isWednesday()) {
     console.log("3 ingredientes");
   } else {
     console.log("2 Ingredientes.");
   }*/
-  const [amountCard, setAmountCard] = useState('');
-  const [amountCash, setAmountCash] = useState('');
-  const [clientName, setClientname] = useState('');
+  const [amountCard, setAmountCard] = useState("");
+  const [amountCash, setAmountCash] = useState("");
+  const [clientName, setClientname] = useState("");
   useEffect(() => {
-    setClientname(addressCli.name ? addressCli.name: clientName);
+    setClientname(addressCli.name ? addressCli.name : clientName);
   }, [addressCli]);
-  const completeSale = () =>{
-    let totalDue = parseFloat(totalFinal) + parseFloat(activeOption === 1 ? 0 : envioPrice );
-    if(amountCard === '' && amountCash === ''){
-      
-      showALertF('fail-sale1', 6000);
-      console.log('debes agregar un monto valido ya sea tarjeta o efectivo para completar la venta');
+  const completeSale = () => {
+    let totalDue =
+      parseFloat(totalFinal) + parseFloat(activeOption === 1 ? 0 : envioPrice);
+    if (amountCard === "" && amountCash === "") {
+      showALertF("fail-sale1", 6000);
+      console.log(
+        "debes agregar un monto valido ya sea tarjeta o efectivo para completar la venta"
+      );
       return false;
     }
-    if(Number(amountCash) === Number(totalDue)){
-      if(Number(amountCash) === 0){
-        showALertF('fail-sale2', 6000);
-        console.log('Debes ingresar un monto valido');
-        return false;
-      }
-      
-    }
-    if(Number(amountCard) === Number(totalDue)){
-      if(Number(amountCard) === 0){
-        showALertF('fail-sale2', 6000);
-        console.log('Debes ingresar un monto valido');
+    if (Number(amountCash) === Number(totalDue)) {
+      if (Number(amountCash) === 0) {
+        showALertF("fail-sale2", 6000);
+        console.log("Debes ingresar un monto valido");
         return false;
       }
     }
-   
-    let totalPayment = parseFloat(amountCash === '' ? 0 : amountCash) + parseFloat(amountCard === '' ? 0 : amountCard);
-    if(Number(totalPayment) < Number(totalDue) ){
-      showALertF('fail-sale3', 6000);
-      console.log('Debes debes completar el total del costo de la venta para continuar');
+    if (Number(amountCard) === Number(totalDue)) {
+      if (Number(amountCard) === 0) {
+        showALertF("fail-sale2", 6000);
+        console.log("Debes ingresar un monto valido");
+        return false;
+      }
+    }
+
+    let totalPayment =
+      parseFloat(amountCash === "" ? 0 : amountCash) +
+      parseFloat(amountCard === "" ? 0 : amountCard);
+    if (Number(totalPayment) < Number(totalDue)) {
+      showALertF("fail-sale3", 6000);
+      console.log(
+        "Debes debes completar el total del costo de la venta para continuar"
+      );
 
       return false;
     }
     //console.log(totalPayment);
     //console.log(totalDue);
     //console.log(carItem);
- //   console.log('venta completada');
+    //   console.log('venta completada');
     console.log(clientName);
-    axios.post(`${baseUrl}/server/api/complete-sale`, {data:carItem, del:activeOption === 1 ? 0 : envioPrice, total:totalFinal, order:activeOption === 1 ? "Local":"Domicilio", total_cash:Number(amountCash), total_card:Number(amountCard), sale_data:addressCli, client:clientName}, {headers: {
-      Authorization: `Bearer ${sesionData}`,
-    },}).then((res) =>{
-      const error = res.data.error;
-      const id_sale = res.data.id_sale;
-      if(!error){
-        showALertF('success-sale', 3000 ,id_sale);
-      }
-      //console.log(error);
-    }).catch((err) => {
-      console.log(err);
-    });
-    
+    axios
+      .post(
+        `${baseUrl}/server/api/complete-sale`,
+        {
+          data: carItem,
+          del: activeOption === 1 ? 0 : envioPrice,
+          total: totalFinal,
+          order: activeOption === 1 ? "Local" : "Domicilio",
+          total_cash: Number(amountCash),
+          total_card: Number(amountCard),
+          sale_data: addressCli,
+          client: clientName,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${sesionData}`,
+          },
+        }
+      )
+      .then((res) => {
+        const error = res.data.error;
+        const id_sale = res.data.id_sale;
+        if (!error) {
+          showALertF("success-sale", 3000, id_sale);
+        }else{
+          showALertF("insu-boxes", 6000, id_sale);
+        }
+        //console.log(error);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const showALertF = (type = "", time = 3000, id_sale) => {
+    setShowAlert(true);
+    setTypeAlert(type);
 
-  }
-  const showALertF = (type = '', time = 3000, id_sale) =>{
-     setShowAlert(true);
-     setTypeAlert(type);
-     
-     setTimeout(() => {
-       setShowAlert(false);
-       if(type === 'success-sale'){
-         window.open(`${bseUrl}/ticket/${id_sale}`, "_blank");
-       }
-      }, time);
-  }
+    setTimeout(() => {
+      setShowAlert(false);
+      if (type === "success-sale") {
+        window.location.reload();
+        window.open(`${bseUrl}/ticket/${id_sale}`, "_blank");
+      }
+    }, time);
+  };
 
   return (
     <PosS>
@@ -741,6 +837,21 @@ const Pos = () => {
                                   <select
                                     name="ing"
                                     value={dataI.ing}
+                                    defaultValue={1}
+                                    onChange={(e) =>
+                                      addIngreType(index_main, e.target.value)
+                                    }
+                                  >
+                                    <option value="1">Pizza Completa</option>
+                                    <option value="2">
+                                      Pizza Mitad 2 Ingredientes
+                                    </option>
+                                  </select>
+                                  <br />
+                                  <br />
+                                  <select
+                                    name="ing"
+                                    value={dataI.ing}
                                     onChange={(e) =>
                                       addIngre(index_main, e.target.value)
                                     }
@@ -793,7 +904,7 @@ const Pos = () => {
                                               />
                                             </div>
                                           </div>
-                                          {index2 === 1 &&
+                                          {index2 === 1 && Number(data.type_ing) === 1 &&
                                           data.ingre.length > 2 ? (
                                             <div className="extra-ing">
                                               <h5>Ingredientes extra</h5>
@@ -801,6 +912,15 @@ const Pos = () => {
                                           ) : (
                                             ""
                                           )}
+                                          {index2 === 3 && Number(data.type_ing) === 2 &&
+                                          data.ingre.length > 4 ? (
+                                            <div className="extra-ing">
+                                              <h5>Ingredientes extra</h5>
+                                            </div>
+                                          ) : (
+                                            ""
+                                          )}
+                                          
                                         </div>
                                       );
                                     })}
@@ -909,15 +1029,23 @@ const Pos = () => {
                             </td>
                             <td>${parseFloat(data.price).toFixed(2)}</td>
                             <td>
-                              <EditableText data={data} id={index_main} fun={updateCantArray} />
+                              <EditableText
+                                value={data.cant}
+                                id={index_main}
+                                fun={updateCantArray}
+                              />
                             </td>
                             <td>
                               {data.cat === "pizza"
                                 ? (
                                     parseFloat(data.exin) *
                                     parseInt(
-                                      data.ingre.length > 2
-                                        ? data.ingre.length - 2
+                                      Number(data.type_ing) === 1
+                                        ? data.ingre.length > 2
+                                          ? data.ingre.length - 2
+                                          : 0
+                                        : data.ingre.length > 4
+                                        ? data.ingre.length - 4
                                         : 0
                                     )
                                   ).toFixed(2)
@@ -926,10 +1054,15 @@ const Pos = () => {
                             <td>
                               $
                               <span className="total-sale">
-                                {parseFloat(
+                                {Number(
                                   (parseFloat(data.price) +
-                                    (data.ingre.length > 2
-                                      ? Number(data.ingre.length - 2) *
+                                    (Number(data.type_ing) === 1
+                                      ? data.ingre.length > 2
+                                        ? Number(data.ingre.length - 2) *
+                                          parseFloat(data.exin)
+                                        : 0
+                                      : data.ingre.length > 4
+                                      ? Number(data.ingre.length - 4) *
                                         parseFloat(data.exin)
                                       : 0) +
                                     (data.qe === true
@@ -1012,10 +1145,13 @@ const Pos = () => {
                 <div className="address">
                   <center>
                     <label htmlFor="">Cliente:</label>
-                    
-                    
                   </center>
-                  <input type="" name="" value={clientName} onChange={(e) => setClientname(e.target.value)} />
+                  <input
+                    type=""
+                    name=""
+                    value={clientName}
+                    onChange={(e) => setClientname(e.target.value)}
+                  />
                 </div>
                 <div className="address">
                   <center>
@@ -1036,41 +1172,63 @@ const Pos = () => {
               ""
             ) : (
               <div className="total">
-                <h3>Envio</h3>
-                <span>$10.00</span>
+                <h3>Envio:</h3>
+                {Number(p_users) === 1 ? (
+                  <EditableTextC
+                    value={envioPrice}
+                    id={0}
+                    fun={updapteDelPrice}
+                  />
+                ) : (
+                  <>${Number(envioPrice).toFixed(2)}</>
+                )}
               </div>
             )}
             <div className="subtotal">
-              <h3>Subtotal</h3>
+              <h3>Subtotal:</h3>
               <span>${parseFloat(totalFinal).toFixed(2)}</span>
             </div>
             <div className="total">
-              <h3>Total</h3>
+              <h3>Total:</h3>
               {activeOption === 1 ? (
                 <span>${parseFloat(totalFinal).toFixed(2)}</span>
               ) : (
-                <span>${(parseFloat(totalFinal) + envioPrice).toFixed(2)}</span>
+                <span>
+                  ${(parseFloat(totalFinal) + Number(envioPrice)).toFixed(2)}
+                </span>
               )}
             </div>
             <label htmlFor="efe">Pagar con efectivo</label>
             <div className="complete-payment">
-              
               <div className="cp-input-container">
-                <input type="text" placeholder="Monto Efectivo" name="efe" value={amountCash} onChange={(e) => setAmountCash(e.target.value)} />
+                <input
+                  type="text"
+                  placeholder="Monto Efectivo"
+                  name="efe"
+                  value={amountCash}
+                  onChange={(e) => setAmountCash(e.target.value)}
+                />
               </div>
             </div>
             <label htmlFor="car">Pagar con tarjeta</label>
             <div className="complete-payment">
               <div className="cp-input-container">
-                <input type="text" placeholder="Monto Tarjeta" name="car" value={amountCard} onChange={(e) => setAmountCard(e.target.value)} />
+                <input
+                  type="text"
+                  placeholder="Monto Tarjeta"
+                  name="car"
+                  value={amountCard}
+                  onChange={(e) => setAmountCard(e.target.value)}
+                />
               </div>
             </div>
             <div className="complete">
               <div className="cp-btn">
-                <button type="button" onClick={completeSale}>Completar venta</button>
+                <button type="button" onClick={completeSale}>
+                  Completar venta
+                </button>
               </div>
             </div>
-            
           </div>
         </div>
       </div>

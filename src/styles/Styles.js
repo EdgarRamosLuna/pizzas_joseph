@@ -4,18 +4,26 @@ export const Content = styled.div`
   display: flex;
   flex-wrap: wrap;
   height: 100%;
-  
+
   select,
-    input {
-      height: 30px;
-      background: transparent;
-      border: 1px solid;
-      color: #a42220;
-      border-radius: 5px;
-      outline: none;
-      box-sizing: border-box;
-      padding: 0 10px;
-    }
+  input,
+  textarea {
+    height: 30px;
+    background: transparent;
+    border: 1px solid;
+    color: #a42220;
+    border-radius: 5px;
+    outline: none;
+    box-sizing: border-box;
+    padding: 5px 10px;
+  }
+  textarea {
+    height: 150px;
+    resize: none;
+  }
+  select {
+    width: 100%;
+  }
 `;
 export const HeaderS = styled.div`
   display: flex;
@@ -33,28 +41,27 @@ export const HeaderS = styled.div`
     transition: width 0.3s ease;
     overflow-x: hidden;
     white-space: pre;
-   z-index:99;
+    z-index: 99;
     &:hover {
       width: 250px;
       transition: width 0.3s ease;
-       a{
+      a {
         color: #fff;
-      //  text-decoration: none;
-     //   list-style: none;
+        //  text-decoration: none;
+        //   list-style: none;
       }
     }
 
-     ul {
+    ul {
       list-style-type: none;
       margin: 0;
       padding: 0;
     }
 
-     li {
+    li {
       padding: 10px;
       text-align: center;
       position: relative;
-      
     }
     * {
       color: #fff;
@@ -68,13 +75,13 @@ export const HeaderS = styled.div`
       margin: 0;
       padding: 0;
     }
-    a{
+    a {
       color: transparent;
-      position:absolute;
+      position: absolute;
       left: 50px;
     }
   }
-  .item-active{
+  .item-active {
     transition: all 0.3s ease-in-out;
     background: #571211;
   }
@@ -114,8 +121,8 @@ export const HeaderS = styled.div`
           width: 25px;
           justify-content: center;
           display: flex;
-          left:18px;
-          position:absolute;
+          left: 18px;
+          position: absolute;
         }
       }
       &:nth-child(2) {
@@ -130,8 +137,8 @@ export const HeaderS = styled.div`
           width: 25px;
           justify-content: center;
           display: flex;
-          left:14px;
-          position:absolute;
+          left: 14px;
+          position: absolute;
         }
       }
       &:nth-child(3) {
@@ -146,8 +153,8 @@ export const HeaderS = styled.div`
           width: 25px;
           justify-content: center;
           display: flex;
-          left:14px;
-          position:absolute;
+          left: 14px;
+          position: absolute;
         }
       }
       &:nth-child(4) {
@@ -162,8 +169,8 @@ export const HeaderS = styled.div`
           width: 25px;
           justify-content: center;
           display: flex;
-          left:14px;
-          position:absolute;
+          left: 14px;
+          position: absolute;
         }
       }
       &:nth-child(5) {
@@ -178,8 +185,8 @@ export const HeaderS = styled.div`
           width: 25px;
           justify-content: center;
           display: flex;
-          left:14px;
-          position:absolute;
+          left: 14px;
+          position: absolute;
         }
       }
       &:nth-child(6) {
@@ -194,8 +201,8 @@ export const HeaderS = styled.div`
           width: 25px;
           justify-content: center;
           display: flex;
-          left:14px;
-          position:absolute;
+          left: 14px;
+          position: absolute;
         }
       }
       &:nth-child(7) {
@@ -210,13 +217,12 @@ export const HeaderS = styled.div`
           width: 25px;
           justify-content: center;
           display: flex;
-          left:14px;
-          position:absolute;
+          left: 14px;
+          position: absolute;
         }
       }
     }
     a {
-     
       font-size: 1.3em;
       text-transform: uppercase;
       width: 250px;
@@ -225,14 +231,14 @@ export const HeaderS = styled.div`
       align-items: center;
       justify-content: start;
     }
-    .logo-container{
-      a{
+    .logo-container {
+      a {
         display: unset;
-        position:  relative;
+        position: relative;
         width: 100%;
         left: 0;
-        i{
-          font-size:0.8em;
+        i {
+          font-size: 0.8em;
         }
       }
     }
@@ -280,9 +286,9 @@ export const BodyS = styled.div`
   height: 90vh;
   margin-left: auto;
   overflow-y: auto;
-  
+
   select {
-    &:nth-child(1){
+    &:nth-child(1) {
       padding: 0 25px !important;
       padding-left: 10px !important;
     }
@@ -317,8 +323,13 @@ export const ModalS = styled.div`
   .form-footer {
     display: flex;
     box-sizing: border-box;
-    width: 35%;
-    margin-left: auto;
+    //margin-left: auto;
+    align-self: end;
+    gap: 15px;
+    @media (max-width: 980px) {
+      
+      flex-direction: column-reverse;
+    }
   }
   .form-item {
     width: 100%;
@@ -327,7 +338,6 @@ export const ModalS = styled.div`
     height: auto;
     gap: 10px;
     margin-bottom: 5px;
-    
   }
   .btn-container {
     display: flex;
@@ -348,6 +358,27 @@ export const ModalS = styled.div`
     width: 100%;
     display: flex;
   }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    border: 1px solid #a42220;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    color: #fff;
+    background-color: #a42220;
+  }
+  .form-item{
+    span{
+      color: #a42220;
+    }
+  }
 `;
 export const StyledButton = styled.button`
   min-width: 150px;
@@ -355,10 +386,11 @@ export const StyledButton = styled.button`
   max-width: 150px;
   margin-left: auto;
   margin-top: 10px;
-  
-  background: ${props => props.bg ? props.bg:"#a42220"};
+
+  background: ${(props) => (props.bg ? props.bg : "#a42220")};
   color: #fff;
-  border: ${props => props.bg ? `1px solid ${props.bg}`:"1px solid #a42220"}; 
+  border: ${(props) =>
+    props.bg ? `1px solid ${props.bg}` : "1px solid #a42220"};
   height: 30px;
   border-radius: 15px;
   cursor: pointer;
@@ -378,6 +410,9 @@ export const StorageS = styled.div`
     border-left: 0;*/
     color: #a42220;
     box-sizing: border-box;
+    @media (max-width: 1500px) {
+      overflow-x: auto;
+    }
   }
   .storage-menu-item {
     width: auto;
@@ -409,8 +444,8 @@ export const TableContainer = styled.div`
   border-right: 1px solid #a42220;
   border-left: 1px solid #a42220;
   .details-container {
-      font-size: 1.3em;
-      color: #101629;
+    font-size: 1.3em;
+    color: #101629;
   }
 `;
 
@@ -457,13 +492,13 @@ export const PosS = styled.div`
     outline: none;
   }
   span.number-container {
-      border-bottom: 1px solid;
-      color: #a42220;
-      font-weight: bold;
-      cursor: pointer;
+    border-bottom: 1px solid;
+    color: #a42220;
+    font-weight: bold;
+    cursor: pointer;
   }
-  .wrapper{
-    input{
+  .wrapper {
+    input {
       border: 0 !important;
     }
   }
@@ -572,7 +607,7 @@ export const PosS = styled.div`
     margin: 15px auto;
     gap: 11px;
   }
-  
+
   .search-client {
     margin-bottom: 15px;
     display: flex;
@@ -696,7 +731,6 @@ export const PosS = styled.div`
     display: flex;
     flex-direction: column;
     gap: 5px;
-
   }
   .extra-ing {
     width: 100%;
@@ -724,8 +758,8 @@ export const PosS = styled.div`
     flex-direction: column;
     gap: 5px;
     textarea {
-     // border: 1px solid #dfe1e5;
-     border: 1px solid #a42220;
+      // border: 1px solid #dfe1e5;
+      border: 1px solid #a42220;
       background-color: white;
       color: #212121;
       height: 100px;
@@ -740,53 +774,50 @@ export const PosS = styled.div`
     width: 100%;
   }
   .store-options {
-      width: 80%;
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-      text-align: center;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-      margin: 0 auto;
-      gap: 0px;
-      margin-bottom: 10px;
-      color: #a42220;
+    width: 80%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    margin: 0 auto;
+    gap: 0px;
+    margin-bottom: 10px;
+    color: #a42220;
   }
-  .type-active{
+  .type-active {
     transition: all 0.3s;
-    background-color:#a42220;
-    i{
-        transition: all 0.3s;
-        color: #fff;
+    background-color: #a42220;
+    i {
+      transition: all 0.3s;
+      color: #fff;
     }
   }
 `;
 export const StoreOptions = styled.div`
-  
-    cursor: pointer;
-    width: 70px;
-    border: 3px solid #a42220;
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: center;
-    box-sizing: border-box;
-    border-radius: 100px;
-    height: 70px;
+  cursor: pointer;
+  width: 70px;
+  border: 3px solid #a42220;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-radius: 100px;
+  height: 70px;
+  transition: all 0.3s;
+  i {
+    font-size: 1.5em;
+  }
+  &:hover {
+    background-color: #a42220;
     transition: all 0.3s;
-    i{
-      font-size: 1.5em;
-    }
-    &:hover{
-      background-color:#a42220;
+    i {
       transition: all 0.3s;
-      i{
-        transition: all 0.3s;
-        color: #fff;
-      }
+      color: #fff;
     }
-  
-  
+  }
 `;
 export const ActionBtns = styled.div`
   display: flex;
@@ -807,15 +838,15 @@ export const ActionBtns = styled.div`
   }
   .btn-edit {
     color: #20a428;
-    &:before{
+    &:before {
       content: "\f044";
       font-family: "Font Awesome 6 Free";
       font-weight: 900;
     }
-  }    
+  }
   .btn-del {
     color: #a42220;
-    &:before{
+    &:before {
       content: "\f1f8";
       font-family: "Font Awesome 6 Free";
       font-weight: 900;
@@ -830,9 +861,9 @@ export const StyledNumber = styled.div`
   align-items: center;
   position: relative;
   min-width: 115px;
-  input{
+  input {
     max-width: 60px;
-    text-align: center ;
+    text-align: center;
   }
   .edit-btns {
     width: 100%;
@@ -844,7 +875,7 @@ export const StyledNumber = styled.div`
     gap: 10px;
     align-items: center;
     justify-content: center;
-    i{
+    i {
       height: 100%;
       display: flex;
       justify-content: center;
@@ -856,59 +887,59 @@ export const StyledNumber = styled.div`
   }
 `;
 export const LoginS = styled.div`
-width: 100%;
-display: flex;
-justify-content: center;
-align-items: center;
-background: #a42220;
-form {
-  display: flex;
-  width: 60%;
-  margin: 0 auto;
-  flex-direction: column;
-  gap: 8px;
-}
-label {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.form-container {
-  width: 800px;
-  margin: 0 auto;
-  background: #fff;
-  height: 50vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-button{
-  height: 30px;
-  background: transparent;
-  border: 1px solid #a42220;
-  background-color: #a42220;
-  color: #fff;
-  border-radius: 5px;
-  outline: none;
-  box-sizing: border-box;
-  padding: 0 10px;
-  transition: all 0.3s;
-  &:hover{
-    transition: all 0.3s;
-    border: 1px solid #a42220;
-    color: #a42220;
-    background-color: #fff;
-  }
-}
-.logo {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 3em;
-  color: #a42220;
-}
+  background: #a42220;
+  form {
+    display: flex;
+    width: 60%;
+    margin: 0 auto;
+    flex-direction: column;
+    gap: 8px;
+  }
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .form-container {
+    width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+  button {
+    height: 30px;
+    background: transparent;
+    border: 1px solid #a42220;
+    background-color: #a42220;
+    color: #fff;
+    border-radius: 5px;
+    outline: none;
+    box-sizing: border-box;
+    padding: 0 10px;
+    transition: all 0.3s;
+    &:hover {
+      transition: all 0.3s;
+      border: 1px solid #a42220;
+      color: #a42220;
+      background-color: #fff;
+    }
+  }
+  .logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    color: #a42220;
+  }
 `;
 export const Loader = styled.div`
   width: 100%;

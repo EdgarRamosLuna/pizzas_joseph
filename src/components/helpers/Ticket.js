@@ -99,7 +99,8 @@ const Ticket = () => {
           minute: "2-digit",
           hour12: true,
         });
-        let formattedDate =  dateFormatter.format(newDate) + " " + timeFormatter.format(newDate);
+        let formattedDate =
+          dateFormatter.format(newDate) + " " + timeFormatter.format(newDate);
         setFormattedDate(formattedDate);
         /*   // let formattedDat = formattedDate.toLocaleString().replace(/:00 /g, " ");
         //let firstDigit = formattedDat.slice(0, 1);
@@ -121,6 +122,7 @@ const Ticket = () => {
 
         //console.log(typeof(secondDigit) === '' ? 'Numero':'');
         //setFormattedDateC(Number());
+        handlePrint();
       })
       .catch((err) => {
         console.error(err);
@@ -154,6 +156,155 @@ const Ticket = () => {
 
         <div ref={componentRef}>
           <div className="ticket">
+          <div className="header">
+              <center>
+                <b>Folio - {Number(dataMain['folio']) < 10 ? `00${dataMain['folio']}` : dataMain['folio']}</b>
+              </center>
+            </div>
+            <br />
+            <div className="table-container" style={{fontSize:'1em'}}>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cant.</th>
+                    <th style={{textAlign:'center'}}>Detalles de la orden</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dataI.map((data, ind) => {
+                    return (
+                      <tr>
+                        <td className="p-cant">
+                          <div className="p-cant-cont">
+                            <span>{data.cant}</span>
+                          </div>
+                        </td>
+
+                        <td className="p-name" style={{textAlign:'center'}}>
+                          {data.cat === "op" ? data.name : data.name}
+                          {data.cat === "drinks" ||  data.cat === "op" ? "" : <div>
+                            -------
+                          </div>}
+                          
+                          {dataI2.map((data2, ind2) => {
+                            if (
+                              Number(data.id_item_sale) ===
+                              Number(data2.id_item_sale)
+                            ) {
+                              return (
+                                <>
+                                  <b style={{ fontSize: "1em" }}>
+                                    {data2.name}
+                                    {Number(data2.is_extra) === 1 ? <div>{data.exin}</div>:""}
+                                  </b>
+                                  
+                                </>
+                              );
+                            }
+                          })}
+                          {data.cat === "op" ? (
+                            ""
+                          ) : (
+                            <>
+                              {Number(data.orilla_relle) !== 0 ? (
+                                <>
+                                  -Orilla Rellena <br />
+                                    <br />
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              {Number(data.queso_ex) !== 0 ? (
+                                <>
+                                  <br />
+                                  -Queso Extra 
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              {Number(data.pastor) !== 0 ? (
+                                <>
+                                  <br />
+                                  -Pastor 
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              {Number(data.deditos) !== 0 ? (
+                                <>
+                                  <br />
+                                  -Deditos
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              
+                              <br />
+                            </>
+                          )}
+                        </td>
+                       
+                        
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            {/*  <div className="item-list">
+              {dataI.map((data, ind) => {
+                return (
+                  <div className="item">
+                    
+                    <span className="item-name">
+                    <div className="item-cant">
+                      {ind === 0 ? <span className="cant-txt">Cant</span>:""}
+                      
+                      
+                      <span>
+                      {data.cant}
+
+                      </span>
+                    </div>
+                    
+                      <div className="item-ing" >
+                      <div className="item-name-value">
+                        {data.name} <br />
+                        
+                      </div>
+                        {dataI2.map((data2, ind2) => {
+                          if (
+                            Number(data.id_item_sale) ===
+                            Number(data2.id_item_sale)
+                          ) {
+                            return (
+                              <>
+                                <b style={{ fontSize: "0.7em" }}>{data2.name}</b>
+                                <br />
+                              </>
+                            );
+                          }
+                        })}
+                      </div>
+                    </span>
+                    <span className="item-price">
+                      ${(Number(data.price) * Number(data.cant)).toFixed(2)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>*/}
+           
+            <div className="footer">
+          
+              <br />
+              <b>
+                <span className="date">{formattedDate}</span>
+              </b>
+            </div>
+          </div>
+          {isPrinting === true && (
+            <div className="ticket">
             <div className="header">
               <center>
                 <b>Pizzas JOSSEPPH</b>
@@ -169,9 +320,9 @@ const Ticket = () => {
                 <thead>
                   <tr>
                     <th>Cant.</th>
-                    <th>Pro.</th>
-                    <th>Datos</th>
-                    <th>Pre. U</th>
+                    <th>Articulo</th>
+                    <th>Detalles</th>
+                    <th>Precio</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -185,7 +336,11 @@ const Ticket = () => {
                         </td>
 
                         <td className="p-name">
-                          {data.cat === "op" ? data.product : data.name}
+                          {data.cat === "op" ? data.name : data.name}
+                          {data.cat === "drinks" ||  data.cat === "op" ? "" : <div>
+                            -------
+                          </div>}
+                          
                           {dataI2.map((data2, ind2) => {
                             if (
                               Number(data.id_item_sale) ===
@@ -195,7 +350,9 @@ const Ticket = () => {
                                 <>
                                   <b style={{ fontSize: "0.7em" }}>
                                     {data2.name}
+                                    {Number(data2.is_extra) === 1 ? <div>{data.exin}</div>:""}
                                   </b>
+                                  
                                 </>
                               );
                             }
@@ -206,18 +363,45 @@ const Ticket = () => {
                             ""
                           ) : (
                             <>
-                              -Orilla Rellena <br />
-                              $0.00
-                              <br />
-                              -Queso Extra <br />
-                              $0.00
-                              <br />
-                              -Pastor
-                              <br />
-                              $0.00
-                              <br />
-                              -Deditos <br />
-                              $0.00
+                              {Number(data.orilla_relle) !== 0 ? (
+                                <>
+                                  -Orilla Rellena <br /> $
+                                  {Number(data.orilla_relle) === 1
+                                    ? data.chstedp
+                                    : data.chstedm}
+                                    <br />
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              {Number(data.queso_ex) !== 0 ? (
+                                <>
+                                  <br />
+                                  -Queso Extra <br />${data.exch}
+                                  <br />
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              {Number(data.pastor) !== 0 ? (
+                                <>
+                                  <br />
+                                  -Pastor <br />${data.pas}
+                                  <br />
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              {Number(data.deditos) !== 0 ? (
+                                <>
+                                  <br />
+                                  -Deditos <br />${data.fin}
+                                  <br />
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              
                               <br />
                             </>
                           )}
@@ -293,12 +477,15 @@ const Ticket = () => {
             )}
 
             <div className="total">
-              <span className="total-label">Sutotal:</span>
+              <span className="total-label">Subtotal:</span>
               <span className="total-amount">
                 ${Number(dataMain.total).toFixed(2)}
               </span>
             </div>
-            <div className="total">
+            <div
+              className="total"
+              style={{ borderBottom: "1px dashed", paddingBottom: "3px" }}
+            >
               <span className="total-label">Total:</span>
               <span className="total-amount">
                 ${(Number(dataMain.total) + Number(dataMain.envio)).toFixed(2)}
@@ -314,7 +501,6 @@ const Ticket = () => {
                     Direccion Cliente:
                     <br /> {dataMain.address}
                   </p>
-                  <br />
                 </>
               )}
 
@@ -324,62 +510,6 @@ const Ticket = () => {
               </b>
             </div>
           </div>
-          {isPrinting === "true" && (
-            <div className="ticket">
-              <div className="header">
-                <center>
-                  <b>Pizzas JOSSEPPH</b>
-                </center>
-                <br />
-                <b>Calle Reforma # 15 centro Parras Coahuila CP 27987</b>
-                <br />
-
-                <b>Tel. 842 422 0123</b>
-              </div>
-              <br />
-              <div className="item-list">
-                <div className="item">
-                  <span className="item-name">
-                    Pizza Familiar <br />
-                    peperoni <br />
-                    salchicha
-                  </span>
-                  <span className="item-price">$150.00</span>
-                </div>
-                <div className="item">
-                  <span className="item-name">
-                    Pizza Familiar <br />
-                    peperoni <br />
-                    salchicha
-                  </span>
-                  <span className="item-price">$150.00</span>
-                </div>
-                <div className="item">
-                  <span className="item-name">
-                    Pizza Familiar <br />
-                    peperoni <br />
-                    salchicha
-                  </span>
-                  <span className="item-price">$150.00</span>
-                </div>
-              </div>
-              <div className="total">
-                <span className="total-label">Total:</span>
-                <span className="total-amount">$300.00</span>
-              </div>
-              <div className="footer">
-                <br />
-                <p>
-                  Direccion Cliente:
-                  <br /> Calle Reforma # 15 centro Parras Coahuila CP 27987
-                </p>
-                <br />
-                <br />
-                <b>
-                  Fecha: <span className="date">{formattedDate}</span>
-                </b>
-              </div>
-            </div>
           )}
         </div>
       </TicketS>

@@ -6,47 +6,80 @@ import { ModalS, StyledButton } from "../../styles/Styles";
 import BtnClose from "../helpers/BtnClose";
 
 const Modal = (props) => {
-  const { type, id_item, table} = props;
-  const { setShowAddInv, stopProp, saveProduct, setShowConfBox, delConf, setDelConf, deleteItemDb, option } = useContext(MainContext);
+  const { type, id_item, table } = props;
+  const {
+    setShowAddInv,
+    stopProp,
+    saveProduct,
+    setShowConfBox,
+    delConf,
+    setDelConf,
+    deleteItemDb,
+    option,
+    confirmed2, setConfirmed2
+  } = useContext(MainContext);
   const [tipo, setTipo] = useState(option);
   const [ingrediente, setIngrediente] = useState(2);
-  const [data, setData] = useState([]);
-  const [data2, setData2] = useState([]);
-  const [data3, setData3] = useState([]);
-  const [data4, setData4] = useState([]);
+  const [data, setData] = useState({
+    chstedm: "",
+    chstedp: "",
+    exch: "",
+    exin: "",
+    fin: "",
+    pas: "",
+    price: "",
+    size: "",
+  });
+  const [data2, setData2] = useState({
+    doca: "",
+    ha: "",
+    price: "",
+    product: "",
+    sal: "",
+  });
+  const [data3, setData3] = useState({
+    cant: "",
+    is_ing: "",
+    name: "",
+  });
+  const [data4, setData4] = useState({
+    cant: "",
+    name: "",
+    price: "",
+  });
   const SelectType = (data) => {
-   // data = data.toString();
+    // data = data.toString();
     setTipo(data);
   };
   useEffect(() => {
-    
-    SelectType(option)
-
+    SelectType(option);
   }, []);
   //console.log(tipo);
   const SelectIngr = (e) => {
     setIngrediente(e.target.value);
   };
-  const delItemC = (id_item, table) =>{
-  //  console.log('aaaaaaaaaa');
-   // setDelConf(true);
+  const delItemC = (id_item, table) => {
+    //  console.log('aaaaaaaaaa');
+    // setDelConf(true);
 
     deleteItemDb(id_item, table);
-    
-    
-  }
-  const hideModal = () =>{
+  };
+  const cancelSale = () => {
+    console.log('etron');
+    setConfirmed2(true);
+    hideModal();
+  };
+  const hideModal = () => {
     setShowAddInv(false);
     setShowConfBox(false);
-
-  }
-  const setFunction = () =>{
+  };
+  const setFunction = () => {
     setShowAddInv(false);
-  }
+  };
 
   console.log(tipo);
   return (
-    <ModalS onClick={() => hideModal()}>
+    <ModalS>
       {type === "addInv" ? (
         <div className="modal-container" onClick={(e) => stopProp(e)}>
           <BtnClose setFunction={setFunction} />
@@ -71,7 +104,7 @@ const Modal = (props) => {
             {tipo === 0 ? (
               <>
                 <div className="form-item">
-                  <label for="">Tamaño</label>
+                  <label for="">Tamaño *</label>
                   <input
                     type="text"
                     name="size"
@@ -86,7 +119,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">Precio</label>
+                  <label for="">Precio *</label>
                   <input
                     type="text"
                     name="price"
@@ -202,7 +235,7 @@ const Modal = (props) => {
             {tipo === 1 ? (
               <>
                 <div className="form-item">
-                  <label for="">Producto</label>
+                  <label for="">Producto *</label>
                   <input
                     type="text"
                     name="product"
@@ -217,7 +250,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">Precio</label>
+                  <label for="">Precio *</label>
                   <input
                     type="text"
                     name="price"
@@ -291,7 +324,6 @@ const Modal = (props) => {
                 <div className="form-item">
                   <label for="">Es ingrediente</label>
                   <select
-                    
                     name="is_ing"
                     value={data3.is_ing}
                     onChange={(e) =>
@@ -308,7 +340,7 @@ const Modal = (props) => {
                   </select>
                 </div>
                 <div className="form-item">
-                  <label for="">Nombre</label>
+                  <label for="">Nombre *</label>
                   <input
                     type="text"
                     name="name"
@@ -322,24 +354,23 @@ const Modal = (props) => {
                     }
                   />
                 </div>
-                {data3.is_ing !== '1' &&
-                <div className="form-item">
-                  <label for="">Cantidad</label>
-                  <input
-                    type="text"
-                    name="cant"
-                    value={data3.cant}
-                    onChange={(e) =>
-                      setData3({
-                        ...data3,
-                        [e.target.dataset.name || e.target.name]:
-                          e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                
-                } 
+                {data3.is_ing !== "1" && (
+                  <div className="form-item">
+                    <label for="">Cantidad</label>
+                    <input
+                      type="text"
+                      name="cant"
+                      value={data3.cant}
+                      onChange={(e) =>
+                        setData3({
+                          ...data3,
+                          [e.target.dataset.name || e.target.name]:
+                            e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                )}
                 {/*ingrediente === "1" ? (
                   <div className="form-item">
                     <label for="">Precio Venta</label>
@@ -359,18 +390,17 @@ const Modal = (props) => {
 
                 <div className="form-item">
                   <StyledButton onClick={(e) => saveProduct(3, data3)}>
-                      Guardar
-                    </StyledButton>
+                    Guardar
+                  </StyledButton>
                 </div>
               </>
             ) : (
               ""
             )}
-             {tipo === 3 ? (
+            {tipo === 3 ? (
               <>
-                
                 <div className="form-item">
-                  <label for="">Nombre del producto</label>
+                  <label for="">Nombre del producto *</label>
                   <input
                     type="text"
                     name="name"
@@ -384,9 +414,9 @@ const Modal = (props) => {
                     }
                   />
                 </div>
-            
+
                 <div className="form-item">
-                  <label for="">Cantidad</label>
+                  <label for="">Cantidad *</label>
                   <input
                     type="text"
                     name="cant"
@@ -401,7 +431,7 @@ const Modal = (props) => {
                   />
                 </div>
                 <div className="form-item">
-                  <label for="">Precio</label>
+                  <label for="">Precio *</label>
                   <input
                     type="text"
                     name="price"
@@ -415,13 +445,11 @@ const Modal = (props) => {
                     }
                   />
                 </div>
-                
-            
 
                 <div className="form-item">
                   <StyledButton onClick={(e) => saveProduct(4, data4)}>
-                      Guardar
-                    </StyledButton>
+                    Guardar
+                  </StyledButton>
                 </div>
               </>
             ) : (
@@ -433,7 +461,7 @@ const Modal = (props) => {
         ""
       )}
 
-{type === "delItem" ? (
+      {type === "delItem" ? (
         <div className="modal-container" onClick={(e) => stopProp(e)}>
           <div className="modal-close" onClick={() => setShowConfBox(false)}>
             <i class="fa-solid fa-circle-xmark"></i>
@@ -442,16 +470,52 @@ const Modal = (props) => {
             <h2>Elminar producto</h2>
           </div>
           <div className="modal-form">
-            <h3>¿Estás seguro(a) que deseas borrar este producto? Esta acción no podrá deshacerse.</h3>
+            <h3>
+              ¿Estás seguro(a) que deseas borrar este producto? Esta acción no
+              podrá deshacerse.
+            </h3>
           </div>
-          
+
           <div className="form-footer">
-                  <StyledButton onClick={() => setShowConfBox(false)} >
-                      Cerrar
-                    </StyledButton>
-                  <StyledButton onClick={(e) => delItemC(id_item, table)} bg="#20a428">
-                      Estoy Seguro(a)
-                    </StyledButton>
+            <StyledButton onClick={() => setShowConfBox(false)}>
+              Cerrar
+            </StyledButton>
+            <StyledButton
+              onClick={(e) => delItemC(id_item, table)}
+              bg="#20a428"
+            >
+              Estoy Seguro(a)
+            </StyledButton>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+      {type === "cancelSale" ? (
+        <div className="modal-container" onClick={(e) => stopProp(e)}>
+          <div className="modal-close" onClick={() => setShowConfBox(false)}>
+            <i class="fa-solid fa-circle-xmark"></i>
+          </div>
+          <div className="modal-title">
+            <h2>Cancelar Venta</h2>
+          </div>
+          <div className="modal-form">
+            <h3>
+              ¿Estás seguro(a) que deseas cancelar esta venta? Esta acción no
+              podrá deshacerse.
+            </h3>
+          </div>
+
+          <div className="form-footer">
+            <StyledButton onClick={() => setShowConfBox(false)}>
+              Cerrar
+            </StyledButton>
+            <StyledButton
+              onClick={()=> cancelSale()}
+              bg="#20a428"
+            >
+              Estoy Seguro(a)
+            </StyledButton>
           </div>
         </div>
       ) : (

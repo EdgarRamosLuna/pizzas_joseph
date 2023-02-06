@@ -10,10 +10,14 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const { baseUrl, sesion, setSesion, sesionData } = useContext(MainContext);
-
+  useEffect(() => {
+    const classElement = document.querySelector(".date-pick");
+    const targetElement = document.querySelector(".header-button");
+    targetElement.parentNode.insertBefore(classElement, targetElement);
+  }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    localStorage.clear();
     try {
       const response = await fetch(`${baseUrl}/server/api/login`, {
         method: "POST",

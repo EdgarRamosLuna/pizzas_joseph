@@ -236,15 +236,60 @@ const TableStorage = (props) => {
         console.error(err);
       });
     }
+    if (type === 4) {
+      setData3([]);
+      setColumns([
+        {
+          name: "Producto",
+          selector: (row) => row.name,
+        },
+        {
+          name: "Precio",
+          selector: (row) => Number(row.price) > 0 ? "0":row.price,
+        },
+        {
+          name: "",
+          selector: (row) => row.actions,
+        },
+        
+      ]);
+      axios.get(`${baseUrl}/server/api/products_materias_primas`).then((res) =>{
+    //    console.log(res);
+        // setData([]);
+        for (let i = 0; i < res.data.length; i++) {
+          const element = res.data[i];
+          setData3(prev =>[...prev,
+            {
+              id: element.id,
+              id_item: element.id_item,
+              is_esp: element.is_esp,
+              name: element.name,
+              price_bu: element.price_bu,
+              price: element.price,
+              actions: <ActionBtns >
+              <button className="btn btn-edit" onClick={(e) => updateItem(e, element.id_item, 3)} />
+              <button className="btn btn-del"  onClick={() => removeItem(element.id_item, 3)} />
+              
+            </ActionBtns>,
+            },
+           
+          ]);
+          
+        }
+      }).catch((err) =>{
+        console.error(err);
+      });
+    }
   }, [type]);
 
   
   return (
     <TableContainer>
-      {type === 0 && <FilterItems columns={columns} data={data} field='size' placeholder='Buscar por tamaño' />}
-      {type === 1 && <FilterItems columns={columns} data={data2} field='product' placeholder='Buscar por producto' />}
-      {type === 2 && <FilterItems columns={columns} data={data3} field='name' placeholder='Buscar por nombre' />}
-      {type === 3 && <FilterItems columns={columns} data={data} field='name' placeholder='Buscar por bebida' />}
+      {type === 0 && <FilterItems columns={columns} data={data} field='size' placeholder='Buscar por tamaño' searchBar={true} />}
+      {type === 1 && <FilterItems columns={columns} data={data2} field='product' placeholder='Buscar por producto' searchBar={true} />}
+      {type === 2 && <FilterItems columns={columns} data={data3} field='name' placeholder='Buscar por nombre' searchBar={true} />}
+      {type === 3 && <FilterItems columns={columns} data={data} field='name' placeholder='Buscar por bebida' searchBar={true} />}
+      {type === 4 && <FilterItems columns={columns} data={data3} field='name' placeholder='Buscar por nombre' searchBar={true} />}
     </TableContainer>
   );
 };

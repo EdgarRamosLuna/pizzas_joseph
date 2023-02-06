@@ -1,4 +1,4 @@
-import React from "react";
+import React, { forwardRef } from "react";
 import { useMemo } from "react";
 import { useContext } from "react";
 import { useState } from "react";
@@ -6,9 +6,10 @@ import DataTable from "react-data-table-component";
 import styled from "styled-components";
 import MainContext from "../../../context/MainContext";
 import { Loader } from "../../../styles/Styles";
+import DatePickerC from "./DatePickerC";
 import { FilterData } from "./FilterData";
 
-const FilterItems = ({ data, columns, field, placeholder }) => {
+const FilterItems = ({ data, columns, field, placeholder, searchBar }) => {
   function convertArrayOfObjectsToCSV(array) {
     let result;
 
@@ -84,25 +85,47 @@ const FilterItems = ({ data, columns, field, placeholder }) => {
     () => <Export onExport={() => downloadCSV(data)} />,
     []
   );
-  const { loadingS } = useContext(MainContext);
+  const { loadingS2 } = useContext(MainContext);
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={filteredItems}
-        pagination
-        paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
-        subHeader
-        subHeaderComponent={subHeaderComponentMemo}
-        persistTableHead
-        progressPending={loadingS}
-        progressComponent={
-          <Loader style={{position:'relative', height:'100%'}}>
-            <img src="/assets/img/loading.svg" alt="" />
-          </Loader>
-        }
-        //      actions={actionsMemo}
-      />
+      {searchBar === true ? (
+        <DataTable
+          columns={columns}
+          data={filteredItems}
+          pagination
+          paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+          subHeader
+          subHeaderComponent={subHeaderComponentMemo}
+          persistTableHead
+          progressPending={loadingS2}
+          progressComponent={
+            <Loader style={{ position: "relative", height: "100%" }}>
+              <img src="/assets/img/loading.svg" alt="" />
+            </Loader>
+          }
+          //      actions={actionsMemo}
+        />
+      ) : (
+        <DataTable
+          columns={columns}
+          data={data}
+          pagination
+          paginationResetDefaultPage={resetPaginationToggle} // optionally, a hook to reset pagination to page 1
+          subHeader
+          subHeaderComponent={
+            <DatePickerC data={data} setData />
+          }
+          persistTableHead
+          progressPending={loadingS2}
+          progressComponent={
+            <Loader style={{ position: "relative", height: "100%" }}>
+              <img src="/assets/img/loading.svg" alt="" />
+            </Loader>
+          }
+          
+          //      actions={actionsMemo}
+        />
+      )}
     </>
   );
 };

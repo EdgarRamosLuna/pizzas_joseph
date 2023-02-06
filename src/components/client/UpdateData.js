@@ -6,7 +6,7 @@ import { ModalS, StyledButton } from "../../styles/Styles";
 import BtnClose from "../helpers/BtnClose";
 
 const UpdateData = (props) => {
-  const { type, table } = props;
+ // const { type, table } = props;
   const {
     setShowAddInv,
     stopProp,
@@ -51,9 +51,9 @@ const UpdateData = (props) => {
     price:'',
     cant:'',
   });
-  const SelectType = (data) => {
+  const SelectType = (type) => {
     // data = data.toString();
-    setTipo(data);
+    setTipo(type);
   };
   
   useEffect(() => {
@@ -114,7 +114,6 @@ const UpdateData = (props) => {
   // console.log(arrayData);
   return (
     <ModalS>
-      {type === "updateItem" ? (
         <div className="modal-container" onClick={(e) => stopProp(e)}>
           <BtnClose setFunction={setFunction} />
           <div className="modal-title">
@@ -420,7 +419,7 @@ const UpdateData = (props) => {
             {tipo === 3 ? (
               <>
                 <div className="form-item">
-                  <label htmlFor="">Nombre del cocon</label>
+                  <label htmlFor="">Nombre del producto</label>
                   <input
                     type="text"
                     name="name"
@@ -476,9 +475,7 @@ const UpdateData = (props) => {
             )}
           </div>
         </div>
-      ) : (
-        ""
-      )}
+    
     </ModalS>
   );
 };

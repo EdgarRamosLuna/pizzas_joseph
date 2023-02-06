@@ -6,104 +6,163 @@ import { ModalS, StyledButton } from "../../styles/Styles";
 import BtnClose from "../helpers/BtnClose";
 
 const UpdateDataU = (props) => {
-  const { type, id_item, table } = props;
-  const {
-    setShowAddInv,
-    stopProp,
-    setShowConfBox,
-    delConf,
-    setDelConf,
-    deleteItemDb,
-    option,
-    updateItem,
-    isEdit,
-    setIsEdit2,
-    actualData,
-  } = useContext(MainContext);
-  const [tipo, setTipo] = useState(0);
-  const [ingrediente, setIngrediente] = useState(2);
+  //const { type, id_item, table } = props;
+  const { stopProp, setIsEdit2, actualData, updateData, id_item, option2 } =
+    useContext(MainContext);
   const [data, setData] = useState({
-    user: "",
+    nombre: "",
+    direccion: "",
+    status: 0,
     password: "",
   });
 
   //console.log(actualData);
   useEffect(() => {
     setData({
-      user: actualData[0].data,
-      password: '',
+      nombre: actualData[0].data,
+      direccion: actualData[1].data,
+      status: option2 === 6 ? actualData[1].data === 'Activo' ? 1 : 0 : actualData[2].data === 'Activo' ? 1 : 0,
+      password: ''
     });
 
-//    SelectType(option);
+    //    SelectType(option2);
   }, []);
-  //console.log(tipo);
-  const SelectIngr = (e) => {
-    setIngrediente(e.target.value);
-  };
-  const delItemC = (id_item, table) => {
-    //  console.log('aaaaaaaaaa');
-    // setDelConf(true);
-
-    deleteItemDb(id_item, table);
-  };
   const hideModal = () => {
     setIsEdit2(false);
   };
   const setFunction = () => {
     setIsEdit2(false);
   };
-  const saveUser = (data) => {
-    console.log(data);
-  }
-  // console.log(arrayData);
   return (
-    <ModalS onClick={() => hideModal()}>
-      <div className="modal-container" onClick={(e) => stopProp(e)}>
-        <BtnClose setFunction={setFunction} />
-        <div className="modal-title">
-          <h2>Editar Usuario</h2>
+    <ModalS>
+      {option2 === 6 && (
+        <div className="modal-container" onClick={(e) => stopProp(e)}>
+          <BtnClose setFunction={setFunction} />
+          <div className="modal-title">
+            <h2>Editar Usuario</h2>
+          </div>
+          <div className="modal-form">
+            <div className="form-item">
+              <label htmlFor="nombre">Usuario</label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                value={data.nombre}
+                autoComplete="off"
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    [e.target.dataset.name || e.target.name]: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-item">
+              <label htmlFor="password">Contraseña</label>
+              <input
+                type="text"
+                id="password"
+                name="password"
+                autoComplete="off"
+                value={data.password}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    [e.target.dataset.name || e.target.name]: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-item">
+              <label htmlFor="">Status</label>
+              <select
+                name="status"
+                value={data.status}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    [e.target.dataset.name || e.target.name]: e.target.value,
+                  })
+                }
+              >
+                <option value="0">Inactivo</option>
+                <option value="1">Activo</option>
+              </select>
+            </div>
+
+            <div className="form-item">
+              <StyledButton onClick={(e) => updateData(5, id_item, data)}>
+                Guardar
+              </StyledButton>
+            </div>
+          </div>
         </div>
-        <div className="modal-form">
-          <div className="form-item">
-            <label htmlFor="user">Usuario</label>
-            <input
-              type="text"
-              id="user"
-              name="user"
-              value={data.user}
-              autoComplete="off"
-              onChange={(e) =>
-                setData({
-                  ...data,
-                  [e.target.dataset.name || e.target.name]: e.target.value,
-                })
-              }
-            />
+      )}
+      {option2 === 7 && (
+        <div className="modal-container" onClick={(e) => stopProp(e)}>
+          <BtnClose setFunction={setFunction} />
+          <div className="modal-title">
+            <h2>Editar Usuario</h2>
           </div>
-          <div className="form-item">
-            <label htmlFor="password">Contraseña</label>
-            <input
-              type="text"
-              id="password"
-              name="password"
-              autoComplete="off"
-              value={data.password}
-              onChange={(e) =>
-                setData({
-                  ...data,
-                  [e.target.dataset.name || e.target.name]: e.target.value,
-                })
-              }
-            />
-          </div>
-          
-          <div className="form-item">
-            <StyledButton onClick={(e) => saveUser(data)}>
-              Guardar
-            </StyledButton>
+          <div className="modal-form">
+            <div className="form-item">
+              <label htmlFor="user">Usuario</label>
+              <input
+                type="text"
+                id="nombre"
+                name="nombre"
+                value={data.nombre}
+                autoComplete="off"
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    [e.target.dataset.name || e.target.name]: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-item">
+              <label htmlFor="direccion">Direccion</label>
+              <textarea
+                type="text"
+                id="direccion"
+                name="direccion"
+                autoComplete="off"
+                value={data.direccion}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    [e.target.dataset.name || e.target.name]: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div className="form-item">
+              <label htmlFor="">Status</label>
+              <select
+                name="status"
+                value={data.status}
+                onChange={(e) =>
+                  setData({
+                    ...data,
+                    [e.target.dataset.name || e.target.name]: e.target.value,
+                  })
+                }
+              >
+                <option value="0">Inactivo</option>
+                <option value="1">Activo</option>
+              </select>
+            </div>
+
+            <div className="form-item">
+              <StyledButton onClick={(e) => updateData(6, id_item, data)}>
+                Guardar
+              </StyledButton>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </ModalS>
   );
 };

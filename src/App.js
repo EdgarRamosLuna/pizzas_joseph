@@ -20,21 +20,25 @@ import Clients from "./components/admin/Clients";
 function App() {
   const [haveSess, setHaveSess] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [permisos, setPermissions] = useState([]);
   const [server, setServer] = useState(process.env.REACT_APP_API_URL_LOCAL_SERVER);
  // console.log(server);
   useEffect(() => {
    // setLoading(true);
-    const token = localStorage?.getItem("token");
+    const token = localStorage.getItem("token");
     if (token !== null && token !== "") {
       //console.log(token);
       axios
         .get(`${server}/server/api/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
+            /*'Cache-Control': 'no-store, no-cache, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'*/
           },
         })
         .then((response) => {
-    
+          
           if(response.data.message === 'Token no valido'){
             console.log(response.data);
             setHaveSess(false);
@@ -44,6 +48,10 @@ function App() {
             }, 1000);
           }else{
             if (Number(response.data.id) > 0) {
+              
+              console.log(response.data)
+              const {p_storage, p_sales, p_clients, p_users} = response.data;
+              setPermissions({p_storage, p_sales, p_clients, p_users})
               setHaveSess(true);
            //   localStorage.setItem('turno', Number(response.data.turno_status));
               setTimeout(() => {
@@ -74,16 +82,16 @@ function App() {
           <Routes>
             {haveSess === true ? (
               <>
-              <Route exact path="/" element={<Header />}>
-                <Route exact path="/" element={<Storage />} />
-                <Route exact path="/inventario" element={<Storage />} />
-                <Route exact path="/ventas" element={<Sales />} />
-                <Route exact path="/pos" element={<Pos />} />
-                <Route exact path="/usuarios" element={<Users />} />
-                <Route exact path="/clientes" element={<Clients />} />
-                
+              <Route exact path="/" element={<Header permisos={permisos} />}>
+                {permisos.p_users === '1' ? <Route exact path="/" element={<Storage />} />: <Route exact path="/" element={<Pos permisos={permisos}  />} />}
+                {permisos.p_storage === '1' ? <Route exact path="/inventario" element={<Storage />} />: <Route exact path="/inventario" element={<Pos permisos={permisos}  />} />}
+                {permisos.p_sales === '1' ? <Route exact path="/ventas" element={<Sales />} /> : <Route exact path="/ventas" element={<Pos permisos={permisos}  />} />}
+                <Route exact path="/pos" element={<Pos  permisos={permisos} />} />
+                {permisos.p_users === '1' ? <Route exact path="/usuarios" element={<Users />} />: <Route exact path="/usuarios" element={<Pos permisos={permisos}  />} />}
+                {permisos.p_clients === '1' ? <Route exact path="/clientes" element={<Clients />} />: <Route exact path="/clientes" element={<Pos permisos={permisos}  />} />}    
               </Route>
-              <Route exact path="/ticket/:id" element={<Ticket />} />
+              {permisos.p_sales === '1' ? <Route exact path="/ticket/:id" element={<Ticket />} />: ""}    
+              
               </>
             ) : (
               <Route exact path="/" element={<Login />}>

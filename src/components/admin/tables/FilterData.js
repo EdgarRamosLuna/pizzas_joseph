@@ -43,6 +43,7 @@ export const FilterData = ({ filterText, onFilter, onClear, placeholder }) => {
 			aria-label="Search Input"
 			value={filterText}
 			onChange={onFilter}
+			autoComplete="off"
 		/>
 		<ClearButton type="button" onClick={onClear}>
 			X

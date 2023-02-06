@@ -6,11 +6,11 @@ import { StorageS } from '../../styles/Styles'
 import TableUsers from './tables/Table_users'
 
 const Users = () => {
-  const {setLoadingS, option} = useContext(MainContext)
+  const {setLoadingS2, option} = useContext(MainContext)
   useEffect(() => {
-    setLoadingS(true);
+    setLoadingS2(true);
     setTimeout(() => {
-      setLoadingS(false);
+      setLoadingS2(false);
     }, 500);
     return () => {};
   }, [option]);
@@ -21,7 +21,7 @@ const Users = () => {
                 <h3>Usuarios</h3>
             </div>
         </div>
-        <TableUsers type={5} /> 
+        <TableUsers type={5}  /> 
     </StorageS>
   )
 }
