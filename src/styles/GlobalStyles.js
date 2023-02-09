@@ -36,8 +36,8 @@ const GlobalStyle = createGlobalStyle`
     //margin-right: auto;
    // margin-left: 200px;
    color: #a42220;
-   max-width: 300px;
-   width: 100%;
+   max-width: 430px;
+    width: 100%;
     &:before{
       content: "Busqueda por fecha";
   //    width: 100%;
@@ -83,7 +83,32 @@ const GlobalStyle = createGlobalStyle`
     overflow: hidden !important;
 }
 .example-custom-input {
-    min-width: 67px;
+    width: 33px;
+}
+.react-datepicker-wrapper {
+    display: flex;
+    padding: 0;
+    border: 0;
+    width: 77px;
+    align-items: center;
+}
+.date-pick-container {
+    text-align: center;
+    display: flex;
+}
+/*.graphics-container {
+    width: 100%;
+    background: #fff;
+    border-left: 1px solid;
+    color: #a42220;
+    border-right: 1px solid;
+}*/
+.graphics-container {
+    width: 100%;
+    background: unset;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 `;
 

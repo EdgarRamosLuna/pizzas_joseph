@@ -34,6 +34,7 @@ const Details = () => {
                 <thead>
                   <tr>
                     <th>Producto</th>
+                    <th>Ingredientes</th>
                     <th>Precio</th>
                     <th>Cantidad</th>
                     <th>Extras</th>
@@ -44,6 +45,11 @@ const Details = () => {
                     return (
                       <tr>
                         <td>{data.name}</td>
+                        <td>{details.sale_data_items_ing.map((data2) =>{
+                          return (<>
+                            {data2.name} <br/>
+                          </>);
+                        })}</td>
                         <td>${data.price}</td>
                         <td>{data.cant}</td>
                         <td>

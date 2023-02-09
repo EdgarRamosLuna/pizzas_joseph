@@ -27,6 +27,7 @@ const Pos = ({ permisos }) => {
     sesionData,
     setSesionData,
     bseUrl,
+    ingPromo
   } = useContext(MainContext);
   const [searchResult2, setSearchResult2] = useState([]);
   const [searchResult3, setSearchResult3] = useState([]);
@@ -650,11 +651,9 @@ const Pos = ({ permisos }) => {
     //    console.log(arrayD);
   };
 
-  const extraIngFree = () => {
-    var d = new Date();
-    var day = d.getDay();
-    return day === 3 || day === 4;
-  };
+  
+  //console.log(extraIngFree());
+  //console.log(ingPromo);
   /*if (isWednesday()) {
     console.log("3 ingredientes");
   } else {
@@ -719,6 +718,7 @@ const Pos = ({ permisos }) => {
           total_card: Number(amountCard),
           sale_data: addressCli,
           client: clientName,
+          ingPromo:ingPromo,
         },
         {
           headers: {
@@ -745,9 +745,10 @@ const Pos = ({ permisos }) => {
     setTypeAlert(type);
 
     setTimeout(() => {
-      setShowAlert(false);
+      //setShowAlert(false);
+      document.querySelector('.notify').click();
       if (type === "success-sale") {
-        window.location.reload();
+     //   window.location.reload();
         window.open(`${bseUrl}/ticket/${id_sale}`, "_blank");
       }
     }, time);
@@ -834,6 +835,7 @@ const Pos = ({ permisos }) => {
                             <td>
                               {data.cat === "pizza" ? (
                                 <>
+                                <label for="">Distribucion de Ingredientes</label> <br />
                                   <select
                                     name="ing"
                                     value={dataI.ing}
@@ -842,9 +844,9 @@ const Pos = ({ permisos }) => {
                                       addIngreType(index_main, e.target.value)
                                     }
                                   >
-                                    <option value="1">Pizza Completa</option>
+                                    <option value="1">Completa</option>
                                     <option value="2">
-                                      Pizza Mitad 2 Ingredientes
+                                      Mitades
                                     </option>
                                   </select>
                                   <br />
@@ -904,22 +906,36 @@ const Pos = ({ permisos }) => {
                                               />
                                             </div>
                                           </div>
-                                          {index2 === 1 && Number(data.type_ing) === 1 &&
+                                          {ingPromo === true ?  (index2 === 2 && Number(data.type_ing) === 1 &&
+                                          data.ingre.length > 3 ? (
+                                            <div className="extra-ing">
+                                              <h5>Ingredientes extra</h5>
+                                            </div>
+                                          ) : (
+                                            ""
+                                          )) : (index2 === 1 && Number(data.type_ing) === 1 &&
                                           data.ingre.length > 2 ? (
                                             <div className="extra-ing">
                                               <h5>Ingredientes extra</h5>
                                             </div>
                                           ) : (
                                             ""
-                                          )}
-                                          {index2 === 3 && Number(data.type_ing) === 2 &&
+                                          ))}
+                                          {ingPromo === true ? (index2 === 4 && Number(data.type_ing) === 2 &&
+                                          data.ingre.length > 5 ? (
+                                            <div className="extra-ing">
+                                              <h5>Ingredientes extra</h5>
+                                            </div>
+                                          ) : (
+                                            ""
+                                          )) :(index2 === 3 && Number(data.type_ing) === 2 &&
                                           data.ingre.length > 4 ? (
                                             <div className="extra-ing">
                                               <h5>Ingredientes extra</h5>
                                             </div>
                                           ) : (
                                             ""
-                                          )}
+                                          ))}
                                           
                                         </div>
                                       );
@@ -1039,7 +1055,15 @@ const Pos = ({ permisos }) => {
                               {data.cat === "pizza"
                                 ? (
                                     parseFloat(data.exin) *
-                                    parseInt(
+                                    (ingPromo === true ? parseInt(
+                                      Number(data.type_ing) === 1
+                                        ? data.ingre.length > 3
+                                          ? data.ingre.length - 3
+                                          : 0
+                                        : data.ingre.length > 5
+                                        ? data.ingre.length - 5
+                                        : 0
+                                    ):parseInt(
                                       Number(data.type_ing) === 1
                                         ? data.ingre.length > 2
                                           ? data.ingre.length - 2
@@ -1047,7 +1071,7 @@ const Pos = ({ permisos }) => {
                                         : data.ingre.length > 4
                                         ? data.ingre.length - 4
                                         : 0
-                                    )
+                                    ))
                                   ).toFixed(2)
                                 : ""}
                             </td>
@@ -1056,7 +1080,15 @@ const Pos = ({ permisos }) => {
                               <span className="total-sale">
                                 {Number(
                                   (parseFloat(data.price) +
-                                    (Number(data.type_ing) === 1
+                                    (ingPromo === true ? (Number(data.type_ing) === 1
+                                    ? data.ingre.length > 3
+                                      ? Number(data.ingre.length - 3) *
+                                        parseFloat(data.exin)
+                                      : 0
+                                    : data.ingre.length > 5
+                                    ? Number(data.ingre.length - 5) *
+                                      parseFloat(data.exin)
+                                    : 0) : (Number(data.type_ing) === 1
                                       ? data.ingre.length > 2
                                         ? Number(data.ingre.length - 2) *
                                           parseFloat(data.exin)
@@ -1064,7 +1096,7 @@ const Pos = ({ permisos }) => {
                                       : data.ingre.length > 4
                                       ? Number(data.ingre.length - 4) *
                                         parseFloat(data.exin)
-                                      : 0) +
+                                      : 0) )+
                                     (data.qe === true
                                       ? parseFloat(data.exch)
                                       : 0) +

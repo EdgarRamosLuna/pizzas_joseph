@@ -425,6 +425,14 @@ export const StorageS = styled.div`
     cursor: pointer;
     border-bottom: 0;
     border: 0;
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    -webkit-touch-callout: none; /* Disable Android and iOS callouts */
+    -webkit-user-select: none; /* Disable Chrome and Safari text selection */
+    -khtml-user-select: none; /* Disable Konqueror text selection */
+    -moz-user-select: none; /* Disable Firefox text selection */
+    -ms-user-select: none; /* Disable Internet Explorer text selection */
+    user-select: none; /* Disable text selection in all browsers */
   }
   .storage-menu-item:nth-child(1) {
     border-left: 0;

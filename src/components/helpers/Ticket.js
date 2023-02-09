@@ -57,7 +57,7 @@ const Ticket = () => {
       promiseResolveRef.current = null;
       setIsPrinting(false);
       setImpresN((prev) => prev + 1);
-      console.log(" ha terminado");
+      //console.log(" ha terminado");
     },
   });
   const [isTicket, setIsTicket] = useState(false);
@@ -155,157 +155,11 @@ const Ticket = () => {
         )}
 
         <div ref={componentRef}>
-          <div className="ticket">
-          <div className="header">
+        <div className="ticket">
+            <div className="header">
               <center>
                 <b>Folio - {Number(dataMain['folio']) < 10 ? `00${dataMain['folio']}` : dataMain['folio']}</b>
               </center>
-            </div>
-            <br />
-            <div className="table-container" style={{fontSize:'1em'}}>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Cant.</th>
-                    <th style={{textAlign:'center'}}>Detalles de la orden</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataI.map((data, ind) => {
-                    return (
-                      <tr>
-                        <td className="p-cant">
-                          <div className="p-cant-cont">
-                            <span>{data.cant}</span>
-                          </div>
-                        </td>
-
-                        <td className="p-name" style={{textAlign:'center'}}>
-                          {data.cat === "op" ? data.name : data.name}
-                          {data.cat === "drinks" ||  data.cat === "op" ? "" : <div>
-                            -------
-                          </div>}
-                          
-                          {dataI2.map((data2, ind2) => {
-                            if (
-                              Number(data.id_item_sale) ===
-                              Number(data2.id_item_sale)
-                            ) {
-                              return (
-                                <>
-                                  <b style={{ fontSize: "1em" }}>
-                                    {data2.name}
-                                    {Number(data2.is_extra) === 1 ? <div>{data.exin}</div>:""}
-                                  </b>
-                                  
-                                </>
-                              );
-                            }
-                          })}
-                          {data.cat === "op" ? (
-                            ""
-                          ) : (
-                            <>
-                              {Number(data.orilla_relle) !== 0 ? (
-                                <>
-                                  -Orilla Rellena <br />
-                                    <br />
-                                </>
-                              ) : (
-                                ""
-                              )}
-                              {Number(data.queso_ex) !== 0 ? (
-                                <>
-                                  <br />
-                                  -Queso Extra 
-                                </>
-                              ) : (
-                                ""
-                              )}
-                              {Number(data.pastor) !== 0 ? (
-                                <>
-                                  <br />
-                                  -Pastor 
-                                </>
-                              ) : (
-                                ""
-                              )}
-                              {Number(data.deditos) !== 0 ? (
-                                <>
-                                  <br />
-                                  -Deditos
-                                </>
-                              ) : (
-                                ""
-                              )}
-                              
-                              <br />
-                            </>
-                          )}
-                        </td>
-                       
-                        
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            {/*  <div className="item-list">
-              {dataI.map((data, ind) => {
-                return (
-                  <div className="item">
-                    
-                    <span className="item-name">
-                    <div className="item-cant">
-                      {ind === 0 ? <span className="cant-txt">Cant</span>:""}
-                      
-                      
-                      <span>
-                      {data.cant}
-
-                      </span>
-                    </div>
-                    
-                      <div className="item-ing" >
-                      <div className="item-name-value">
-                        {data.name} <br />
-                        
-                      </div>
-                        {dataI2.map((data2, ind2) => {
-                          if (
-                            Number(data.id_item_sale) ===
-                            Number(data2.id_item_sale)
-                          ) {
-                            return (
-                              <>
-                                <b style={{ fontSize: "0.7em" }}>{data2.name}</b>
-                                <br />
-                              </>
-                            );
-                          }
-                        })}
-                      </div>
-                    </span>
-                    <span className="item-price">
-                      ${(Number(data.price) * Number(data.cant)).toFixed(2)}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>*/}
-           
-            <div className="footer">
-          
-              <br />
-              <b>
-                <span className="date">{formattedDate}</span>
-              </b>
-            </div>
-          </div>
-          {isPrinting === true && (
-            <div className="ticket">
-            <div className="header">
               <center>
                 <b>Pizzas JOSSEPPH</b>
               </center>
@@ -348,7 +202,7 @@ const Ticket = () => {
                             ) {
                               return (
                                 <>
-                                  <b style={{ fontSize: "0.7em" }}>
+                                  <b style={{ fontSize: "0.85em" }}>
                                     {data2.name}
                                     {Number(data2.is_extra) === 1 ? <div>{data.exin}</div>:""}
                                   </b>
@@ -365,10 +219,14 @@ const Ticket = () => {
                             <>
                               {Number(data.orilla_relle) !== 0 ? (
                                 <>
-                                  -Orilla Rellena <br /> $
+                       
                                   {Number(data.orilla_relle) === 1
-                                    ? data.chstedp
-                                    : data.chstedm}
+                                    ? <>
+                                    ORP <br />
+                                    {data.chstedp}</>
+                                    : <>
+                                    ORM <br />
+                                    {data.chstedm}</>}
                                     <br />
                                 </>
                               ) : (
@@ -450,7 +308,7 @@ const Ticket = () => {
                           ) {
                             return (
                               <>
-                                <b style={{ fontSize: "0.7em" }}>{data2.name}</b>
+                                <b style={{ fontSize: "0.85em" }}>{data2.name}</b>
                                 <br />
                               </>
                             );
@@ -498,8 +356,226 @@ const Ticket = () => {
                 <>
                   <br />
                   <p>
-                    Direccion Cliente:
+                    Direccion & Cliente:
                     <br /> {dataMain.address}
+                    <br />
+                    {dataMain.client}
+                  </p>
+                </>
+              )}
+
+              <br />
+              <b>
+                <span className="date">{formattedDate}</span>
+              </b>
+            </div>
+          </div>
+          {isPrinting === true && (
+            <div className="ticket">
+            <div className="header">
+              <center>
+                <b>Folio - {Number(dataMain['folio']) < 10 ? `00${dataMain['folio']}` : dataMain['folio']}</b>
+              </center>
+              <center>
+                <b>Pizzas JOSSEPPH</b>
+              </center>
+              <b>Calle Reforma # 15 centro Parras Coahuila CP 27987</b>
+              <br />
+
+              <b>Tel. 842 422 0123</b>
+            </div>
+            <br />
+            <div className="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Cant.</th>
+                    <th>Articulo</th>
+                    <th>Detalles</th>
+                    <th>Precio</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dataI.map((data, ind) => {
+                    return (
+                      <tr>
+                        <td className="p-cant">
+                          <div className="p-cant-cont">
+                            <span>{data.cant}</span>
+                          </div>
+                        </td>
+
+                        <td className="p-name">
+                          {data.cat === "op" ? data.name : data.name}
+                          {data.cat === "drinks" ||  data.cat === "op" ? "" : <div>
+                            -------
+                          </div>}
+                          
+                          {dataI2.map((data2, ind2) => {
+                            if (
+                              Number(data.id_item_sale) ===
+                              Number(data2.id_item_sale)
+                            ) {
+                              return (
+                                <>
+                                  <b style={{ fontSize: "0.85em" }}>
+                                    {data2.name}
+                                    {Number(data2.is_extra) === 1 ? <div>{data.exin}</div>:""}
+                                  </b>
+                                  
+                                </>
+                              );
+                            }
+                          })}
+                        </td>
+                        <td>
+                          {data.cat === "op" ? (
+                            ""
+                          ) : (
+                            <>
+                              {Number(data.orilla_relle) !== 0 ? (
+                                <>
+                       
+                                  {Number(data.orilla_relle) === 1
+                                    ? <>
+                                    ORP <br />
+                                    {data.chstedp}</>
+                                    : <>
+                                    ORM <br />
+                                    {data.chstedm}</>}
+                                    <br />
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              {Number(data.queso_ex) !== 0 ? (
+                                <>
+                                  <br />
+                                  -Queso Extra <br />${data.exch}
+                                  <br />
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              {Number(data.pastor) !== 0 ? (
+                                <>
+                                  <br />
+                                  -Pastor <br />${data.pas}
+                                  <br />
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              {Number(data.deditos) !== 0 ? (
+                                <>
+                                  <br />
+                                  -Deditos <br />${data.fin}
+                                  <br />
+                                </>
+                              ) : (
+                                ""
+                              )}
+                              
+                              <br />
+                            </>
+                          )}
+                        </td>
+                        <td className="p-price">
+                          <div className="p-cant-cont">
+                            <span>
+                              $
+                              {(Number(data.price) * Number(data.cant)).toFixed(
+                                2
+                              )}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            {/*  <div className="item-list">
+              {dataI.map((data, ind) => {
+                return (
+                  <div className="item">
+                    
+                    <span className="item-name">
+                    <div className="item-cant">
+                      {ind === 0 ? <span className="cant-txt">Cant</span>:""}
+                      
+                      
+                      <span>
+                      {data.cant}
+
+                      </span>
+                    </div>
+                    
+                      <div className="item-ing" >
+                      <div className="item-name-value">
+                        {data.name} <br />
+                        
+                      </div>
+                        {dataI2.map((data2, ind2) => {
+                          if (
+                            Number(data.id_item_sale) ===
+                            Number(data2.id_item_sale)
+                          ) {
+                            return (
+                              <>
+                                <b style={{ fontSize: "0.85em" }}>{data2.name}</b>
+                                <br />
+                              </>
+                            );
+                          }
+                        })}
+                      </div>
+                    </span>
+                    <span className="item-price">
+                      ${(Number(data.price) * Number(data.cant)).toFixed(2)}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>*/}
+            {Number(dataMain.type_order) === 2 ? (
+              <div className="total">
+                <span className="total-label">Envio:</span>
+                <span className="total-amount">
+                  ${Number(dataMain.envio).toFixed(2)}
+                </span>
+              </div>
+            ) : (
+              ""
+            )}
+
+            <div className="total">
+              <span className="total-label">Subtotal:</span>
+              <span className="total-amount">
+                ${Number(dataMain.total).toFixed(2)}
+              </span>
+            </div>
+            <div
+              className="total"
+              style={{ borderBottom: "1px dashed", paddingBottom: "3px" }}
+            >
+              <span className="total-label">Total:</span>
+              <span className="total-amount">
+                ${(Number(dataMain.total) + Number(dataMain.envio)).toFixed(2)}
+              </span>
+            </div>
+            <div className="footer">
+              {Number(dataMain.type_order) === 1 ? (
+                ""
+              ) : (
+                <>
+                  <br />
+                  <p>
+                    Direccion & Cliente:
+                    <br /> {dataMain.address}
+                    <br />
+                    {dataMain.client}
                   </p>
                 </>
               )}
