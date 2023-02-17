@@ -82,8 +82,11 @@ const GlobalStyle = createGlobalStyle`
     text-indent: -999em !important;
     overflow: hidden !important;
 }
-.example-custom-input {
+.custom-input {
     width: 33px;
+    i{
+      font-size:1.3em;
+    }
 }
 .react-datepicker-wrapper {
     display: flex;
@@ -109,6 +112,23 @@ const GlobalStyle = createGlobalStyle`
     display: flex;
     gap: 10px;
     margin-bottom: 15px;
+}
+.wrapper{
+  div{
+    min-height:25px !important;
+  }
+}
+.payment-types {
+    display: flex;
+    font-size: 0.9em;
+    justify-content: space-between;
+    text-align: center;
+}
+.cash-container, .card-container {
+    width: 48%;
+}
+div.line{
+  min-height: unset !important;
 }
 `;
 

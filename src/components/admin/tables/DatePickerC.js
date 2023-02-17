@@ -39,7 +39,7 @@ const DatePickerC = () => {
   //console.log(sixDaysLater.toLocaleDateString());
   
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
-    <div className="example-custom-input" onClick={onClick} ref={ref}>
+    <div className="custom-input" onClick={onClick} ref={ref}>
       <i className="fa-solid fa-calendar-days"></i>
     </div>
   ));
@@ -97,83 +97,7 @@ const DatePickerC = () => {
   const clearRange = () => {
     setData([]);
     setLoadingS2(true);
-    axios
-      .get(`${baseUrl}/server/api/get_sales`)
-      .then((res) => {
-        //    console.log(res);
-        // setData([]);
-        for (let i = 0; i < res.data.length; i++) {
-          const element = res.data[i];
-          const date = new Date(Date.parse(element.date.replace(/-/g, "/")));
-          const year = date.getFullYear();
-          const month = date.getMonth();
-          const day = date.getDate();
-          const hours = date.getHours();
-          const minutes = date.getMinutes();
-          const newDate = new Date(year, month, day, hours, minutes);
-          const formattedDate = newDate.toLocaleString().replace(/:00 /g, " ");
-          const formattedDate2 =
-            `0${date.getMonth() + 1}`.slice(-2) +
-            "-" +
-            `0${date.getDate()}`.slice(-2) +
-            "-" +
-            date.getFullYear();
-          //console.log(formattedDate2);
-          setData((prev) => [
-            ...prev,
-            {
-              id: element.id,
-              client: element.client,
-              total: `$${element.total}`,
-              total_cash: `$${element.total_cash}`,
-              total_card: `$${element.total_card}`,
-              envio: `$${element.envio}`,
-              address: element.address,
-              date: formattedDate,
-              formattedDate: formattedDate2,
-              status: (
-                <>
-                  <SelectComponent
-                    id_sale={element.id}
-                    statusData={element.status}
-                  />
-                </>
-              ),
-              st: Number(element.status),
-              order:
-                Number(element.type_order) === 1 ? "Restaurante" : "Domicilio",
-              actions: (
-                <>
-                  <ActionBtns>
-                    <button
-                      className="btn"
-                      onClick={() => printTicket(element.id)}
-                    >
-                      <i className="fa-solid fa-print"></i>
-                    </button>
-                    <button
-                      className="btn btn-del"
-                      onClick={() => removeItem(element.id, 5)}
-                    />
-                  </ActionBtns>
-                </>
-              ),
-              details: (
-                <div className="details-container">
-                  <i
-                    className="fa-solid fa-circle-info"
-                    onClick={(e) => showDetails(element.id)}
-                  />
-                </div>
-              ),
-            },
-          ]);
-        }
-        setLoadingS2(false);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    
   };
 
   const params = useLocation();
@@ -202,9 +126,9 @@ const DatePickerC = () => {
           locale="es"
         />
       </div>
-      <div className="clearRanges" onClick={() => clearRange()}>
-        <i class="fa-solid fa-circle-xmark"></i>
-      </div>
+      {/*<div className="clearRanges" onClick={() => clearRange()}>
+        <i className="fa-solid fa-circle-xmark"></i>
+  </div>*/}
     </div>
   );
 };

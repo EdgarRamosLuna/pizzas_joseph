@@ -34,6 +34,23 @@ const EditableText = ({ value, id, fun}) => {
     fun(id, value);
     setIsInput(false);
   }
+  const keyPressed = (e) => {
+   
+    /* let keyCode = e.code;
+ 
+     keyCode = JSON.stringify(keyCode)
+     keyCode = keyCode.replaceAll('"', '');*/
+    // alert(keyCode);
+     if(e.key === 'Enter'){
+        handleConfirm(inputValue);
+     }
+   }
+   useEffect(() => {
+    
+    if(isInput){
+        document.querySelector('input[type="text"]').select();
+    }
+   }, [isInput]);
   return (
     <StyledNumber>
       {isInput ? (
@@ -46,6 +63,7 @@ const EditableText = ({ value, id, fun}) => {
               value={inputValue}
               onChange={(e) => handleChange(e)}
               onClick={(e) => e.target.select()}
+              onKeyDown={(e)=> keyPressed(e)}
             />
             <i
               className="fa-solid fa-xmark"

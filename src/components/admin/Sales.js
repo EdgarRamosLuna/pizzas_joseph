@@ -6,8 +6,17 @@ import { StorageS } from "../../styles/Styles";
 import PanelContainer from "./PanelContainer";
 import Table_sales from "./tables/Table_sales";
 const Sales = () => {
-  const { setLoadingS, setLoadingS2, option, setOption, pathname, data } =
-    useContext(MainContext);
+  const {
+    setLoadingS,
+    setLoadingS2,
+    option2,
+    setOption2,
+    pathname,
+    data,
+    setStartDate,
+    setEndDate,
+    setData,
+  } = useContext(MainContext);
 
   useEffect(() => {
     setLoadingS2(true);
@@ -15,7 +24,7 @@ const Sales = () => {
       setLoadingS2(false);
     }, 500);
     return () => {};
-  }, [option]);
+  }, [option2]);
   /*
   useEffect(() => {
     const classElement = document.querySelector(".date-pick");
@@ -27,24 +36,32 @@ const Sales = () => {
   const [totalSalesCash, setTotalSalesCash] = useState(0);
   const [totalSalesCard, setTotalSalesCard] = useState(0);
   useEffect(() => {
-  //  console.log(data);
+    //console.log("cambio");
+    
+  }, [pathname]);
+  useEffect(() => {
+    //  console.log(data);
+    setTotalSales(0);
+    setTotalSalesCash(0);
+    setTotalSalesCard(0);
+
     if (data.length > 0) {
       //  console.log(sum)
       const sum = data.reduce((acc, obj) => {
-        if (obj.st === 1 || obj.st === 2) {
-          return acc + Number(obj.totalFinal);
+        if (Number(obj.st) === 1) {
+          return acc + Number(obj.totalFinal.replace("$", ""));
         }
         return acc;
       }, 0);
       const sum2 = data.reduce((acc, obj) => {
-        if (obj.st === 1 || obj.st === 2) {
+        if (Number(obj.st) === 1) {
           return acc + Number(obj.total_card.replace("$", ""));
         }
         return acc;
       }, 0);
       const sum3 = data.reduce((acc, obj) => {
-        if (obj.st === 1 || obj.st === 2) {
-          return acc + Number(obj.total_cash.replace("$", ""));
+        if (Number(obj.st) === 1) {
+          return acc + Number(obj.total_cash.replace("$", "")) - Number(obj.cambio);
         }
         return acc;
       }, 0);
@@ -62,25 +79,25 @@ const Sales = () => {
       );*/
     }
   }, [data]);
-
-  const selectTimeLine = (option) => {
-    // console.log(option);
-    switch (option) {
+ 
+  const selectTimeLine = (option2) => {
+    // console.log(option2);
+    switch (option2) {
       case "d":
-        //console.log(option);
-        setOption(0);
+        //console.log(option2);
+        setOption2(0);
         break;
       case "w":
-        setOption(1);
+        setOption2(1);
         break;
       case "m":
-        setOption(2);
+        setOption2(2);
         break;
       case "y":
-        setOption(3);
+        setOption2(3);
         break;
       case "t":
-        setOption(4);
+        setOption2(4);
         break;
 
       default:
@@ -101,11 +118,11 @@ data.map(item => {
             <div className="data">${totalSales.toFixed(2)}</div>
             <div className="title">
               <h4>
-                Ganancias {option === 0 && "diarias"}{" "}
-                {option === 1 && "semanales"}
-                {option === 2 && "mensuales"}
-                {option === 3 && "anuales"}
-                {option === 4 && "totales"}
+                Ventas {option2 === 0 && "diarias"}
+                {option2 === 1 && "semanales"}
+                {option2 === 2 && "mensuales"}
+                {option2 === 3 && "anuales"}
+                {option2 === 4 && "totales"}
               </h4>
             </div>
           </div>
@@ -129,41 +146,41 @@ data.map(item => {
       </div>
       <div className="storage-menu">
         <div
-          className={`storage-menu-item ${option === 0 ? "active" : ""}`}
+          className={`storage-menu-item ${option2 === 0 ? "active" : ""}`}
           onClick={() => selectTimeLine("d")}
         >
           <h3>Ventas Diarias</h3>
         </div>
         <div
-          className={`storage-menu-item ${option === 1 ? "active" : ""}`}
+          className={`storage-menu-item ${option2 === 1 ? "active" : ""}`}
           onClick={() => selectTimeLine("w")}
         >
           <h3>Ventas Semanales</h3>
         </div>
         <div
-          className={`storage-menu-item ${option === 2 ? "active" : ""}`}
+          className={`storage-menu-item ${option2 === 2 ? "active" : ""}`}
           onClick={() => selectTimeLine("m")}
         >
           <h3>Ventas Mensuales</h3>
         </div>
         <div
-          className={`storage-menu-item ${option === 3 ? "active" : ""}`}
+          className={`storage-menu-item ${option2 === 3 ? "active" : ""}`}
           onClick={() => selectTimeLine("y")}
         >
           <h3>Ventas Anuales</h3>
         </div>
         <div
-          className={`storage-menu-item ${option === 4 ? "active" : ""}`}
+          className={`storage-menu-item ${option2 === 4 ? "active" : ""}`}
           onClick={() => selectTimeLine("t")}
         >
           <h3>Ventas Totales</h3>
         </div>
       </div>
-      {option === 0 && <Table_sales type={4} timeline={0} />}
-      {option === 1 && <Table_sales type={4} timeline={1} />}
-      {option === 2 && <Table_sales type={4} timeline={2} />}
-      {option === 3 && <Table_sales type={4} timeline={3} />}
-      {option === 4 && <Table_sales type={4} timeline={4} />}
+      {option2 === 0 && <Table_sales timelineP={0} />}
+      {option2 === 1 && <Table_sales timelineP={1} />}
+      {option2 === 2 && <Table_sales timelineP={2} />}
+      {option2 === 3 && <Table_sales timelineP={3} />}
+      {option2 === 4 && <Table_sales timelineP={4} />}
     </StorageS>
   );
 };

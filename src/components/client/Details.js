@@ -45,9 +45,9 @@ const Details = () => {
                     return (
                       <tr>
                         <td>{data.name}</td>
-                        <td>{details.sale_data_items_ing.map((data2) =>{
+                        <td>{data.cat === 'pizza' && details.sale_data_items_ing.map((data2) =>{
                           return (<>
-                            {data2.name} <br/>
+                            {Number(data.id_item_sale) === Number(data2.id_item_sale) && data2.name} <br/>
                           </>);
                         })}</td>
                         <td>${data.price}</td>
@@ -86,11 +86,12 @@ const Details = () => {
                 </tbody>
               </table>
             </div>
-            {Number(details.sale_data[0].type_order) === 2 ? (
-              <>
-                <div className="form-item">
+            <div className="form-item">
                   <label for="">Cliente: <span>{details.sale_data[0].client}</span></label>
                 </div>
+            {Number(details.sale_data[0].type_order) === 2 ? (
+              <>
+                
                 <div className="form-item">
                   <label for="">Direccion de entrega: <span>{details.sale_data[0].address}</span></label>
                 </div>

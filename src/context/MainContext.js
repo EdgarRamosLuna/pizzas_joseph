@@ -88,7 +88,7 @@ export const MainContextProvider = ({ children }) => {
   };
   let pattern = /^[0-9]+$/;
   const saveProduct = (type, data) => {
-    console.log(type, data);
+    //console.log(type, data);
 
     if (type === 1) {
       if (data.size === "") {
@@ -473,14 +473,17 @@ export const MainContextProvider = ({ children }) => {
     setTimeout(() => {
       const classElement = document.querySelector(".graphics-container");
       const targetElement = document.querySelector(".rdt_Pagination");
-      //console.log(pathname);
+      //  console.log(pathname);
       //console.log();
-      targetElement.childNodes[0].innerHTML = "Filas por pagina";
+      if (pathname !== "pos") {
+        if (targetElement) {
+          //   console.log(targetElement);
+          targetElement.childNodes[0].innerHTML = "Filas por pagina";
+        }
+      }
     }, 500);
   }, [data]);
-  useEffect(() => {
-    setOption(0);
-  }, []);
+
   const [actualData, setActualData] = useState([]);
   const updateItem = (e, item, type) => {
     setActualData([]);
@@ -549,7 +552,7 @@ export const MainContextProvider = ({ children }) => {
         id,
         table,
       });
-      console.log(response.data);
+      //   console.log(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -577,7 +580,7 @@ export const MainContextProvider = ({ children }) => {
   const printTicket = (id_sale) => {
     window.open(`${bseUrl}/ticket/${id_sale}`, "_blank");
   };
- 
+
   const sendRequest = (from, to) => {
     axios
       .post(`${baseUrl}/server/api/searchByDate`, { from, to })
@@ -593,25 +596,38 @@ export const MainContextProvider = ({ children }) => {
           const minutes = date.getMinutes();
           const newDate = new Date(year, month, day, hours, minutes);
           const formattedDate = newDate.toLocaleString().replace(/:00 /g, " ");
+          let dateFormatter = new Intl.DateTimeFormat("es-MX", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          });
+          let timeFormatter = new Intl.DateTimeFormat("es-MX", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          });
+          let formattedDatef = dateFormatter.format(newDate) + " " + timeFormatter.format(newDate);
           const formattedDate2 =
+            date.getFullYear() +
+            "-" +
             `0${date.getMonth() + 1}`.slice(-2) +
             "-" +
-            `0${date.getDate()}`.slice(-2) +
-            "-" +
-            date.getFullYear();
+            `0${date.getDate()}`.slice(-2);
           //console.log(formattedDate2);
           setData((prev) => [
             ...prev,
             {
               id: element.id,
               client: element.client,
-              total: `$${(Number(element.total)).toFixed(2)}`,
-              totalFinal: (Number(element.total) + Number(element.envio)).toFixed(2),
+              total: `$${Number(element.total).toFixed(2)}`,
+              totalFinal: (
+                Number(element.total) + Number(element.envio)
+              ).toFixed(2),
               total_cash: `$${element.total_cash}`,
               total_card: `$${element.total_card}`,
               envio: `$${element.envio}`,
               address: element.address,
-              date: formattedDate,
+              date: formattedDatef,
               formattedDate: formattedDate2,
               status: (
                 <>
@@ -648,6 +664,7 @@ export const MainContextProvider = ({ children }) => {
                   />
                 </div>
               ),
+              cambio: Number(element.total_cash) > 0 ?  element.cambio : (0).toFixed(2)
             },
           ]);
         }
@@ -661,7 +678,7 @@ export const MainContextProvider = ({ children }) => {
     axios
       .get(`${baseUrl}/server/api/sale_details/${id_sale}`)
       .then((res) => {
-        console.log(res.data);
+        //   console.log(res.data);
         setShowDetails(true);
         setDetails(res.data);
       })
@@ -676,7 +693,7 @@ export const MainContextProvider = ({ children }) => {
     setEndDate(endDate);
     setData([]);
     setLoadingS2(true);
-    
+
     sendRequest(from, to);
   };
   const dayOfWeek = d.getDay();
@@ -702,6 +719,10 @@ export const MainContextProvider = ({ children }) => {
     return day === 3 || day === 4;
   };
   const [ingPromo, setIngPromo] = useState(extraIngFree);
+  useEffect(() => {
+    setOption(0);
+    setOption2(0);
+  }, [pathname]);
   return (
     <MainContext.Provider
       value={{
@@ -795,9 +816,12 @@ export const MainContextProvider = ({ children }) => {
         lastDayOfYear,
         week,
         showDetail,
-        startDate, setStartDate,
-        endDate, setEndDate,
-        ingPromo, setIngPromo
+        startDate,
+        setStartDate,
+        endDate,
+        setEndDate,
+        ingPromo,
+        setIngPromo,
       }}
     >
       {children}

@@ -537,7 +537,10 @@ export const PosS = styled.div`
     position: relative;
   }
   .header-search {
-    margin-bottom: 15px;
+  //  margin-bottom: 15px;
+    @media(max-width:1580px){
+      width: 39%;
+    }
   }
   .search {
     display: flex;
@@ -603,6 +606,9 @@ export const PosS = styled.div`
   .rp-container1 {
     width: 100%;
     display: flex;
+    input{
+      height: 25px !important; 
+    }
   }
   .rp-container-1-1 {
     width: 80%;
@@ -614,6 +620,9 @@ export const PosS = styled.div`
     flex-direction: column;
     margin: 15px auto;
     gap: 11px;
+    @media(max-width:1580px){
+      gap: 5px;
+    }
   }
 
   .search-client {
@@ -622,6 +631,9 @@ export const PosS = styled.div`
     flex-direction: column;
     gap: 10px;
     text-align: center;
+    @media(max-width:1580px){
+      margin-top: 5px;
+    }
 
     input {
       width: 100%;
@@ -645,6 +657,10 @@ export const PosS = styled.div`
     align-items: center;
     border: 1px solid #a42220;
     box-sizing: border-box;
+    @media(max-width:1580px){
+      height: 39px;
+      margin-top:5px;
+    }
   }
   .cp-input-container {
     display: flex;
@@ -672,6 +688,9 @@ export const PosS = styled.div`
       color: #fff;
       height: 50px;
       width: 100%;
+      img{
+        height: 100%;
+      }
     }
   }
   .subtotal {
@@ -776,6 +795,9 @@ export const PosS = styled.div`
       outline: none;
       box-sizing: border-box;
       resize: none;
+      @media(max-width:1580px){
+        height: 69px;
+      }
     }
   }
   .rp-container0 {
@@ -793,6 +815,11 @@ export const PosS = styled.div`
     gap: 0px;
     margin-bottom: 10px;
     color: #a42220;
+    h1{
+      @media(max-width:1580px){
+        font-size: 0.9em;
+      }
+    }
   }
   .type-active {
     transition: all 0.3s;
@@ -815,6 +842,8 @@ export const StoreOptions = styled.div`
   border-radius: 100px;
   height: 70px;
   transition: all 0.3s;
+
+  
   i {
     font-size: 1.5em;
   }
@@ -824,6 +853,13 @@ export const StoreOptions = styled.div`
     i {
       transition: all 0.3s;
       color: #fff;
+    }
+  }
+  @media(max-width:1580px){
+    width: 50px;
+    height: 50px;
+    i{
+      font-size: 1em;
     }
   }
 `;

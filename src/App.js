@@ -49,7 +49,7 @@ function App() {
           }else{
             if (Number(response.data.id) > 0) {
               
-              console.log(response.data)
+            //  console.log(response.data)
               const {p_storage, p_sales, p_clients, p_users} = response.data;
               setPermissions({p_storage, p_sales, p_clients, p_users})
               setHaveSess(true);
@@ -90,7 +90,8 @@ function App() {
                 {permisos.p_users === '1' ? <Route exact path="/usuarios" element={<Users />} />: <Route exact path="/usuarios" element={<Pos permisos={permisos}  />} />}
                 {permisos.p_clients === '1' ? <Route exact path="/clientes" element={<Clients />} />: <Route exact path="/clientes" element={<Pos permisos={permisos}  />} />}    
               </Route>
-              {permisos.p_sales === '1' ? <Route exact path="/ticket/:id" element={<Ticket />} />: ""}    
+              {/*permisos.p_sales === '1' ? <Route exact path="/ticket/:id" element={<Ticket />} />: ""*/}    
+              <Route exact path="/ticket/:id" element={<Ticket />} />
               
               </>
             ) : (

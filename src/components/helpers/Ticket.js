@@ -155,18 +155,23 @@ const Ticket = () => {
         )}
 
         <div ref={componentRef}>
-        <div className="ticket">
+          <div className="ticket">
             <div className="header">
               <center>
-                <b>Folio - {Number(dataMain['folio']) < 10 ? `00${dataMain['folio']}` : dataMain['folio']}</b>
+                <b>
+                  Folio -{" "}
+                  {Number(dataMain["folio"]) < 10
+                    ? `00${dataMain["folio"]}`
+                    : dataMain["folio"]}
+                </b>
               </center>
-              <center>
+              {/*<center>
                 <b>Pizzas JOSSEPPH</b>
               </center>
               <b>Calle Reforma # 15 centro Parras Coahuila CP 27987</b>
               <br />
 
-              <b>Tel. 842 422 0123</b>
+        <b>Tel. 842 422 0123</b>*/}
             </div>
             <br />
             <div className="table-container">
@@ -191,10 +196,12 @@ const Ticket = () => {
 
                         <td className="p-name">
                           {data.cat === "op" ? data.name : data.name}
-                          {data.cat === "drinks" ||  data.cat === "op" ? "" : <div>
-                            -------
-                          </div>}
-                          
+                          {data.cat === "drinks" || data.cat === "op" ? (
+                            ""
+                          ) : (
+                            <div>-------</div>
+                          )}
+
                           {dataI2.map((data2, ind2) => {
                             if (
                               Number(data.id_item_sale) ===
@@ -204,9 +211,16 @@ const Ticket = () => {
                                 <>
                                   <b style={{ fontSize: "0.85em" }}>
                                     {data2.name}
-                                    {Number(data2.is_extra) === 1 ? <div>{data.exin}</div>:""}
+                                    {Number(data2.is_extra) === 1 ? (
+                                      <div>{data.exin}</div>
+                                    ) : (
+                                      ""
+                                    )}
+                                    <br />
+                                    {Number(data.type_ing) === 2 && ind2 === 1
+                                      ? "-Mitades-"
+                                      : ""}
                                   </b>
-                                  
                                 </>
                               );
                             }
@@ -219,15 +233,18 @@ const Ticket = () => {
                             <>
                               {Number(data.orilla_relle) !== 0 ? (
                                 <>
-                       
-                                  {Number(data.orilla_relle) === 1
-                                    ? <>
-                                    ORP <br />
-                                    {data.chstedp}</>
-                                    : <>
-                                    ORM <br />
-                                    {data.chstedm}</>}
-                                    <br />
+                                  {Number(data.orilla_relle) === 1 ? (
+                                    <>
+                                      ORP <br />
+                                      {data.chstedp}
+                                    </>
+                                  ) : (
+                                    <>
+                                      ORM <br />
+                                      {data.chstedm}
+                                    </>
+                                  )}
+                                  <br />
                                 </>
                               ) : (
                                 ""
@@ -259,7 +276,7 @@ const Ticket = () => {
                               ) : (
                                 ""
                               )}
-                              
+
                               <br />
                             </>
                           )}
@@ -323,7 +340,7 @@ const Ticket = () => {
                 );
               })}
             </div>*/}
-            {Number(dataMain.type_order) === 2 ? (
+            {/*Number(dataMain.type_order) === 2 ? (
               <div className="total">
                 <span className="total-label">Envio:</span>
                 <span className="total-amount">
@@ -332,14 +349,14 @@ const Ticket = () => {
               </div>
             ) : (
               ""
-            )}
+            )*/}
 
-            <div className="total">
+            {/* <div className="total">
               <span className="total-label">Subtotal:</span>
               <span className="total-amount">
                 ${Number(dataMain.total).toFixed(2)}
               </span>
-            </div>
+          </div>*/}
             <div
               className="total"
               style={{ borderBottom: "1px dashed", paddingBottom: "3px" }}
@@ -372,131 +389,151 @@ const Ticket = () => {
           </div>
           {isPrinting === true && (
             <div className="ticket">
-            <div className="header">
-              <center>
-                <b>Folio - {Number(dataMain['folio']) < 10 ? `00${dataMain['folio']}` : dataMain['folio']}</b>
-              </center>
-              <center>
-                <b>Pizzas JOSSEPPH</b>
-              </center>
-              <b>Calle Reforma # 15 centro Parras Coahuila CP 27987</b>
+              <div className="header">
+                <center>
+                  <i className="fa-solid fa-pizza-slice"></i>
+                </center>
+                <center>
+                  <b>
+                    Folio -{" "}
+                    {Number(dataMain["folio"]) < 10
+                      ? `00${dataMain["folio"]}`
+                      : dataMain["folio"]}
+                  </b>
+                </center>
+                <center>
+                  <b>Pizzas JOSSEPPH</b>
+                </center>
+                <center>
+
+                <b>Calle Reforma # 15 centro Parras Coahuila CP 27987</b>
+                <br />
+
+                <b>Tel. 842 422 0123</b>
+
+                </center>
+              </div>
               <br />
+              <div className="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Cant.</th>
+                      <th>Articulo</th>
+                      <th>Detalles</th>
+                      <th>Precio</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataI.map((data, ind) => {
+                      return (
+                        <tr>
+                          <td className="p-cant">
+                            <div className="p-cant-cont">
+                              <span>{data.cant}</span>
+                            </div>
+                          </td>
 
-              <b>Tel. 842 422 0123</b>
-            </div>
-            <br />
-            <div className="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Cant.</th>
-                    <th>Articulo</th>
-                    <th>Detalles</th>
-                    <th>Precio</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataI.map((data, ind) => {
-                    return (
-                      <tr>
-                        <td className="p-cant">
-                          <div className="p-cant-cont">
-                            <span>{data.cant}</span>
-                          </div>
-                        </td>
+                          <td className="p-name">
+                            {data.cat === "op" ? data.name : data.name}
+                            {data.cat === "drinks" || data.cat === "op" ? (
+                              ""
+                            ) : (
+                              <div>-------</div>
+                            )}
 
-                        <td className="p-name">
-                          {data.cat === "op" ? data.name : data.name}
-                          {data.cat === "drinks" ||  data.cat === "op" ? "" : <div>
-                            -------
-                          </div>}
-                          
-                          {dataI2.map((data2, ind2) => {
-                            if (
-                              Number(data.id_item_sale) ===
-                              Number(data2.id_item_sale)
-                            ) {
-                              return (
-                                <>
-                                  <b style={{ fontSize: "0.85em" }}>
-                                    {data2.name}
-                                    {Number(data2.is_extra) === 1 ? <div>{data.exin}</div>:""}
-                                  </b>
-                                  
-                                </>
-                              );
-                            }
-                          })}
-                        </td>
-                        <td>
-                          {data.cat === "op" ? (
-                            ""
-                          ) : (
-                            <>
-                              {Number(data.orilla_relle) !== 0 ? (
-                                <>
-                       
-                                  {Number(data.orilla_relle) === 1
-                                    ? <>
-                                    ORP <br />
-                                    {data.chstedp}</>
-                                    : <>
-                                    ORM <br />
-                                    {data.chstedm}</>}
+                            {dataI2.map((data2, ind2) => {
+                              if (
+                                Number(data.id_item_sale) ===
+                                Number(data2.id_item_sale)
+                              ) {
+                                return (
+                                  <>
+                                    <b style={{ fontSize: "0.85em" }}>
+                                      {data2.name}
+                                      {Number(data2.is_extra) === 1 ? (
+                                        <div>{data.exin}</div>
+                                      ) : (
+                                        ""
+                                      )}
+                                    </b>
+                                  </>
+                                );
+                              }
+                            })}
+                          </td>
+                          <td>
+                            {data.cat === "op" ? (
+                              ""
+                            ) : (
+                              <>
+                                {Number(data.orilla_relle) !== 0 ? (
+                                  <>
+                                    {Number(data.orilla_relle) === 1 ? (
+                                      <>
+                                        ORP <br />
+                                        {data.chstedp}
+                                      </>
+                                    ) : (
+                                      <>
+                                        ORM <br />
+                                        {data.chstedm}
+                                      </>
+                                    )}
                                     <br />
-                                </>
-                              ) : (
-                                ""
-                              )}
-                              {Number(data.queso_ex) !== 0 ? (
-                                <>
-                                  <br />
-                                  -Queso Extra <br />${data.exch}
-                                  <br />
-                                </>
-                              ) : (
-                                ""
-                              )}
-                              {Number(data.pastor) !== 0 ? (
-                                <>
-                                  <br />
-                                  -Pastor <br />${data.pas}
-                                  <br />
-                                </>
-                              ) : (
-                                ""
-                              )}
-                              {Number(data.deditos) !== 0 ? (
-                                <>
-                                  <br />
-                                  -Deditos <br />${data.fin}
-                                  <br />
-                                </>
-                              ) : (
-                                ""
-                              )}
-                              
-                              <br />
-                            </>
-                          )}
-                        </td>
-                        <td className="p-price">
-                          <div className="p-cant-cont">
-                            <span>
-                              $
-                              {(Number(data.price) * Number(data.cant)).toFixed(
-                                2
-                              )}
-                            </span>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            {/*  <div className="item-list">
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+                                {Number(data.queso_ex) !== 0 ? (
+                                  <>
+                                    <br />
+                                    -Queso Extra <br />${data.exch}
+                                    <br />
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+                                {Number(data.pastor) !== 0 ? (
+                                  <>
+                                    <br />
+                                    -Pastor <br />${data.pas}
+                                    <br />
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+                                {Number(data.deditos) !== 0 ? (
+                                  <>
+                                    <br />
+                                    -Deditos <br />${data.fin}
+                                    <br />
+                                  </>
+                                ) : (
+                                  ""
+                                )}
+
+                                <br />
+                              </>
+                            )}
+                          </td>
+                          <td className="p-price">
+                            <div className="p-cant-cont">
+                              <span>
+                                $
+                                {(
+                                  Number(data.price) * Number(data.cant)
+                                ).toFixed(2)}
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              {/*  <div className="item-list">
               {dataI.map((data, ind) => {
                 return (
                   <div className="item">
@@ -539,53 +576,85 @@ const Ticket = () => {
                 );
               })}
             </div>*/}
-            {Number(dataMain.type_order) === 2 ? (
-              <div className="total">
-                <span className="total-label">Envio:</span>
-                <span className="total-amount">
-                  ${Number(dataMain.envio).toFixed(2)}
-                </span>
-              </div>
-            ) : (
-              ""
-            )}
-
-            <div className="total">
-              <span className="total-label">Subtotal:</span>
-              <span className="total-amount">
-                ${Number(dataMain.total).toFixed(2)}
-              </span>
-            </div>
-            <div
-              className="total"
-              style={{ borderBottom: "1px dashed", paddingBottom: "3px" }}
-            >
-              <span className="total-label">Total:</span>
-              <span className="total-amount">
-                ${(Number(dataMain.total) + Number(dataMain.envio)).toFixed(2)}
-              </span>
-            </div>
-            <div className="footer">
-              {Number(dataMain.type_order) === 1 ? (
-                ""
+              {Number(dataMain.type_order) === 2 ? (
+                <div className="total">
+                  <span className="total-label">Envio:</span>
+                  <span className="total-amount">
+                    ${Number(dataMain.envio).toFixed(2)}
+                  </span>
+                </div>
               ) : (
-                <>
-                  <br />
-                  <p>
-                    Direccion & Cliente:
-                    <br /> {dataMain.address}
-                    <br />
-                    {dataMain.client}
-                  </p>
-                </>
+                ""
               )}
 
-              <br />
-              <b>
-                <span className="date">{formattedDate}</span>
-              </b>
+              <div className="total">
+                <span className="total-label">Subtotal:</span>
+                <span className="total-amount">
+                  ${Number(dataMain.total).toFixed(2)}
+                </span>
+              </div>
+              <div className="total">
+                <span className="total-label">Total:</span>
+                <span className="total-amount">
+                  $
+                  {(Number(dataMain.total) + Number(dataMain.envio)).toFixed(2)}
+                </span>
+              </div>
+              <div className="total">
+                <span className="total-label">Total Efectivo:</span>
+                <span className="total-amount">
+                  ${Number(dataMain.total_cash).toFixed(2)}
+                </span>
+              </div>
+              <div className="total">
+                <span className="total-label">Total Tarjeta:</span>
+                <span className="total-amount">
+                  ${Number(dataMain.total_card).toFixed(2)}
+                </span>
+              </div>
+              <div
+                className="total"
+                style={{ borderBottom: "1px dashed", paddingBottom: "3px" }}
+              >
+                <span className="total-label">Cambio:</span>
+                <span className="total-amount">
+                  ${Number(dataMain.cambio).toFixed(2)}
+                </span>
+              </div>
+              <div className="footer">
+                {Number(dataMain.type_order) === 1 ? (
+                  <>
+                    {dataMain.client !== "" ? (
+                      <>
+                        <br />
+                        <p>
+                          Cliente:
+                          <br />
+                          {dataMain.client}
+                        </p>
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <br />
+                    <p>
+                      Direccion & Cliente:
+                      <br /> {dataMain.address}
+                      <br />
+                      {dataMain.client}
+                    </p>
+                  </>
+                )}
+
+                <br />
+                <b>
+                  <span className="date">{formattedDate}</span>
+                </b>
+              </div>
             </div>
-          </div>
           )}
         </div>
       </TicketS>

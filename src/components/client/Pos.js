@@ -27,7 +27,7 @@ const Pos = ({ permisos }) => {
     sesionData,
     setSesionData,
     bseUrl,
-    ingPromo
+    ingPromo,
   } = useContext(MainContext);
   const [searchResult2, setSearchResult2] = useState([]);
   const [searchResult3, setSearchResult3] = useState([]);
@@ -39,6 +39,7 @@ const Pos = ({ permisos }) => {
   const [elementType, setElementType] = useState("span");
   //const [deliver_price, setDeliver_price] = useState(0);
   useEffect(() => {
+    setCarItem([]);
     axios
       .get(`${baseUrl}/server/api/get_clients`)
       .then((res) => {
@@ -219,6 +220,7 @@ const Pos = ({ permisos }) => {
       .catch((err) => {
         console.log(err);
       });
+
     //return () => {};
   }, []);
   // console.log(searchResult);
@@ -429,6 +431,12 @@ const Pos = ({ permisos }) => {
   const handleOnFocus = (e) => {
     //console.log(e.target);
     //console.log("Focused");
+    e.target.select();
+  };
+  const handleOnClick = (e) => {
+    //console.log(e.target);
+    //console.log("Focused");
+    e.target.select();
   };
   const formatResult = (item) => {
     return (
@@ -651,7 +659,6 @@ const Pos = ({ permisos }) => {
     //    console.log(arrayD);
   };
 
-  
   //console.log(extraIngFree());
   //console.log(ingPromo);
   /*if (isWednesday()) {
@@ -665,20 +672,53 @@ const Pos = ({ permisos }) => {
   useEffect(() => {
     setClientname(addressCli.name ? addressCli.name : clientName);
   }, [addressCli]);
-  const completeSale = () => {
+  let requestLimit = 1;
+  const [isDisabled, setIsDisabled] = useState(false);
+  const completeSale = (e) => {
+    console.log("entroooo");
+    setIsDisabled(true);
+    /*  if(e.target.disabled === true){
+      console.log('printing....');
+      return false;
+    }*/
+    if (requestLimit > 1) {
+      return false;
+    }
+
+    const btn = document.querySelector(".completeS-btn");
+    btn.disabled = true;
+    btn.innerHTML = '<img src="/assets/img/loading2.svg" alt="" />';
+    console.log(e.target);
+
     let totalDue =
       parseFloat(totalFinal) + parseFloat(activeOption === 1 ? 0 : envioPrice);
+    if (carItem.length === 0) {
+      showALertF("fail-sale0", 6000);
+      btn.innerHTML = "Completar venta";
+      btn.disabled = false;
+      setIsDisabled(false);
+      requestLimit = 1;
+      return false;
+    }
     if (amountCard === "" && amountCash === "") {
       showALertF("fail-sale1", 6000);
       console.log(
         "debes agregar un monto valido ya sea tarjeta o efectivo para completar la venta"
       );
+      btn.innerHTML = "Completar venta";
+      btn.disabled = false;
+      setIsDisabled(false);
+      requestLimit = 1;
       return false;
     }
     if (Number(amountCash) === Number(totalDue)) {
       if (Number(amountCash) === 0) {
         showALertF("fail-sale2", 6000);
         console.log("Debes ingresar un monto valido");
+        btn.innerHTML = "Completar venta";
+        btn.disabled = false;
+        setIsDisabled(false);
+        requestLimit = 1;
         return false;
       }
     }
@@ -686,6 +726,10 @@ const Pos = ({ permisos }) => {
       if (Number(amountCard) === 0) {
         showALertF("fail-sale2", 6000);
         console.log("Debes ingresar un monto valido");
+        btn.innerHTML = "Completar venta";
+        btn.disabled = false;
+        setIsDisabled(false);
+        requestLimit = 1;
         return false;
       }
     }
@@ -698,7 +742,10 @@ const Pos = ({ permisos }) => {
       console.log(
         "Debes debes completar el total del costo de la venta para continuar"
       );
-
+      btn.innerHTML = "Completar venta";
+      btn.disabled = false;
+      setIsDisabled(false);
+      requestLimit = 1;
       return false;
     }
     //console.log(totalPayment);
@@ -718,7 +765,7 @@ const Pos = ({ permisos }) => {
           total_card: Number(amountCard),
           sale_data: addressCli,
           client: clientName,
-          ingPromo:ingPromo,
+          ingPromo: ingPromo,
         },
         {
           headers: {
@@ -730,10 +777,17 @@ const Pos = ({ permisos }) => {
         const error = res.data.error;
         const id_sale = res.data.id_sale;
         if (!error) {
-          showALertF("success-sale", 3000, id_sale);
-        }else{
+          requestLimit = 1;
+          showALertF("success-sale", 1500, id_sale);
+        } else {
           showALertF("insu-boxes", 6000, id_sale);
         }
+        setTimeout(() => {
+          btn.innerHTML = "Completar venta";
+          btn.disabled = false;
+        }, 3000);
+
+        requestLimit = 2;
         //console.log(error);
       })
       .catch((err) => {
@@ -746,9 +800,10 @@ const Pos = ({ permisos }) => {
 
     setTimeout(() => {
       //setShowAlert(false);
-      document.querySelector('.notify').click();
+      document.querySelector(".notify").click();
       if (type === "success-sale") {
-     //   window.location.reload();
+        setIsDisabled(false);
+        window.location.reload();
         window.open(`${bseUrl}/ticket/${id_sale}`, "_blank");
       }
     }, time);
@@ -765,6 +820,7 @@ const Pos = ({ permisos }) => {
               //   onHover={handleOnHover}
               onSelect={handleOnSelect}
               onFocus={handleOnFocus}
+              //onClick={handleOnClick}
               autoFocus
               formatResult={formatResult}
             />
@@ -835,7 +891,7 @@ const Pos = ({ permisos }) => {
                             <td>
                               {data.cat === "pizza" ? (
                                 <>
-                                <label for="">Distribucion de Ingredientes</label> <br />
+                                  {/* <label for="">Distribucion de Ingredientes</label> <br />*/}
                                   <select
                                     name="ing"
                                     value={dataI.ing}
@@ -845,9 +901,7 @@ const Pos = ({ permisos }) => {
                                     }
                                   >
                                     <option value="1">Completa</option>
-                                    <option value="2">
-                                      Mitades
-                                    </option>
+                                    <option value="2">Mitades</option>
                                   </select>
                                   <br />
                                   <br />
@@ -906,37 +960,44 @@ const Pos = ({ permisos }) => {
                                               />
                                             </div>
                                           </div>
-                                          {ingPromo === true ?  (index2 === 2 && Number(data.type_ing) === 1 &&
-                                          data.ingre.length > 3 ? (
+                                          {ingPromo === true ? (
+                                            index2 === 2 &&
+                                            Number(data.type_ing) === 1 &&
+                                            data.ingre.length > 3 ? (
+                                              <div className="extra-ing">
+                                                <h5>Ingredientes extra</h5>
+                                              </div>
+                                            ) : (
+                                              ""
+                                            )
+                                          ) : index2 === 1 &&
+                                            Number(data.type_ing) === 1 &&
+                                            data.ingre.length > 2 ? (
                                             <div className="extra-ing">
                                               <h5>Ingredientes extra</h5>
                                             </div>
                                           ) : (
                                             ""
-                                          )) : (index2 === 1 && Number(data.type_ing) === 1 &&
-                                          data.ingre.length > 2 ? (
+                                          )}
+                                          {ingPromo === true ? (
+                                            index2 === 4 &&
+                                            Number(data.type_ing) === 2 &&
+                                            data.ingre.length > 5 ? (
+                                              <div className="extra-ing">
+                                                <h5>Ingredientes extra</h5>
+                                              </div>
+                                            ) : (
+                                              ""
+                                            )
+                                          ) : index2 === 3 &&
+                                            Number(data.type_ing) === 2 &&
+                                            data.ingre.length > 4 ? (
                                             <div className="extra-ing">
                                               <h5>Ingredientes extra</h5>
                                             </div>
                                           ) : (
                                             ""
-                                          ))}
-                                          {ingPromo === true ? (index2 === 4 && Number(data.type_ing) === 2 &&
-                                          data.ingre.length > 5 ? (
-                                            <div className="extra-ing">
-                                              <h5>Ingredientes extra</h5>
-                                            </div>
-                                          ) : (
-                                            ""
-                                          )) :(index2 === 3 && Number(data.type_ing) === 2 &&
-                                          data.ingre.length > 4 ? (
-                                            <div className="extra-ing">
-                                              <h5>Ingredientes extra</h5>
-                                            </div>
-                                          ) : (
-                                            ""
-                                          ))}
-                                          
+                                          )}
                                         </div>
                                       );
                                     })}
@@ -1055,23 +1116,25 @@ const Pos = ({ permisos }) => {
                               {data.cat === "pizza"
                                 ? (
                                     parseFloat(data.exin) *
-                                    (ingPromo === true ? parseInt(
-                                      Number(data.type_ing) === 1
-                                        ? data.ingre.length > 3
-                                          ? data.ingre.length - 3
-                                          : 0
-                                        : data.ingre.length > 5
-                                        ? data.ingre.length - 5
-                                        : 0
-                                    ):parseInt(
-                                      Number(data.type_ing) === 1
-                                        ? data.ingre.length > 2
-                                          ? data.ingre.length - 2
-                                          : 0
-                                        : data.ingre.length > 4
-                                        ? data.ingre.length - 4
-                                        : 0
-                                    ))
+                                    (ingPromo === true
+                                      ? parseInt(
+                                          Number(data.type_ing) === 1
+                                            ? data.ingre.length > 3
+                                              ? data.ingre.length - 3
+                                              : 0
+                                            : data.ingre.length > 5
+                                            ? data.ingre.length - 5
+                                            : 0
+                                        )
+                                      : parseInt(
+                                          Number(data.type_ing) === 1
+                                            ? data.ingre.length > 2
+                                              ? data.ingre.length - 2
+                                              : 0
+                                            : data.ingre.length > 4
+                                            ? data.ingre.length - 4
+                                            : 0
+                                        ))
                                   ).toFixed(2)
                                 : ""}
                             </td>
@@ -1080,15 +1143,17 @@ const Pos = ({ permisos }) => {
                               <span className="total-sale">
                                 {Number(
                                   (parseFloat(data.price) +
-                                    (ingPromo === true ? (Number(data.type_ing) === 1
-                                    ? data.ingre.length > 3
-                                      ? Number(data.ingre.length - 3) *
-                                        parseFloat(data.exin)
-                                      : 0
-                                    : data.ingre.length > 5
-                                    ? Number(data.ingre.length - 5) *
-                                      parseFloat(data.exin)
-                                    : 0) : (Number(data.type_ing) === 1
+                                    (ingPromo === true
+                                      ? Number(data.type_ing) === 1
+                                        ? data.ingre.length > 3
+                                          ? Number(data.ingre.length - 3) *
+                                            parseFloat(data.exin)
+                                          : 0
+                                        : data.ingre.length > 5
+                                        ? Number(data.ingre.length - 5) *
+                                          parseFloat(data.exin)
+                                        : 0
+                                      : Number(data.type_ing) === 1
                                       ? data.ingre.length > 2
                                         ? Number(data.ingre.length - 2) *
                                           parseFloat(data.exin)
@@ -1096,7 +1161,7 @@ const Pos = ({ permisos }) => {
                                       : data.ingre.length > 4
                                       ? Number(data.ingre.length - 4) *
                                         parseFloat(data.exin)
-                                      : 0) )+
+                                      : 0) +
                                     (data.qe === true
                                       ? parseFloat(data.exch)
                                       : 0) +
@@ -1158,7 +1223,21 @@ const Pos = ({ permisos }) => {
             </div>
           </div>
           {activeOption === 1 ? (
-            ""
+            <div className="rp-container1">
+              <div className="rp-container-1-1">
+                <div className="address">
+                  <center>
+                    <label htmlFor="">Cliente:</label>
+                  </center>
+                  <input
+                    type=""
+                    name=""
+                    value={clientName}
+                    onChange={(e) => setClientname(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
           ) : (
             <div className="rp-container1">
               <div className="rp-container-1-1">
@@ -1230,33 +1309,56 @@ const Pos = ({ permisos }) => {
                 </span>
               )}
             </div>
-            <label htmlFor="efe">Pagar con efectivo</label>
-            <div className="complete-payment">
-              <div className="cp-input-container">
-                <input
-                  type="text"
-                  placeholder="Monto Efectivo"
-                  name="efe"
-                  value={amountCash}
-                  onChange={(e) => setAmountCash(e.target.value)}
-                />
+            <div className="payment-types">
+              <div className="cash-container">
+                <label htmlFor="efe">Pagar con efectivo</label>
+                <div className="complete-payment">
+                  <div className="cp-input-container">
+                    <input
+                      type="text"
+                      placeholder="Monto Efectivo"
+                      name="efe"
+                      value={amountCash}
+                      onChange={(e) => setAmountCash(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="card-container">
+                <label htmlFor="car">Pagar con tarjeta</label>
+                <div className="complete-payment">
+                  <div className="cp-input-container">
+                    <input
+                      type="text"
+                      placeholder="Monto Tarjeta"
+                      name="car"
+                      value={amountCard}
+                      onChange={(e) =>
+                        setAmountCard(
+                          activeOption === 1
+                            ? e.target.value > parseFloat(totalFinal)
+                              ? parseFloat(totalFinal)
+                              : e.target.value
+                            : e.target.value >
+                              parseFloat(totalFinal) + Number(envioPrice)
+                            ? parseFloat(totalFinal) + Number(envioPrice)
+                            : e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-            <label htmlFor="car">Pagar con tarjeta</label>
-            <div className="complete-payment">
-              <div className="cp-input-container">
-                <input
-                  type="text"
-                  placeholder="Monto Tarjeta"
-                  name="car"
-                  value={amountCard}
-                  onChange={(e) => setAmountCard(e.target.value)}
-                />
-              </div>
-            </div>
+
             <div className="complete">
               <div className="cp-btn">
-                <button type="button" onClick={completeSale}>
+                <button
+                  type="button"
+                  disabled={isDisabled}
+                  onClick={(e) => completeSale(e)}
+                  className="completeS-btn"
+                >
                   Completar venta
                 </button>
               </div>
