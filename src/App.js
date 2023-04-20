@@ -32,9 +32,9 @@ function App() {
         .get(`${server}/server/api/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
-            /*'Cache-Control': 'no-store, no-cache, must-revalidate',
+            'Cache-Control': 'no-store, no-cache, must-revalidate',
             'Pragma': 'no-cache',
-            'Expires': '0'*/
+            'Expires': '0'
           },
         })
         .then((response) => {
