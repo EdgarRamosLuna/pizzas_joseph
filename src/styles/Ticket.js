@@ -355,7 +355,7 @@ export const TicketS = styled.div`
   }
   .table-container {
     width: 100%;
-    font-size: 0.66em;
+    font-size: 0.8em;
   }
   .item-cant {
     width: 40px;

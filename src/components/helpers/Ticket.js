@@ -367,20 +367,11 @@ const Ticket = () => {
               </span>
             </div>
             <div className="footer">
-              {Number(dataMain.type_order) === 1 ? (
-                ""
-              ) : (
-                <>
-                  <br />
-                  <p>
-                    Direccion & Cliente:
-                    <br /> {dataMain.address}
-                    <br />
-                    {dataMain.client}
-                  </p>
-                </>
-              )}
-
+              <>
+                Cliente:
+                <br />
+                <p>{dataMain.client}</p>
+              </>
               <br />
               <b>
                 <span className="date">{formattedDate}</span>
@@ -405,12 +396,10 @@ const Ticket = () => {
                   <b>Pizzas JOSSEPPH</b>
                 </center>
                 <center>
+                  <b>Calle Reforma # 15 centro Parras Coahuila CP 27987</b>
+                  <br />
 
-                <b>Calle Reforma # 15 centro Parras Coahuila CP 27987</b>
-                <br />
-
-                <b>Tel. 842 422 0123</b>
-
+                  <b>Tel. 842 422 0123</b>
                 </center>
               </div>
               <br />
@@ -653,6 +642,10 @@ const Ticket = () => {
                 <b>
                   <span className="date">{formattedDate}</span>
                 </b>
+              </div>
+              <div className="qr">
+                <img src="/assets/img/qr.png" alt="" />
+                <p>Escaneame para conocer nuestros productos</p>
               </div>
             </div>
           )}

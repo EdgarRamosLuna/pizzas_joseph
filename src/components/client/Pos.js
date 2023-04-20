@@ -40,6 +40,7 @@ const Pos = ({ permisos }) => {
   //const [deliver_price, setDeliver_price] = useState(0);
   useEffect(() => {
     setCarItem([]);
+    setSearchResult([]);
     axios
       .get(`${baseUrl}/server/api/get_clients`)
       .then((res) => {
@@ -584,12 +585,18 @@ const Pos = ({ permisos }) => {
   }, [datas]);*/
   const [opIng, setOpIng] = useState([]);
   useEffect(() => {
-    for (let i = 0; i < searchResult.length; i++) {
-      const element = searchResult[i];
-      if (element.cat === "mp") {
-        setOpIng((prev) => [...prev, searchResult[i]]);
+
+      if(searchResult.length === 0){
+        setOpIng([]);
+      }else{
+        for (let i = 0; i < searchResult.length; i++) {
+          const element = searchResult[i];
+          if (element.cat === "mp") {
+            setOpIng((prev) => [...prev, searchResult[i]]);
+          }
+        }
+
       }
-    }
   }, [searchResult]);
   const [dataI, setDataI] = useState([]);
   const addIngre = (id, val) => {
@@ -917,14 +924,31 @@ const Pos = ({ permisos }) => {
                                     </option>
                                     {opIng.map((item, indx) => {
                                       return (
-                                        <option
-                                          value={item.id}
-                                          key={`${
-                                            opIng.length + carItem.length
-                                          }-${item.name}-${indx}`}
-                                        >
-                                          {item.name}
-                                        </option>
+                                        <>
+                                          {indx === 15 ? (
+                                            <>
+                                            <optgroup style={{width:'100%'}} label={`${indx === 15 ? "**ESPECIALIDADES**" : ""}`}>                                              
+                                            </optgroup>
+                                            <option
+                                                value={item.id}
+                                                key={`${
+                                                  opIng.length + carItem.length
+                                                }-${item.name}-${indx}`}
+                                              >
+                                                {item.name}
+                                              </option>
+                                            </>
+                                          ) : (
+                                            <option
+                                              value={item.id}
+                                              key={`${
+                                                opIng.length + carItem.length
+                                              }-${item.name}-${indx}`}
+                                            >
+                                              {item.name}
+                                            </option>
+                                          )}
+                                        </>
                                       );
                                     })}
                                   </select>
@@ -1311,12 +1335,12 @@ const Pos = ({ permisos }) => {
             </div>
             <div className="payment-types">
               <div className="cash-container">
-                <label htmlFor="efe">Pagar con efectivo</label>
+                <label htmlFor="efe"></label>
                 <div className="complete-payment">
                   <div className="cp-input-container">
                     <input
                       type="text"
-                      placeholder="Monto Efectivo"
+                      placeholder="Efectivo"
                       name="efe"
                       value={amountCash}
                       onChange={(e) => setAmountCash(e.target.value)}
@@ -1325,12 +1349,12 @@ const Pos = ({ permisos }) => {
                 </div>
               </div>
               <div className="card-container">
-                <label htmlFor="car">Pagar con tarjeta</label>
+                <label htmlFor="car"></label>
                 <div className="complete-payment">
                   <div className="cp-input-container">
                     <input
                       type="text"
-                      placeholder="Monto Tarjeta"
+                      placeholder="Tarjeta"
                       name="car"
                       value={amountCard}
                       onChange={(e) =>
