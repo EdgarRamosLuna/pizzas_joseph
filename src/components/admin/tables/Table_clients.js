@@ -32,7 +32,7 @@ const TableClients = (props) => {
           selector: (row) => row.actions,
         },
       ]);
-      axios.get(`${baseUrl}/server/api/get_clients`).then((res) =>{
+      axios.get(`${baseUrl}/get_clients`).then((res) =>{
         console.log(res.data);
         // setData([]);
         for (let i = 0; i < res.data.length; i++) {

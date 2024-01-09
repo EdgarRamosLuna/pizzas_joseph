@@ -53,7 +53,7 @@ const TestTable = () => {
 
     const [data, setData] = useState([]);
     useEffect(() => {
-        axios.get(`http://localhost/server/api/products_pizza`).then((res) =>{
+        axios.get(`http://localhost/products_pizza`).then((res) =>{
             //    console.log(res);
                 // setData([]);
                 for (let i = 0; i < res.data.length; i++) {

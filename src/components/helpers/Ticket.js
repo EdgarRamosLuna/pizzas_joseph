@@ -9,7 +9,11 @@ import MainContext from "../../context/MainContext";
 import GlobalStyle from "../../styles/GlobalStyles";
 import { TicketS } from "../../styles/Ticket";
 
-const Ticket = () => {
+const Ticket = ({
+  storeName = `BROTHER'S pizzas`,
+  storeAddress = `Calle Juan Antonio de la Fuente # 149 centro. San Pedro Coahuila CP 27800`,
+  storePhone = `872 772 5294`
+}) => {
   const { baseUrl } = useContext(MainContext);
   const [pdf, setPdf] = useState(null);
   const [impressed, setImpressed] = useState(false);
@@ -74,7 +78,7 @@ const Ticket = () => {
   const [formattedDate, setFormattedDate] = useState(null);
   useEffect(() => {
     axios
-      .get(`${baseUrl}/server/api/ticket/${idSale}`)
+      .get(`${baseUrl}/ticket/${idSale}`)
       .then((res) => {
         //console.log(res.data);
         setDataMain(res.data.sale_data[0]);
@@ -102,35 +106,13 @@ const Ticket = () => {
         let formattedDate =
           dateFormatter.format(newDate) + " " + timeFormatter.format(newDate);
         setFormattedDate(formattedDate);
-        /*   // let formattedDat = formattedDate.toLocaleString().replace(/:00 /g, " ");
-        //let firstDigit = formattedDat.slice(0, 1);
-        //let secondDigit = formattedDat.slice(1, 2);
-        //let completeNumer = 0;
-      //  console.log(firstDigit);
-      console.log(formattedDate);
-        
-        let pattern = /^[0-9]+$/;
-        if (pattern.test(firstDigit) && pattern.test(secondDigit)) {
-          //    console.log("La cadena es un número." + firstDigit);
-       //   completeNumer = `${firstDigit}` + secondDigit;
 
-     //     setFormattedDateC(Number(completeNumer));
-        } else {
-      //    setFormattedDateC(Number(firstDigit));
-          //console.log("La cadena no es un número.");
-        }*/
-
-        //console.log(typeof(secondDigit) === '' ? 'Numero':'');
-        //setFormattedDateC(Number());
         handlePrint();
       })
       .catch((err) => {
         console.error(err);
       });
   }, []);
-  //console.log(formattedDateC);
-
-  //console.log(formattedDateC);
 
   return (
     <>
@@ -138,7 +120,6 @@ const Ticket = () => {
       <TicketS>
         {isPrinting === false ? (
           <div className="action-buttons">
-            {/*<button onClick={generatePDF}>Generar PDF</button>*/}
             <button onClick={handlePrint}>
               <i className="fa-solid fa-print"></i> Imprimir
             </button>
@@ -165,13 +146,6 @@ const Ticket = () => {
                     : dataMain["folio"]}
                 </b>
               </center>
-              {/*<center>
-                <b>Pizzas JOSSEPPH</b>
-              </center>
-              <b>Calle Reforma # 15 centro Parras Coahuila CP 27987</b>
-              <br />
-
-        <b>Tel. 842 422 0123</b>*/}
             </div>
             <br />
             <div className="table-container">
@@ -297,66 +271,7 @@ const Ticket = () => {
                 </tbody>
               </table>
             </div>
-            {/*  <div className="item-list">
-              {dataI.map((data, ind) => {
-                return (
-                  <div className="item">
-                    
-                    <span className="item-name">
-                    <div className="item-cant">
-                      {ind === 0 ? <span className="cant-txt">Cant</span>:""}
-                      
-                      
-                      <span>
-                      {data.cant}
 
-                      </span>
-                    </div>
-                    
-                      <div className="item-ing" >
-                      <div className="item-name-value">
-                        {data.name} <br />
-                        
-                      </div>
-                        {dataI2.map((data2, ind2) => {
-                          if (
-                            Number(data.id_item_sale) ===
-                            Number(data2.id_item_sale)
-                          ) {
-                            return (
-                              <>
-                                <b style={{ fontSize: "0.85em" }}>{data2.name}</b>
-                                <br />
-                              </>
-                            );
-                          }
-                        })}
-                      </div>
-                    </span>
-                    <span className="item-price">
-                      ${(Number(data.price) * Number(data.cant)).toFixed(2)}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>*/}
-            {/*Number(dataMain.type_order) === 2 ? (
-              <div className="total">
-                <span className="total-label">Envio:</span>
-                <span className="total-amount">
-                  ${Number(dataMain.envio).toFixed(2)}
-                </span>
-              </div>
-            ) : (
-              ""
-            )*/}
-
-            {/* <div className="total">
-              <span className="total-label">Subtotal:</span>
-              <span className="total-amount">
-                ${Number(dataMain.total).toFixed(2)}
-              </span>
-          </div>*/}
             <div
               className="total"
               style={{ borderBottom: "1px dashed", paddingBottom: "3px" }}
@@ -415,13 +330,13 @@ const Ticket = () => {
                   </b>
                 </center>
                 <center>
-                  <b>Pizzas JOSSEPPH</b>
+                  <b>{storeName}</b>
                 </center>
                 <center>
-                  <b>Calle Reforma # 15 centro Parras Coahuila CP 27987</b>
+                  <b>{storeAddress}</b>
                   <br />
 
-                  <b>Tel. 842 422 0123</b>
+                  <b>Tel. {storePhone}</b>
                 </center>
               </div>
               <br />

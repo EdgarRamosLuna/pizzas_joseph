@@ -34,7 +34,7 @@ const EditableTextC = ({ value, id, fun}) => {
   const handleConfirm = (value) => {
     fun(value);
     setIsInput(false);
-    axios.post(`${baseUrl}/server/api/uenvio`, {envio: value}).then((res) => {
+    axios.post(`${baseUrl}/uenvio`, {envio: value}).then((res) => {
         console.log(res.data);
     }).catch((err) => {
         console.error(err);

@@ -15,7 +15,7 @@ const Login = () => {
     e.preventDefault();
     localStorage.clear();
     try {
-      const response = await fetch(`${baseUrl}/server/api/login`, {
+      const response = await fetch(`${baseUrl}/login`, {
         method: "POST",
         body: JSON.stringify({ username, password }),
         headers: { "Content-Type": "application/json" },

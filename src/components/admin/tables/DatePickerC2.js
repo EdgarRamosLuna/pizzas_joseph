@@ -65,7 +65,7 @@ const DatePickerC2 = () => {
   const showDetails = (id_sale) => {
     //console.log(id_sale);
     axios
-      .get(`${baseUrl}/server/api/sale_details/${id_sale}`)
+      .get(`${baseUrl}/sale_details/${id_sale}`)
       .then((res) => {
         console.log(res.data);
         setShowDetails(true);

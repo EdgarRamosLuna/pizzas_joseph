@@ -114,7 +114,7 @@ const TableSale = (props) => {
     }
     if (timelineP === 4) {
       //setTimeline(firstDayOfYear, lastDayOfYear);
-      axios.get(`${baseUrl}/server/api/get_sales`).then((res) => {
+      axios.get(`${baseUrl}/get_sales`).then((res) => {
         //    console.log(res);
         // setData([]);
         for (let i = 0; i < res.data.length; i++) {
@@ -193,7 +193,7 @@ const TableSale = (props) => {
 
     //const isMonday = (dayOfWeek === 1);
     /* axios
-      .get(`${baseUrl}/server/api/get_sales`)
+      .get(`${baseUrl}/get_sales`)
       .then((res) => {
         //    console.log(res);
         // setData([]);

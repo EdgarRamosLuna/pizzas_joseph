@@ -56,7 +56,7 @@ const SelectComponent = ({ statusData, id_sale }) => {
     setStatus(val);
 
     axios
-      .post(`${baseUrl}/server/api/status`, { status: val, id_sale })
+      .post(`${baseUrl}/status`, { status: val, id_sale })
       .then((res) => {
           //    console.log(res);
            setData([]);

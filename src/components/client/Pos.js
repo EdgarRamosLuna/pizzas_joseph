@@ -43,7 +43,7 @@ const Pos = ({ permisos }) => {
     setCarItem([]);
     setSearchResult([]);
     axios
-      .get(`${baseUrl}/server/api/get_clients`)
+      .get(`${baseUrl}/get_clients`)
       .then((res) => {
         //console.log(res.data);
 
@@ -63,7 +63,7 @@ const Pos = ({ permisos }) => {
         console.error(err);
       });
     axios
-      .get(`${baseUrl}/server/api/get`)
+      .get(`${baseUrl}/get`)
       .then((res) => {
         setEnvioPrice(Number(res.data.deliver_price));
         console.log();
@@ -229,7 +229,7 @@ const Pos = ({ permisos }) => {
   const searchItem = (value) => {
     if (value.length >= 3) {
       axios
-        .post(`${baseUrl}/server/api/search`, { val: value })
+        .post(`${baseUrl}/search`, { val: value })
         .then((res) => {})
         .catch((err) => {
           console.error(err);
@@ -763,7 +763,7 @@ const Pos = ({ permisos }) => {
     console.log(clientName);
     axios
       .post(
-        `${baseUrl}/server/api/complete-sale`,
+        `${baseUrl}/complete-sale`,
         {
           data: carItem,
           del: activeOption === 1 ? 0 : envioPrice,

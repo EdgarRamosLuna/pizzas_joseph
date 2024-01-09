@@ -113,7 +113,7 @@ const TableStorage = (props) => {
         },
         
       ]);
-      axios.get(`${baseUrl}/server/api/products_other`).then((res) =>{
+      axios.get(`${baseUrl}/products_other`).then((res) =>{
     //    console.log(res);
         // setData([]);
         for (let i = 0; i < res.data.length; i++) {
@@ -162,7 +162,7 @@ const TableStorage = (props) => {
         },
         
       ]);
-      axios.get(`${baseUrl}/server/api/products_materias_primas`).then((res) =>{
+      axios.get(`${baseUrl}/products_materias_primas`).then((res) =>{
     //    console.log(res);
         // setData([]);
         for (let i = 0; i < res.data.length; i++) {
@@ -210,7 +210,7 @@ const TableStorage = (props) => {
         },
         
       ]);
-      axios.get(`${baseUrl}/server/api/drinks`).then((res) =>{
+      axios.get(`${baseUrl}/drinks`).then((res) =>{
     //    console.log(res);
         // setData([]);
         for (let i = 0; i < res.data.length; i++) {
@@ -253,7 +253,7 @@ const TableStorage = (props) => {
         },
         
       ]);
-      axios.get(`${baseUrl}/server/api/products_materias_primas`).then((res) =>{
+      axios.get(`${baseUrl}/products_materias_primas`).then((res) =>{
     //    console.log(res);
         // setData([]);
         for (let i = 0; i < res.data.length; i++) {
