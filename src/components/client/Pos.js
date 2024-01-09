@@ -7,7 +7,8 @@ import { useCallback } from "react";
 import EditableText from "../../helpers/EditableText";
 import EditableTextC from "../../helpers/EditableTextC";
 const Pos = ({ permisos }) => {
-  const { p_storage, p_sales, p_clients, p_users } = permisos;
+  const { p_storage, p_sales, p_clients, p_users, admin } = permisos;
+
   const [val, setVal] = useState("");
 
   const {
@@ -831,37 +832,7 @@ const Pos = ({ permisos }) => {
               autoFocus
               formatResult={formatResult}
             />
-          </div>
-          {/*<div className="header">
-            <div className="search">
-              <div className="search-btn" onClick={searchItem}>
-                <i className="fa-solid fa-magnifying-glass"></i>
-              </div>
-              <div className="search-field">
-                <input
-                  type=""
-                  name=""
-                  value={val}
-                  placeholder="Buscar productos"
-                  onChange={(e) => searchItem(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="search-result">
-              {searchResult.length > 0
-                ? searchResult.map((data) => {
-                    return (
-                      <div
-                        className="result-item"
-                        onClick={() => addItemCart(data.id, data.name, 1)}
-                      >
-                        {data.name}
-                      </div>
-                    );
-                  })
-                : ""}
-            </div>
-                </div>*/}
+          </div>         
           <div className="body-table">
             <div className="table-container">
               <table>
@@ -1308,7 +1279,7 @@ const Pos = ({ permisos }) => {
             ) : (
               <div className="total">
                 <h3>Envio:</h3>
-                {Number(p_users) === 1 ? (
+                {Number(admin) === 1 ? (
                   <EditableTextC
                     value={envioPrice}
                     id={0}

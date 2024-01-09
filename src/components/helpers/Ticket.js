@@ -367,11 +367,33 @@ const Ticket = () => {
               </span>
             </div>
             <div className="footer">
-              <>
-                Cliente:
-                <br />
-                <p>{dataMain.client}</p>
-              </>
+              {Number(dataMain.type_order) === 1 ? (
+                <>
+                  {dataMain.client !== "" ? (
+                    <>
+                      <br />
+                      <p>
+                        Cliente:
+                        <br />
+                        {dataMain.client}
+                      </p>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </>
+              ) : (
+                <>
+                  <br />
+                  <p>
+                    Direccion & Cliente:
+                    <br /> {dataMain.address}
+                    <br />
+                    {dataMain.client}
+                  </p>
+                </>
+              )}
+
               <br />
               <b>
                 <span className="date">{formattedDate}</span>

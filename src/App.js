@@ -32,15 +32,14 @@ function App() {
         .get(`${server}/server/api/user`, {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Cache-Control': 'no-store, no-cache, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
+            //'Cache-Control': 'no-store, no-cache, must-revalidate',
+            //'Pragma': 'no-cache',
+            //'Expires': '0'
           },
         })
         .then((response) => {
           
           if(response.data.message === 'Token no valido'){
-            console.log(response.data);
             setHaveSess(false);
             setTimeout(() => {
               setLoading(false);
@@ -51,7 +50,7 @@ function App() {
               
             //  console.log(response.data)
               const {p_storage, p_sales, p_clients, p_users} = response.data;
-              setPermissions({p_storage, p_sales, p_clients, p_users})
+              setPermissions(response.data)
               setHaveSess(true);
            //   localStorage.setItem('turno', Number(response.data.turno_status));
               setTimeout(() => {

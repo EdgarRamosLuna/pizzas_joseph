@@ -167,7 +167,7 @@ export const MainContextProvider = ({ children }) => {
 
     //return false;
     axios
-      .post(`${baseUrl}/server/api/save`, { type: type, data: data, id: v4() })
+      .post(`${baseUrl}/save`, { type: type, data: data, id: v4() })
       .then((res) => {
         // console.log(parseFloat(res.data.price));
         let element = res.data;
@@ -356,7 +356,7 @@ export const MainContextProvider = ({ children }) => {
 
     //  return false;
     axios
-      .post(`${baseUrl}/server/api/update`, { type, data: dataDb, id })
+      .post(`${baseUrl}/update`, { type, data: dataDb, id })
       .then((res) => {
         // console.log(parseFloat(res.data.price));
         let element = res.data;
@@ -548,7 +548,7 @@ export const MainContextProvider = ({ children }) => {
   const saveChangesDB = async (table, id) => {
     //const bseUrl = 'https://mi-url.com';
     try {
-      const response = await axios.post(`${baseUrl}/server/api/delete`, {
+      const response = await axios.post(`${baseUrl}/delete`, {
         id,
         table,
       });
@@ -583,7 +583,7 @@ export const MainContextProvider = ({ children }) => {
 
   const sendRequest = (from, to) => {
     axios
-      .post(`${baseUrl}/server/api/searchByDate`, { from, to })
+      .post(`${baseUrl}/searchByDate`, { from, to })
       .then((res) => {
         for (let i = 0; i < res.data.length; i++) {
           const element = res.data[i];
@@ -676,7 +676,7 @@ export const MainContextProvider = ({ children }) => {
   const showDetail = (id_sale) => {
     //console.log(id_sale);
     axios
-      .get(`${baseUrl}/server/api/sale_details/${id_sale}`)
+      .get(`${baseUrl}/sale_details/${id_sale}`)
       .then((res) => {
         //   console.log(res.data);
         setShowDetails(true);

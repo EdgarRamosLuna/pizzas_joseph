@@ -53,7 +53,7 @@ const TableStorage = (props) => {
           selector: (row) => row.actions,
         },
       ]);
-      axios.get(`${baseUrl}/server/api/products_pizza`).then((res) =>{
+      axios.get(`${baseUrl}/pizzas`).then((res) =>{
     //    console.log(res);
         // setData([]);
         for (let i = 0; i < res.data.length; i++) {
