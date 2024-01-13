@@ -807,11 +807,11 @@ const Pos = ({ permisos }) => {
     setTypeAlert(type);
 
     setTimeout(() => {
-      //setShowAlert(false);
+      setShowAlert(false);
       document.querySelector(".notify").click();
       if (type === "success-sale") {
         setIsDisabled(false);
-      //  window.location.reload();
+       window.location.reload();
         window.open(`${bseUrl}/ticket/${id_sale}`, "_blank");
       }
     }, time);
