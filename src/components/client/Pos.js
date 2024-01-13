@@ -755,12 +755,7 @@ const Pos = ({ permisos }) => {
       setIsDisabled(false);
       requestLimit = 1;
       return false;
-    }
-    //console.log(totalPayment);
-    //console.log(totalDue);
-    //console.log(carItem);
-    //   console.log('venta completada');
-    console.log(clientName);
+    }    
     axios
       .post(
         `${baseUrl}/complete-sale`,
