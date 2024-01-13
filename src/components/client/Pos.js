@@ -683,7 +683,7 @@ const Pos = ({ permisos }) => {
   let requestLimit = 1;
   const [isDisabled, setIsDisabled] = useState(false);
   const completeSale = (e) => {
-    console.log("entroooo");
+
     setIsDisabled(true);
     /*  if(e.target.disabled === true){
       console.log('printing....');
@@ -811,7 +811,7 @@ const Pos = ({ permisos }) => {
       document.querySelector(".notify").click();
       if (type === "success-sale") {
         setIsDisabled(false);
-        window.location.reload();
+      //  window.location.reload();
         window.open(`${bseUrl}/ticket/${id_sale}`, "_blank");
       }
     }, time);
