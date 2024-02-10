@@ -308,6 +308,8 @@ export const ModalS = styled.div`
     width: 50%;
     background: #fff;
     height: auto;
+    max-height: 90vh;
+    overflow-y: scroll;
     display: flex;
     box-sizing: border-box;
     padding: 20px;
@@ -379,6 +381,12 @@ export const ModalS = styled.div`
       color: #a42220;
     }
   }
+  .ing-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+}
 `;
 export const StyledButton = styled.button`
   min-width: 150px;

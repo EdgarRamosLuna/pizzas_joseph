@@ -104,12 +104,7 @@ const Sales = () => {
         break;
     }
   };
-  /*
-data.map(item => {
-          if (item.st === 1) {
-            return <div key={item.id}>{item.total +}</div>;
-          }
-        })*/
+
   return (
     <StorageS>
       <div className="graphics-container">

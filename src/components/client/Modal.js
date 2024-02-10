@@ -12,11 +12,9 @@ const Modal = (props) => {
     stopProp,
     saveProduct,
     setShowConfBox,
-    delConf,
-    setDelConf,
     deleteItemDb,
     option,
-    confirmed2, setConfirmed2
+    setConfirmed2
   } = useContext(MainContext);
   const [tipo, setTipo] = useState(option);
   const [ingrediente, setIngrediente] = useState(2);
@@ -48,20 +46,15 @@ const Modal = (props) => {
     price: "",
   });
   const SelectType = (data) => {
-    // data = data.toString();
     setTipo(data);
   };
   useEffect(() => {
     SelectType(option);
   }, []);
-  //console.log(tipo);
   const SelectIngr = (e) => {
     setIngrediente(e.target.value);
   };
   const delItemC = (id_item, table) => {
-    //  console.log('aaaaaaaaaa');
-    // setDelConf(true);
-
     deleteItemDb(id_item, table);
   };
   const cancelSale = () => {
@@ -371,22 +364,7 @@ const Modal = (props) => {
                     />
                   </div>
                 )}
-                {/*ingrediente === "1" ? (
-                  <div className="form-item">
-                    <label for="">Precio Venta</label>
-                    <input type="text" name="" value="" />
-                  </div>
-                ) : (
-                  ""
-                )}
-                {ingrediente === "2" || ingrediente === 2 ? (
-                  <div className="form-item">
-                    <label for="">Cantidad</label>
-                    <input type="text" name="" value="" />
-                  </div>
-                ) : (
-                  ""
-                )*/}
+             
 
                 <div className="form-item">
                   <StyledButton onClick={(e) => saveProduct(3, data3)}>

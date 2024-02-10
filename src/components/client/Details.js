@@ -45,11 +45,16 @@ const Details = () => {
                     return (
                       <tr>
                         <td>{data.name}</td>
-                        <td>{data.cat === 'pizza' && details.sale_data_items_ing.map((data2) =>{
-                          return (<>
-                            {Number(data.id_item_sale) === Number(data2.id_item_sale) && data2.name} <br/>
-                          </>);
-                        })}</td>
+                        <td>
+                          <div className="ing-container">
+                            {data.cat === "pizza" &&
+                              details.sale_data_items_ing.map((data2) => {
+                                return (
+                                  Number(data.id_item_sale) === Number(data2.id_item_sale) && <div>{data2.name}</div> 
+                                );
+                              })}
+                          </div>
+                        </td>
                         <td>${data.price}</td>
                         <td>{data.cant}</td>
                         <td>
@@ -87,16 +92,22 @@ const Details = () => {
               </table>
             </div>
             <div className="form-item">
-                  <label for="">Cliente: <span>{details.sale_data[0].client}</span></label>
-                </div>
+              <label for="">
+                Cliente: <span>{details.sale_data[0].client}</span>
+              </label>
+            </div>
             {Number(details.sale_data[0].type_order) === 2 ? (
               <>
-                
                 <div className="form-item">
-                  <label for="">Direccion de entrega: <span>{details.sale_data[0].address}</span></label>
+                  <label for="">
+                    Direccion de entrega:{" "}
+                    <span>{details.sale_data[0].address}</span>
+                  </label>
                 </div>
                 <div className="form-item">
-                  <label for="">Costo de envio: <span>${details.sale_data[0].envio}</span></label>
+                  <label for="">
+                    Costo de envio: <span>${details.sale_data[0].envio}</span>
+                  </label>
                 </div>
               </>
             ) : (
